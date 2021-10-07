@@ -113,7 +113,8 @@
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorIcons"
-                android:layout_margin="30dp"/>
+                android:layout_margin="30dp"
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
