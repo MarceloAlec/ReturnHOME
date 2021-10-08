@@ -2,7 +2,7 @@
 
 include 'connection.php' ;
  
- $con = mysqli_connect($HostName,$HostUser,$HostPass,$DatabaseName);
+ $con = mysqli_connect($hostname,$hostuser,$hostpass,$database);
  
  $name = $_POST['name'];
  $email = $_POST['email'];
