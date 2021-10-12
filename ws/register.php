@@ -20,6 +20,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $stmt->bindValue(':pass',$_POST['pass']);
     //EJECUTA LA SENTENCIA SQL, ENVIA LOS DATOS A LA BASE
     $stmt->execute();
+    $idPost = $pdo->lastInsertId();
+    if($idPost){
+        $val = array("id" => $idPost);
+        echo json_encode($val);
+    }
+    
 }
 
 
