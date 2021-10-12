@@ -15,7 +15,7 @@ public class ClientProvider {
 
     private Context context;
     //RAIZ DE LA URL QUE FORMA PARTE DE LA PETICION
-    private String baseUrl = "http://192.168.0.3:82/";
+    private String baseUrl = "http://192.168.0.3:82/api.returnhome.com/v1/";
 
 
     public ClientProvider(Context context){

@@ -16,6 +16,6 @@ public interface IClientApi {
             "Content-Type:application/json"
     })
 
-    @POST("returnhome/register.php")
+    @POST("register.php")
     Call<ResponseBody> register(@Body Client client);
 }
