@@ -4,7 +4,7 @@ public class Client {
 
     private String name;
     private String email;
-    private String hash_password;
+    private String password;
     private char gender;
     private String phoneNumber;
 
@@ -12,7 +12,7 @@ public class Client {
     public Client(String name, String email, String password, char gender, String phoneNumber) {
         this.name = name;
         this.email = email;
-        this.hash_password = password;
+        this.password = password;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
     }
@@ -33,12 +33,12 @@ public class Client {
         this.email = email;
     }
 
-    public String getHash_password() {
-        return hash_password;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHash_password(String hash_password) {
-        this.hash_password = hash_password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public char getGender() {

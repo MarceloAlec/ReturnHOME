@@ -18,15 +18,22 @@ $pdo = new Connection();
  $parameters = file_get_contents('php://input');
  $data = json_decode($parameters, true);
 
-$sql = "insert into tblclient (name, email, pass) values(:name, :email, :pass)";
+$sql = "insert into tblclient (name, email, pass, gender, phoneNumber) values(:name, :email, :pass, :gender, :phoneNumber)";
 //MEDIANTE PREPARE() SE CREA UNA INSTANCIA DE LA CLASE PDO STATEMENT
 //PARA PASAR LOS VALORES O EJECUTAR SENTENCIAS
 $stmt = $pdo->prepare($sql);
+$name = $data["name"];
+$email = $data["email"];
+$password = password_hash($data["password"],PASSWORD_DEFAULT);
+$gender = $data["gender"];
+$phoneNumber = $data["phoneNumber"];
 
 //CON BINDVALUE SE ENLAZA EL VALOR DE LA VARIABLE
-$stmt->bindValue(':name',$data["name"]);
-$stmt->bindValue(':email',$data["email"]);
-$stmt->bindValue(':pass',$data["pass"]);
+$stmt->bindValue(':name',$name);
+$stmt->bindValue(':email',$email);
+$stmt->bindValue(':pass',$password);
+$stmt->bindValue(':gender',$gender);
+$stmt->bindValue(':phoneNumber',$phoneNumber);
 //EJECUTA LA SENTENCIA SQL, ENVIA LOS DATOS A LA BASE
 $stmt->execute();
 /* $idPost = $pdo->lastInsertId();
