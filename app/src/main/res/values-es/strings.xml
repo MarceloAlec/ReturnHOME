@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReturnHOME</string>
+    <string name="txtInputName">Nombre completo</string>
+    <string name="txtInputEmail">Correo electrónico</string>
+    <string name="txtInputPassword">Contraseña</string>
+    <string name="rbtnMale">Masculino</string>
+    <string name="rbtnFemale">Femenino</string>
+    <string name="txtInputPhoneNumber">Numero de celular</string>
+    <string name="btnRegister">REGISTRAR</string>
+</resources>
