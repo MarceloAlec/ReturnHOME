@@ -16,6 +16,6 @@ public interface IClientApi {
             "Content-Type:application/json"
     })
 
-    @POST("register.php")
-    Call<ResponseBody> register(@Body Client client);
+    @POST("client/create.php")
+    Call<ResponseBody> create(@Body Client client);
 }

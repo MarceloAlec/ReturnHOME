@@ -4,13 +4,15 @@ public class Client {
 
     private String name;
     private String email;
-    private String pass;
+    private String hash_password;
+    private String gender;
 
 
-    public Client(String name, String email, String password) {
+    public Client(String name, String email, String password, String gender) {
         this.name = name;
         this.email = email;
-        this.pass = password;
+        this.hash_password = password;
+        this.gender = gender;
     }
 
     public String getName() {
@@ -29,14 +31,19 @@ public class Client {
         this.email = email;
     }
 
-    public String getPassword() {
-        return pass;
+    public String getHash_password() {
+        return hash_password;
     }
 
-    public void setPassword(String password) {
-        this.pass = password;
+    public void setHash_password(String hash_password) {
+        this.hash_password = hash_password;
     }
 
+    public String getGender() {
+        return gender;
+    }
 
-
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

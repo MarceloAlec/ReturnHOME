@@ -26,7 +26,7 @@ public class ClientProvider {
     //RETORNA UN CALL DEL TIPO STRING
     public Call<ResponseBody> registerClient(Client client){
 
-        return RetrofitClient.getClient(baseUrl).create(IClientApi.class).register(client);
+        return RetrofitClient.getClient(baseUrl).create(IClientApi.class).create(client);
     }
 
 }
