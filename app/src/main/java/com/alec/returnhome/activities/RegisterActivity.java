@@ -3,6 +3,7 @@ package com.alec.returnhome.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.hbb20.CountryCodePicker;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dmax.dialog.SpotsDialog;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputEditText mTextInputPhoneNumber;
     ClientProvider mClientProvider;
 
+    AlertDialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +52,9 @@ public class RegisterActivity extends AppCompatActivity {
         mRadioButtonMale = findViewById(R.id.radioButtonMale);
         mCountryCodePicker = findViewById(R.id.countryCodePicker);
         mTextInputPhoneNumber = findViewById(R.id.textInputNumberPhone);
+
+        //Crea un mensaje de espera para el proceso de registro
+        mDialog = new SpotsDialog.Builder().setContext(RegisterActivity.this).setMessage(R.string.dialogRegister).build();
 
         mClientProvider = new ClientProvider(RegisterActivity.this);
 
@@ -72,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !phoneNumber.isEmpty()){
             if(password.length() >= 6 ){
                 //DATOS INGRESADOS CORRECTAMENTE
+                mDialog.show();
                 registerClient(new Client(name,email,password,gender,codeNumber+phoneNumber));
             }
             else{
@@ -85,21 +93,23 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
+
         mClientProvider.registerClient(client).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
-                try{
-                    Log.i("Response", response.body().toString());
-                }catch (Exception ex){
-                    Log.d("Error", "Error encontrado" + ex.getMessage());
-                }
+                mDialog.hide();
+
+                Intent intent = new Intent(RegisterActivity.this, MapClientActivity.class);
+                //Una vez ingresado el usuario al activity MapDriver, no podra regresar al activity anterior
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("Error", "Error encontrado" + t.getMessage());
-
+                Toast.makeText(RegisterActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
             }
         });
 
