@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.alec.returnhome.R;
 import com.alec.returnhome.models.Client;
 import com.alec.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
+import com.hbb20.CountryCodePicker;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,7 +31,9 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputEditText mTextInputEmail;
     TextInputEditText mTextInputName;
     TextInputEditText mTextInputPassword;
-
+    RadioButton mRadioButtonMale;
+    CountryCodePicker mCountryCodePicker;
+    TextInputEditText mTextInputPhoneNumber;
     ClientProvider mClientProvider;
 
     @Override
@@ -40,6 +45,9 @@ public class RegisterActivity extends AppCompatActivity {
         mTextInputName = findViewById(R.id.textInputName);
         mTextInputEmail = findViewById(R.id.textInputEmail);
         mTextInputPassword = findViewById(R.id.textInputPassword);
+        mRadioButtonMale = findViewById(R.id.radioButtonMale);
+        mCountryCodePicker = findViewById(R.id.countryCodePicker);
+        mTextInputPhoneNumber = findViewById(R.id.textInputNumberPhone);
 
         mClientProvider = new ClientProvider(RegisterActivity.this);
 
@@ -56,11 +64,15 @@ public class RegisterActivity extends AppCompatActivity {
         String name = mTextInputName.getText().toString();
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
+        char gender = ((mRadioButtonMale.isChecked() ? 'M' : 'F'));
+        String codeNumber = mCountryCodePicker.getSelectedCountryCodeWithPlus();
+        String phoneNumber = mTextInputPhoneNumber.getText().toString();
 
-        if(!name.isEmpty() && !email.isEmpty() && !password.isEmpty()){
+
+        if(!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !phoneNumber.isEmpty()){
             if(password.length() >= 6 ){
                 //DATOS INGRESADOS CORRECTAMENTE
-                registerClient(new Client(name,email,password));
+                registerClient(new Client(name,email,password,gender,codeNumber+phoneNumber));
             }
             else{
                 Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();

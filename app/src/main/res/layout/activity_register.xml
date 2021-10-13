@@ -33,7 +33,7 @@
                     android:id="@+id/textInputName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre completo"
+                    android:hint="@string/txtInputName"
                     android:inputType="text">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -63,7 +63,7 @@
                     android:id="@+id/textInputEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Correo electrónico"
+                    android:hint="@string/txtInputEmail"
                     android:inputType="textEmailAddress">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -93,7 +93,7 @@
                     android:id="@+id/textInputPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Contraseña"
+                    android:hint="@string/txtInputPassword"
                     android:inputType="textPassword">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -122,22 +122,57 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radioButtonMale"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Masculino"
+                    android:text="@string/rbtnMale"
                     android:checked="true">
 
                 </com.google.android.material.radiobutton.MaterialRadioButton>
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/radioButtonFemale"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Femenino">
+                    android:text="@string/rbtnFemale">
 
                 </com.google.android.material.radiobutton.MaterialRadioButton>
             </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCodePicker"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:ccp_defaultNameCode="EC"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:layout_width="0dp"
+                android:layout_weight="1.4"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputNumberPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txtInputPhoneNumber"
+                    android:inputType="textPassword">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -151,12 +186,12 @@
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="REGISTRAR"
+                android:text="@string/btnRegister"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorIcons"
                 android:layout_margin="30dp"
-                android:textSize="15sp"/>
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
