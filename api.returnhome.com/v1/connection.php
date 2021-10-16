@@ -18,7 +18,7 @@ class Connection extends PDO
                                 $this->hostuser, 
                                 $this->hostpass
                                 ,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        }catch(PDOException $e){
+            }catch(PDOException $e){
             echo 'ERROR: ' . $e->getMessage();
             exit;
         }

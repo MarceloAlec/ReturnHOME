@@ -18,10 +18,10 @@ $pdo = new Connection();
  $parameters = file_get_contents('php://input');
  $data = json_decode($parameters, true);
 
-$sql = "insert into tblclient (name, email, pass, gender, phoneNumber) values(:name, :email, :pass, :gender, :phoneNumber)";
+$sqlQuery = "insert into tblclient (name, email, pass, gender, phoneNumber) values(:name, :email, :pass, :gender, :phoneNumber)";
 //MEDIANTE PREPARE() SE CREA UNA INSTANCIA DE LA CLASE PDO STATEMENT
 //PARA PASAR LOS VALORES O EJECUTAR SENTENCIAS
-$stmt = $pdo->prepare($sql);
+$stmt = $pdo->prepare($sqlQuery);
 $name = $data["name"];
 $email = $data["email"];
 $password = password_hash($data["password"],PASSWORD_DEFAULT);
@@ -53,10 +53,10 @@ if($idPost){
     )
 ); */
 
-$versiones = array("estado"=>"201");
+$versiones = array("status"=>"201");
 echo json_encode($versiones);
     
-
+?>
 
 
 
