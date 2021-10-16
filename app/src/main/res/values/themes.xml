@@ -12,5 +12,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- Permite que navigation view sea transparente al status bar -->
+        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/colorIcons</item>
+        <item name="titleTextColor">@color/colorIcons</item>
+    </style>
+
 </resources>

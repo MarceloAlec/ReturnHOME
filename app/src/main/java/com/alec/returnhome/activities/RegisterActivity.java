@@ -53,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         mCountryCodePicker = findViewById(R.id.countryCodePicker);
         mTextInputPhoneNumber = findViewById(R.id.textInputNumberPhone);
 
-        //Crea un mensaje de espera para el proceso de registro
+        //MENSAJE DE ESPERA PARA EL PROCESO DE REGISTRO
         mDialog = new SpotsDialog.Builder().setContext(RegisterActivity.this).setMessage(R.string.dialogRegister).build();
 
         mClientProvider = new ClientProvider(RegisterActivity.this);
@@ -93,18 +93,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
-
         mClientProvider.registerClient(client).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
                 mDialog.hide();
 
-                Intent intent = new Intent(RegisterActivity.this, MapClientActivity.class);
-                //Una vez ingresado el usuario al activity MapDriver, no podra regresar al activity anterior
+                Intent intent = new Intent(RegisterActivity.this, NavigationActivity.class);
+                //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-
             }
 
             @Override

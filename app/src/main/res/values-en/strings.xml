@@ -8,4 +8,11 @@
     <string name="rbtnFemale">Female</string>
     <string name="txtInputPhoneNumber">Phone number</string>
     <string name="btnRegister">REGISTER</string>
+    <string name="dialogRegister">Just a moment</string>
+    <string name="nav_pet">Pets</string>
+    <string name="profile">Profile</string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
+    <string name="pets_fragment">Pets</string>
+    <string name="nav_profile">Profile</string>
 </resources>
