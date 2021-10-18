@@ -8,13 +8,11 @@ require_once '../connection.php' ;
 // CREA LA CONEXION A LA BASE DE DATOS
 $pdo = new Connection();
 // OBTENER VALOR DEL PARAMETRO ID
-
-$parameters = file_get_contents('php://input');
-$data = json_decode($parameters, true);
+$id = isset($_GET['id']) ? $_GET['id'] : die();
 
 $sqlQuery = "select idPet, name, breed, gender, description from tblpet where id_client = ?";
 $stmt = $pdo->prepare($sqlQuery);
-$stmt->bindValue(1,$data["id"]);
+$stmt->bindValue(1,$id);
 $stmt->execute();
 
 $petCount = $stmt->rowCount();
@@ -42,7 +40,7 @@ if($petCount > 0){
 else{
     http_response_code(404);
     echo json_encode(
-        array("message" => "No pets found.")
+        array("message" => "No petArrayList found.")
     );
 }
 
