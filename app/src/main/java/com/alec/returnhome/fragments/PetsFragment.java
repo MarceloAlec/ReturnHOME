@@ -3,60 +3,93 @@ package com.alec.returnhome.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alec.returnhome.R;
+import com.alec.returnhome.models.Pet;
+import com.alec.returnhome.providers.PetProvider;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class PetsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    PetProvider petProvider;
+    RecyclerView mRecyclerViewPets;
+    ArrayList<Pet> mPetList;
+    PetProvider mPetProvider;
+    int idClient=1;
 
     public PetsFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PetsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PetsFragment newInstance(String param1, String param2) {
-        PetsFragment fragment = new PetsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pets, container, false);
+        View view = inflater.inflate(R.layout.fragment_pets, container, false);
+
+        mPetProvider = new PetProvider(getContext());
+        mRecyclerViewPets = view.findViewById(R.id.recyclerView);
+
+        getPets(1);
+       // showList();
+
+        return view;
+    }
+
+    private void getPets(int idClient) {
+        mPetProvider.getPets(idClient).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body());
+                    JSONArray jsonArray = jsonObject.getJSONArray("pets");
+
+
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ArrayList<Pet>>(){}.getType();
+                    mPetList = gson.fromJson(String.valueOf(jsonArray), type);
+
+                    showList();
+
+                } catch (JSONException e) {
+                    Log.d("Error", "Error encontrado" + e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void showList() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
+        mRecyclerViewPets.setLayoutManager(linearLayoutManager);
+        //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
+        petProvider = new PetProvider(getContext(), mPetList);
+        mRecyclerViewPets.setAdapter(petProvider);
     }
 }

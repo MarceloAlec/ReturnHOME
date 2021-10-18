@@ -59,6 +59,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_pet:
 
                 ft.replace(R.id.content, new PetsFragment()).commit();
+
                 break;
             case R.id.nav_profile:
                 ft.replace(R.id.content, new ProfileFragment()).commit();

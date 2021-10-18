@@ -2,17 +2,26 @@ package com.alec.returnhome.models;
 
 public class Pet {
 
-    String name;
-    String breed;
-    String gender;
-    String description;
+    private int idPet;
+    private String name;
+    private String breed;
+    private char gender;
+    private String description;
 
 
-    public Pet(String name, String breed, String gender, String description) {
+    public Pet(int idPet, String name, String breed, char gender, String description) {
         this.name = name;
         this.breed = breed;
         this.gender = gender;
         this.description = description;
+    }
+
+    public int getIdPet() {
+        return idPet;
+    }
+
+    public void setIdPet(int idPet) {
+        this.idPet = idPet;
     }
 
     public String getName() {
@@ -31,11 +40,11 @@ public class Pet {
         this.breed = breed;
     }
 
-    public String getGender() {
+    public char getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(char gender) {
         this.gender = gender;
     }
 
