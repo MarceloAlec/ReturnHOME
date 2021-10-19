@@ -1,5 +1,7 @@
 package com.alec.returnhome.models;
 
+import java.util.Objects;
+
 public class Pet {
 
     private int idPet;
@@ -55,4 +57,6 @@ public class Pet {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

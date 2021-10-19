@@ -44,14 +44,14 @@ public class PetsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_pets, container, false);
 
         mPetProvider = new PetProvider(getContext());
         mRecyclerViewPets = view.findViewById(R.id.recyclerView);
 
         getPets(1);
-       // showList();
+
 
         return view;
     }

@@ -73,8 +73,12 @@ public class PetProvider extends RecyclerView.Adapter<PetProvider.PetsViewHolder
         //A CADA POSICION DEL RECYCLER TENDRA LA MISMA VISTA CREADA EN ONCREATEVIEWHOLDER
         String namePet = petArrayList.get(position).getName();
         String breedPet = petArrayList.get(position).getBreed();
+        String genderPet = String.valueOf(petArrayList.get(position).getGender());
+        String descriptionPet = petArrayList.get(position).getDescription();
         holder.mTextViewNamePet.setText(namePet);
         holder.mTextViewBreedPet.setText(breedPet);
+        holder.mTextViewGenderPet.setText(genderPet);
+        holder.mTextViewDescriptionPet.setText(descriptionPet);
     }
 
 
@@ -89,13 +93,18 @@ public class PetProvider extends RecyclerView.Adapter<PetProvider.PetsViewHolder
 
         TextView mTextViewNamePet;
         TextView mTextViewBreedPet;
+        TextView mTextViewGenderPet;
+        TextView mTextViewDescriptionPet;
         ImageView mImageViewPet;
 
         public PetsViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewNamePet = itemView.findViewById(R.id.namePet);
             mTextViewBreedPet = itemView.findViewById(R.id.breedPet);
+            mTextViewGenderPet = itemView.findViewById(R.id.genderPet);
+            mTextViewDescriptionPet = itemView.findViewById(R.id.descriptionPet);
             mImageViewPet = itemView.findViewById(R.id.imageView_pet);
+
         }
     }
 }

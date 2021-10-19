@@ -10,9 +10,13 @@
     <string name="btnRegister">REGISTER</string>
     <string name="dialogRegister">Just a moment</string>
     <string name="nav_pet">Pets</string>
-    <string name="profile">Profile</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
-    <string name="pets_fragment">Pets</string>
     <string name="nav_profile">Profile</string>
+    <string name="lbl_breedPet">Breed:</string>
+    <string name="lbl_genderPet">Gender:</string>
+    <string name="lbl_descriptionPet">Description:</string>
+    <string name="btn_edit">EDIT</string>
+    <string name="btn_delete">DELETE</string>
+
 </resources>

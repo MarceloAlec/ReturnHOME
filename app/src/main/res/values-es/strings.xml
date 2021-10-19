@@ -13,5 +13,10 @@
     <string name="nav_profile">Perfil</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
+    <string name="lbl_breedPet">Raza:</string>
+    <string name="lbl_genderPet">Genero:</string>
+    <string name="lbl_descriptionPet">Descripcion:</string>
+    <string name="btn_edit">EDITAR</string>
+    <string name="btn_delete">ELIMINAR</string>
 
 </resources>
