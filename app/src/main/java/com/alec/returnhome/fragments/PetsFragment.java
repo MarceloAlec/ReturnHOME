@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.alec.returnhome.R;
 import com.alec.returnhome.models.Pet;
@@ -35,6 +37,8 @@ public class PetsFragment extends Fragment {
     RecyclerView mRecyclerViewPets;
     ArrayList<Pet> mPetList;
     PetProvider mPetProvider;
+
+
     int idClient=1;
 
     public PetsFragment() {
@@ -49,6 +53,7 @@ public class PetsFragment extends Fragment {
 
         mPetProvider = new PetProvider(getContext());
         mRecyclerViewPets = view.findViewById(R.id.recyclerView);
+
 
         getPets(1);
 

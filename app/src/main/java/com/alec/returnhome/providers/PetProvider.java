@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import retrofit2.Call;
 
 public class PetProvider extends RecyclerView.Adapter<PetProvider.PetsViewHolder> {
 
+
     private Context context;
     //RAIZ DE LA URL QUE FORMA PARTE DE LA PETICION
     private String baseUrl = "http://192.168.0.3:82/api.returnhome.com/v1/";
@@ -38,7 +40,6 @@ public class PetProvider extends RecyclerView.Adapter<PetProvider.PetsViewHolder
         this.petArrayList = petArrayList;
 
     }
-
 
     public Call<String> getPets(int idClient){
 
@@ -96,6 +97,7 @@ public class PetProvider extends RecyclerView.Adapter<PetProvider.PetsViewHolder
         TextView mTextViewGenderPet;
         TextView mTextViewDescriptionPet;
         ImageView mImageViewPet;
+        Button mButtonDelete;
 
         public PetsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,6 +106,14 @@ public class PetProvider extends RecyclerView.Adapter<PetProvider.PetsViewHolder
             mTextViewGenderPet = itemView.findViewById(R.id.genderPet);
             mTextViewDescriptionPet = itemView.findViewById(R.id.descriptionPet);
             mImageViewPet = itemView.findViewById(R.id.imageView_pet);
+            mButtonDelete = itemView.findViewById(R.id.btnDelete);
+
+            mButtonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("CLICK");
+                }
+            });
 
         }
     }
