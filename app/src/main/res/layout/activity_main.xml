@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@drawable/background_color"
-    tools:context=".activities.RegisterActivity">
+    tools:context=".activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <ImageView
             android:layout_width="150dp"
@@ -23,60 +24,44 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ReturnHOME"
+            android:text="@string/name_app"
             android:textAlignment="center"
             android:textColor="@color/colorIcons"
-            android:layout_margin="20dp"
+            android:layout_margin="30dp"
             android:textSize="50sp"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Encuentra a tu mascota"
+            android:text="@string/slogan_app"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryLight"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="60dp"
             android:textSize="20sp"
             android:textStyle="italic|bold"/>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btnGoToLogin"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="bottom"
-            android:layout_margin="20dp">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/btn_have_an_account"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorPrimaryText" />
 
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="@color/colorAccent"
-                android:text="INICIAR SESIÓN"
-                android:textColor="@color/colorPrimaryText"
-                android:layout_marginRight="5dp"
-                android:textSize="15sp"/>
-
-            <Button
-                android:id="@+id/btnRegister"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="@color/colorAccent"
-                android:text="REGISTRARSE"
-                android:textColor="@color/colorPrimaryText"
-                android:layout_marginLeft="5dp"
-                android:textSize="15sp"/>
-
-
-
-
-        </LinearLayout>
-
-
+        <Button
+            android:id="@+id/btnGoToRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/btn_register_now" />
 
 
     </LinearLayout>

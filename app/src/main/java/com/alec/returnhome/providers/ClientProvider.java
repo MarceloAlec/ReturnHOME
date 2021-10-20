@@ -8,6 +8,9 @@ import com.alec.returnhome.retrofit.RetrofitClient;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -23,10 +26,14 @@ public class ClientProvider {
 
     }
 
-    //RETORNA UN CALL DEL TIPO STRING
-    public Call<ResponseBody> registerClient(Client client){
+
+    public Call<String> registerClient(Client client){
 
         return RetrofitClient.getClient(baseUrl).create(IClientApi.class).create(client);
+    }
+
+    public Call<String> authClient(HashMap<String,String> auth){
+        return RetrofitClient.getClient(baseUrl).create(IClientApi.class).authClient(auth);
     }
 
 }

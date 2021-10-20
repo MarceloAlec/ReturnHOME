@@ -27,10 +27,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginStart="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputName"
+                    android:id="@+id/textInputNameRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/txtInputName"
@@ -57,10 +57,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginStart="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEmail"
+                    android:id="@+id/textInputEmailRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/txtInputEmail"
@@ -87,10 +87,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginStart="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputPassword"
+                    android:id="@+id/textInputPasswordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/txtInputPassword"

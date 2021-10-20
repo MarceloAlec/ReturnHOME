@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activities.RegisterActivity">
+    tools:context=".activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,12 +35,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginStart="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEmailLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Correo electrónico"
+                    android:hint="@string/txtInputEmail"
                     android:inputType="textEmailAddress">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -64,12 +65,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginStart="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputPasswordLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Contraseña"
+                    android:hint="@string/txtInputPassword"
                     android:inputType="textPassword">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -85,9 +87,10 @@
             android:gravity="bottom">
 
             <Button
+                android:id="@+id/btnSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="REGISTRAR"
+                android:text="@string/btn_sign_in"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorIcons"

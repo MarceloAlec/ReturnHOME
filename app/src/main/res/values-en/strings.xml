@@ -18,5 +18,10 @@
     <string name="lbl_descriptionPet">Description:</string>
     <string name="btn_edit">EDIT</string>
     <string name="btn_delete">DELETE</string>
+    <string name="btn_sign_in">SIGN IN</string>
+    <string name="name_app">ReturnHOME</string>
+    <string name="slogan_app">Encuentra a tu mascota</string>
+    <string name="btn_have_an_account">ALREADY HAVE AN ACCOUNT? LOG IN</string>
+    <string name="btn_register_now">REGISTER NOW</string>
 
 </resources>

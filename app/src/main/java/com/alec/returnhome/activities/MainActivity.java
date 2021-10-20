@@ -12,8 +12,8 @@ import com.alec.returnhome.R;
 public class MainActivity extends AppCompatActivity {
 
     //PARA REFERENCIAR LOS BOTONES
-    Button mButtonLogin;
-    Button mButtonRegister;
+    Button mButtonGoToLogin;
+    Button mButttonGoToRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +21,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //SE OBTIENE LA REFERENCIA DE LOS BOTONES
-        mButtonLogin = findViewById(R.id.btnLogin);
-        mButtonRegister = findViewById(R.id.btnRegister);
+        mButtonGoToLogin = findViewById(R.id.btnGoToLogin);
+        mButttonGoToRegister = findViewById(R.id.btnGoToRegister);
 
         //AÑADE EL EVENTO CLICK A LOS BOTONES
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
+        mButtonGoToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //SE CREA UNA INTENCION PARA PASAR DE UNA ACTIVIDAD A OTRA
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mButtonRegister.setOnClickListener(new View.OnClickListener() {
+        mButttonGoToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);

@@ -14,10 +14,12 @@ public class RetrofitClient {
         retrofit = new Retrofit.Builder()
                             .baseUrl(url)
                             .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
                             .build();
-
         return retrofit;
     }
+
+
 
 
 }

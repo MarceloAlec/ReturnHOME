@@ -4,6 +4,8 @@ import com.alec.returnhome.models.Client;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,7 +19,8 @@ public interface IClientApi {
     })
 
     @POST("client/create.php")
-    Call<ResponseBody> create(@Body Client client);
+    Call<String> create(@Body Client client);
 
-
+    @POST("client/auth.php")
+    Call<String> authClient(@Body HashMap<String,String> auth);
 }

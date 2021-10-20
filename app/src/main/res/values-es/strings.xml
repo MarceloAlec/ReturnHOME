@@ -6,7 +6,7 @@
     <string name="txtInputPassword">Contraseña</string>
     <string name="rbtnMale">Masculino</string>
     <string name="rbtnFemale">Femenino</string>
-    <string name="txtInputPhoneNumber">Numero de celular</string>
+    <string name="txtInputPhoneNumber">Número de celular</string>
     <string name="btnRegister">REGISTRAR</string>
     <string name="dialogRegister">Espera un momento</string>
     <string name="nav_pet">Mascotas</string>
@@ -14,9 +14,14 @@
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="lbl_breedPet">Raza:</string>
-    <string name="lbl_genderPet">Genero:</string>
-    <string name="lbl_descriptionPet">Descripcion:</string>
+    <string name="lbl_genderPet">Género:</string>
+    <string name="lbl_descriptionPet">Descripción:</string>
     <string name="btn_edit">EDITAR</string>
     <string name="btn_delete">ELIMINAR</string>
+    <string name="btn_sign_in">INICIAR SESIÓN</string>
+    <string name="name_app">ReturnHOME</string>
+    <string name="slogan_app">Encuentra a tu mascota</string>
+    <string name="btn_have_an_account">YA TENGO UNA CUENTA</string>
+    <string name="btn_register_now">REGISTRARME AHORA</string>
 
 </resources>
