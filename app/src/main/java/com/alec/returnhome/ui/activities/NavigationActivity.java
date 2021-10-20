@@ -1,4 +1,4 @@
-package com.alec.returnhome.activities;
+package com.alec.returnhome.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,13 +10,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.alec.returnhome.R;
-import com.alec.returnhome.fragments.PetsFragment;
-import com.alec.returnhome.fragments.ProfileFragment;
+import com.alec.returnhome.ui.fragments.PetsFragment;
+import com.alec.returnhome.ui.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

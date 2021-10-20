@@ -1,4 +1,4 @@
-package com.alec.returnhome.activities;
+package com.alec.returnhome.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

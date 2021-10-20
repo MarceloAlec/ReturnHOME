@@ -1,11 +1,11 @@
-package com.alec.returnhome.activities;
+package com.alec.returnhome.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,21 +15,20 @@ import com.alec.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.HashMap;
-import java.util.Map;
 
-import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button mButtonSignIn;
-    TextInputEditText mTextInputEmail;
-    TextInputEditText mTextInputPassword;
+    private Button mButtonSignIn;
+    private TextInputEditText mTextInputEmail;
+    private TextInputEditText mTextInputPassword;
+
+    private ClientProvider mClientProvider;
 
 
-    ClientProvider mClientProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,5 +96,12 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void saveLoginSharedPreferences(int id, String name){
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("id", id);
+        editor.apply();
     }
 }

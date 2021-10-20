@@ -13,16 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.NavigationActivity"/>
+        <activity android:name=".ui.activities.NavigationActivity"/>
         <activity
-            android:name=".activities.LoginActivity"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:name=".ui.activities.LoginActivity"
+            android:parentActivityName=".ui.activities.MainActivity"/>
         <activity
-            android:name=".activities.RegisterActivity"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:name=".ui.activities.RegisterActivity"
+            android:parentActivityName=".ui.activities.MainActivity"/>
 
         <activity
-            android:name=".activities.MainActivity">
+            android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

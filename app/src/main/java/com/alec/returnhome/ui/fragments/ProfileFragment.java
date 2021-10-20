@@ -1,4 +1,4 @@
-package com.alec.returnhome.fragments;
+package com.alec.returnhome.ui.fragments;
 
 import android.os.Bundle;
 

@@ -1,7 +1,5 @@
 package com.alec.returnhome.models;
 
-import java.util.Objects;
-
 public class Pet {
 
     private int idPet;

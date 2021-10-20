@@ -1,4 +1,4 @@
-package com.alec.returnhome.fragments;
+package com.alec.returnhome.ui.fragments;
 
 import android.os.Bundle;
 
@@ -6,16 +6,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.alec.returnhome.R;
 import com.alec.returnhome.models.Pet;
 import com.alec.returnhome.providers.PetProvider;
+import com.alec.returnhome.ui.adapters.PetAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,7 +32,7 @@ import retrofit2.Response;
 
 public class PetsFragment extends Fragment {
 
-    PetProvider petProvider;
+    PetAdapter mPetAdapter;
     RecyclerView mRecyclerViewPets;
     ArrayList<Pet> mPetList;
     PetProvider mPetProvider;
@@ -94,7 +93,7 @@ public class PetsFragment extends Fragment {
         //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
         mRecyclerViewPets.setLayoutManager(linearLayoutManager);
         //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
-        petProvider = new PetProvider(getContext(), mPetList);
-        mRecyclerViewPets.setAdapter(petProvider);
+        mPetAdapter = new PetAdapter(getContext(), mPetList);
+        mRecyclerViewPets.setAdapter(mPetAdapter);
     }
 }

@@ -1,4 +1,4 @@
-package com.alec.returnhome.retrofit;
+package com.alec.returnhome.utils.retrofit;
 
 
 import retrofit2.Call;
@@ -12,6 +12,6 @@ public interface IPetApi {
             "Content-Type:application/json"
     })
 
-    @GET("pet/read.php")
+    @GET("read.php")
     Call<String> read(@Query("id") int idClient);
 }
