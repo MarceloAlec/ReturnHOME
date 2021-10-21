@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.alec.returnhome.R;
+import com.alec.returnhome.models.ApiResponse;
 import com.alec.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -62,9 +63,9 @@ public class LoginActivity extends AppCompatActivity {
                 auth.put("email", email);
                 auth.put("password", password);
 
-                mClientProvider.authClient(auth).enqueue(new Callback<String>() {
+                mClientProvider.authClient(auth).enqueue(new Callback<ApiResponse>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                         if(response.isSuccessful()){
 
@@ -79,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                         Toast.makeText(LoginActivity.this, "Ingreso fallido", Toast.LENGTH_SHORT).show();
                     }

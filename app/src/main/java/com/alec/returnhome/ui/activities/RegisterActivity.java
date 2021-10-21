@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.alec.returnhome.R;
+import com.alec.returnhome.models.ApiResponse;
 import com.alec.returnhome.models.Client;
 import com.alec.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -87,20 +88,28 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
-        mClientProvider.registerClient(client).enqueue(new Callback<String>() {
+        mClientProvider.registerClient(client).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
                 mDialog.hide();
 
-                Intent intent = new Intent(RegisterActivity.this, NavigationActivity.class);
-                //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                if(response.isSuccessful()){
+
+
+                    Intent intent = new Intent(RegisterActivity.this, NavigationActivity.class);
+                    //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(RegisterActivity.this, "El correo ya se encuentra registrado", Toast.LENGTH_SHORT).show();
+                }
+
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
 
                 Toast.makeText(RegisterActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
             }

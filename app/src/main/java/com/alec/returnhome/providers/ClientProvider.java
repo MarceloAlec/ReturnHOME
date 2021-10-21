@@ -2,6 +2,7 @@ package com.alec.returnhome.providers;
 
 import android.content.Context;
 
+import com.alec.returnhome.models.ApiResponse;
 import com.alec.returnhome.models.Client;
 import com.alec.returnhome.utils.retrofit.IClientApi;
 import com.alec.returnhome.utils.retrofit.RetrofitClient;
@@ -23,12 +24,12 @@ public class ClientProvider {
     }
 
 
-    public Call<String> registerClient(Client client){
+    public Call<ApiResponse> registerClient(Client client){
 
         return RetrofitClient.getClient(BASE_URL).create(IClientApi.class).create(client);
     }
 
-    public Call<String> authClient(HashMap<String,String> auth){
+    public Call<ApiResponse> authClient(HashMap<String,String> auth){
         return RetrofitClient.getClient(BASE_URL).create(IClientApi.class).authClient(auth);
     }
 

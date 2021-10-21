@@ -19,15 +19,14 @@ $stmt = $client->authClient($pdo,$data["email"],$data["password"]);
 
 if($stmt){
     http_response_code(201);
-    $client_auth[] = array("id"=>$stmt["id"],
+    $client_auth = array("id"=>$stmt["id"],
                     "name"=>$stmt["name"],
                     "email"=>$stmt["email"],
                     "password"=>$stmt["pass"],
                     "gender"=>$stmt["gender"],
                     "phoneNumber"=>$stmt["phoneNumber"]);
     
-    echo json_encode(array("message"=>"Client authenticated successfully",
-                           "client" => $client_auth));
+    echo json_encode(array("message"=>"Client authenticated successfully", "client" => $client_auth));
 
 }
 else{
