@@ -22,6 +22,11 @@
     <string name="slogan_app">Encuentra a tu mascota</string>
     <string name="btn_have_an_account">ALREADY HAVE AN ACCOUNT? LOG IN</string>
     <string name="btn_register_now">REGISTER NOW</string>
+    <string name="pref_file_key" translatable="false">pref_file_key</string>
+    <string name="pref_is_user_login" translatable="false">isuserlogin</string>
+    <string name="pref_username" translatable="false">user_name</string>
+    <string name="pref_user_id" translatable="false">user_id</string>
+    <string name="pref_user_phonenumber" translatable="false">user_phonenumber</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

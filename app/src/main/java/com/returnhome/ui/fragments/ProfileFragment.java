@@ -1,4 +1,4 @@
-package com.alec.returnhome.ui.fragments;
+package com.returnhome.ui.fragments;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alec.returnhome.R;
+import com.returnhome.R;
 
 /**
  * A simple {@link Fragment} subclass.

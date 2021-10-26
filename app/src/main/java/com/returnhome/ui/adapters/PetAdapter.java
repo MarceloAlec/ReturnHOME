@@ -1,4 +1,4 @@
-package com.alec.returnhome.ui.adapters;
+package com.returnhome.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alec.returnhome.R;
-import com.alec.returnhome.models.Pet;
+import com.returnhome.R;
+import com.returnhome.models.Pet;
 
 import java.util.ArrayList;
 

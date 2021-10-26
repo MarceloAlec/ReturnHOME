@@ -1,4 +1,4 @@
-package com.alec.returnhome.ui.fragments;
+package com.returnhome.ui.fragments;
 
 import android.os.Bundle;
 
@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alec.returnhome.R;
-import com.alec.returnhome.models.Pet;
-import com.alec.returnhome.providers.PetProvider;
-import com.alec.returnhome.ui.adapters.PetAdapter;
+import com.returnhome.R;
+import com.returnhome.models.Pet;
+import com.returnhome.providers.PetProvider;
+import com.returnhome.ui.adapters.PetAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.retrofit.ResponseApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,13 +34,10 @@ import retrofit2.Response;
 
 public class PetsFragment extends Fragment {
 
-    PetAdapter mPetAdapter;
-    RecyclerView mRecyclerViewPets;
-    ArrayList<Pet> mPetList;
-    PetProvider mPetProvider;
-
-
-    int idClient=1;
+    private PetAdapter mPetAdapter;
+    private RecyclerView mRecyclerViewPets;
+    private PetProvider mPetProvider;
+    private AppConfig mAppConfig;
 
     public PetsFragment() {
 
@@ -50,50 +49,41 @@ public class PetsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_pets, container, false);
 
-        mPetProvider = new PetProvider(getContext());
+        mPetProvider = new PetProvider(container.getContext());
         mRecyclerViewPets = view.findViewById(R.id.recyclerView);
+        mAppConfig = new AppConfig(container.getContext());
 
-
-        getPets(1);
-
+        getPets();
 
         return view;
     }
 
-    private void getPets(int idClient) {
-        mPetProvider.getPets(idClient).enqueue(new Callback<String>() {
+    private void getPets() {
+        int idClient = mAppConfig.getUserId();
+
+        mPetProvider.getPets(idClient).enqueue(new Callback<ResponseApi>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response.body());
-                    JSONArray jsonArray = jsonObject.getJSONArray("pets");
-
-
-                    Gson gson = new Gson();
-                    Type type = new TypeToken<ArrayList<Pet>>(){}.getType();
-                    mPetList = gson.fromJson(String.valueOf(jsonArray), type);
-
-                    showList();
-
-                } catch (JSONException e) {
-                    Log.d("Error", "Error encontrado" + e.getMessage());
+            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+                if(response.isSuccessful()){
+                   showList(response.body().getPets());
                 }
-
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ResponseApi> call, Throwable t) {
 
             }
         });
     }
 
-    private void showList() {
+
+
+    private void showList(ArrayList<Pet> pets) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
         mRecyclerViewPets.setLayoutManager(linearLayoutManager);
         //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
-        mPetAdapter = new PetAdapter(getContext(), mPetList);
+        mPetAdapter = new PetAdapter(getContext(), pets);
         mRecyclerViewPets.setAdapter(mPetAdapter);
     }
 }

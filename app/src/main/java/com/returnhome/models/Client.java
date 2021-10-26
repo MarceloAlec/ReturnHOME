@@ -1,4 +1,4 @@
-package com.alec.returnhome.models;
+package com.returnhome.models;
 
 public class Client {
 

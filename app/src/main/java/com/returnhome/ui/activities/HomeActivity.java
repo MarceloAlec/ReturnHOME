@@ -1,4 +1,4 @@
-package com.alec.returnhome.ui.activities;
+package com.returnhome.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,28 +11,33 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-import com.alec.returnhome.R;
-import com.alec.returnhome.ui.fragments.PetsFragment;
-import com.alec.returnhome.ui.fragments.ProfileFragment;
+import com.returnhome.R;
+import com.returnhome.ui.fragments.PetsFragment;
+import com.returnhome.ui.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.returnhome.utils.AppConfig;
 
-public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
-    Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private Toolbar mToolbar;
+    private TextView mTextViewUserName;
+    private TextView mTextViewUserPhoneNumber;
+    private View mHeaderView;
 
-    ActionBarDrawerToggle mToggle;
+    private ActionBarDrawerToggle mToggle;
+    private AppConfig mAppConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation);
+        setContentView(R.layout.activity_home);
 
-        mDrawerLayout = findViewById(R.id.drawerLayout);
-        mNavigationView = findViewById(R.id.nav_view);
-        mToolbar = findViewById(R.id.toolbar);
+        initializeComponents();
 
         //CONFIGURACION DEL TOOLBAR
         setSupportActionBar(mToolbar);
@@ -46,6 +51,20 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         getSupportFragmentManager().beginTransaction().add(R.id.content, new PetsFragment()).commit();
         setTitle(getString(R.string.nav_pet));
 
+        mAppConfig = new AppConfig(this);
+
+        mTextViewUserName.setText(mAppConfig.getUserName());
+        mTextViewUserPhoneNumber.setText(mAppConfig.getPhoneNumber());
+
+    }
+
+    private void initializeComponents() {
+        mDrawerLayout = findViewById(R.id.drawerLayout);
+        mNavigationView = findViewById(R.id.nav_view);
+        mToolbar = findViewById(R.id.toolbar);
+        mHeaderView = mNavigationView.getHeaderView(0);
+        mTextViewUserName = mHeaderView.findViewById(R.id.textView_userName);
+        mTextViewUserPhoneNumber =mHeaderView.findViewById(R.id.textView_phoneNumber);
     }
 
     @Override

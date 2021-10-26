@@ -1,7 +1,6 @@
-package com.alec.returnhome.utils.retrofit;
+package com.returnhome.utils.retrofit;
 
-import com.alec.returnhome.models.ApiResponse;
-import com.alec.returnhome.models.Client;
+import com.returnhome.models.Client;
 
 import java.util.HashMap;
 
@@ -17,8 +16,8 @@ public interface IClientApi {
     })
 
     @POST("create.php")
-    Call<ApiResponse> create(@Body Client client);
+    Call<ResponseApi> create(@Body Client client);
 
     @POST("auth.php")
-    Call<ApiResponse> authClient(@Body HashMap<String,String> auth);
+    Call<ResponseApi> authClient(@Body HashMap<String,String> auth);
 }

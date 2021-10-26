@@ -1,4 +1,4 @@
-package com.alec.returnhome.ui.activities;
+package com.returnhome.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,22 +7,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.alec.returnhome.R;
+import com.returnhome.R;
+import com.returnhome.utils.AppConfig;
 
 public class MainActivity extends AppCompatActivity {
 
     //PARA REFERENCIAR LOS BOTONES
-    Button mButtonGoToLogin;
-    Button mButttonGoToRegister;
+    private Button mButtonGoToLogin;
+    private Button mButttonGoToRegister;
+
+    private AppConfig mAppConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //SE OBTIENE LA REFERENCIA DE LOS BOTONES
-        mButtonGoToLogin = findViewById(R.id.btnGoToLogin);
-        mButttonGoToRegister = findViewById(R.id.btnGoToRegister);
+        initializeComponents();
+
+        mAppConfig = new AppConfig(this);
+
+        if(mAppConfig.isUserLogin()){
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         //AÑADE EL EVENTO CLICK A LOS BOTONES
         mButtonGoToLogin.setOnClickListener(new View.OnClickListener() {
@@ -44,5 +53,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void initializeComponents() {
+        mButtonGoToLogin = findViewById(R.id.btnGoToLogin);
+        mButttonGoToRegister = findViewById(R.id.btnGoToRegister);
     }
 }

@@ -1,4 +1,4 @@
-package com.alec.returnhome.ui.activities;
+package com.returnhome.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.alec.returnhome.R;
-import com.alec.returnhome.models.ApiResponse;
-import com.alec.returnhome.models.Client;
-import com.alec.returnhome.providers.ClientProvider;
+import com.returnhome.R;
+import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.Client;
+import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
@@ -24,34 +25,30 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    Button mButtonRegister;
-    TextInputEditText mTextInputEmail;
-    TextInputEditText mTextInputName;
-    TextInputEditText mTextInputPassword;
-    RadioButton mRadioButtonMale;
-    CountryCodePicker mCountryCodePicker;
-    TextInputEditText mTextInputPhoneNumber;
-    ClientProvider mClientProvider;
+    private Button mButtonRegister;
+    private TextInputEditText mTextInputEmail;
+    private TextInputEditText mTextInputName;
+    private TextInputEditText mTextInputPassword;
+    private RadioButton mRadioButtonMale;
+    private CountryCodePicker mCountryCodePicker;
+    private TextInputEditText mTextInputPhoneNumber;
+    private ClientProvider mClientProvider;
 
-    AlertDialog mDialog;
+    private AlertDialog mDialog;
+    private AppConfig mAppConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mButtonRegister = findViewById(R.id.btnRegister);
-        mTextInputName = findViewById(R.id.textInputNameRegister);
-        mTextInputEmail = findViewById(R.id.textInputEmailRegister);
-        mTextInputPassword = findViewById(R.id.textInputPasswordRegister);
-        mRadioButtonMale = findViewById(R.id.radioButtonMale);
-        mCountryCodePicker = findViewById(R.id.countryCodePicker);
-        mTextInputPhoneNumber = findViewById(R.id.textInputNumberPhone);
+        initializeComponents();
 
         //MENSAJE DE ESPERA PARA EL PROCESO DE REGISTRO
         mDialog = new SpotsDialog.Builder().setContext(RegisterActivity.this).setMessage(R.string.dialogRegister).build();
 
         mClientProvider = new ClientProvider(RegisterActivity.this);
+        mAppConfig = new AppConfig(this);
 
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +58,17 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
+
+    private void initializeComponents() {
+        mButtonRegister = findViewById(R.id.btnRegister);
+        mTextInputName = findViewById(R.id.textInputNameRegister);
+        mTextInputEmail = findViewById(R.id.textInputEmailRegister);
+        mTextInputPassword = findViewById(R.id.textInputPasswordRegister);
+        mRadioButtonMale = findViewById(R.id.radioButtonMale);
+        mCountryCodePicker = findViewById(R.id.countryCodePicker);
+        mTextInputPhoneNumber = findViewById(R.id.textInputNumberPhone);
+    }
+
 
     private void clickRegister() {
         String name = mTextInputName.getText().toString();
@@ -88,16 +96,21 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
-        mClientProvider.registerClient(client).enqueue(new Callback<ApiResponse>() {
+        mClientProvider.registerClient(client).enqueue(new Callback<ResponseApi>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
-                mDialog.hide();
+                mDialog.dismiss();
 
                 if(response.isSuccessful()){
 
+                    mAppConfig.updateLoginStatus(true);
+                    mAppConfig.saveUserName(client.getName());
+                    mAppConfig.saveUserId(response.body().getClient().getId());
+                    mAppConfig.saveUserPhoneNumber(client.getPhoneNumber());
 
-                    Intent intent = new Intent(RegisterActivity.this, NavigationActivity.class);
+
+                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                     //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -109,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(Call<ResponseApi> call, Throwable t) {
 
                 Toast.makeText(RegisterActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
             }
