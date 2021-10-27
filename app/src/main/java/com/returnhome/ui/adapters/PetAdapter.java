@@ -7,26 +7,38 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.returnhome.R;
 import com.returnhome.models.Pet;
+import com.returnhome.providers.PetProvider;
+import com.returnhome.ui.activities.LoginActivity;
+import com.returnhome.utils.retrofit.ResponseApi;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder>{
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
 
     //LISTA MASCOTAS SE ENVIAN AL RECYCLERVIEW
     private ArrayList<Pet> petArrayList;
     LayoutInflater inflater;
+    PetProvider mPetProvider;
+    Context context;
 
     public PetAdapter(Context context, ArrayList<Pet> petArrayList){
+        this.context=context;
         this.inflater = LayoutInflater.from(context);
         this.petArrayList = petArrayList;
-
+        mPetProvider = new PetProvider(context);
     }
 
     @NonNull
@@ -54,14 +66,37 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull PetViewHolder holder, int position) {
         //A CADA POSICION DEL RECYCLER TENDRA LA MISMA VISTA CREADA EN ONCREATEVIEWHOLDER
-        String namePet = petArrayList.get(position).getName();
-        String breedPet = petArrayList.get(position).getBreed();
-        String genderPet = String.valueOf(petArrayList.get(position).getGender());
-        String descriptionPet = petArrayList.get(position).getDescription();
-        holder.mTextViewNamePet.setText(namePet);
-        holder.mTextViewBreedPet.setText(breedPet);
-        holder.mTextViewGenderPet.setText(genderPet);
-        holder.mTextViewDescriptionPet.setText(descriptionPet);
+        holder.mTextViewNamePet.setText(petArrayList.get(position).getName());
+        holder.mTextViewBreedPet.setText(petArrayList.get(position).getBreed());
+
+        //PARA TENER ACCESO AL CONTEXTO EN EL PETVIEWHOLDER Y LLAMAR A LA FUNCION STARTACTIVITY
+        //LOS EVENTOS DE CLIC SE ASIGNARAN EN PETVIEWHOLDER
+        holder.mButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                mPetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getIdPet()).enqueue(new Callback<ResponseApi>() {
+                    @Override
+                    public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+                        if(response.isSuccessful()){
+                            petArrayList.remove(holder.getBindingAdapterPosition());
+                            notifyItemRemoved(holder.getBindingAdapterPosition());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseApi> call, Throwable t) {
+                        Toast.makeText(context, "Eliminación fallida", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+
+
+
     }
 
     //OBTIENE LOS ELEMENTOS EN EL RECYCLER VIEW
@@ -70,32 +105,30 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder>{
         return petArrayList.size();
     }
 
+
     //MANEJA LOS ELEMENTOS QUE CONTIENE LA VISTA DE CADA ITEM DENTRO DEL RECYCLER
-    public class PetViewHolder extends RecyclerView.ViewHolder{
+    public class PetViewHolder extends RecyclerView.ViewHolder {
 
         TextView mTextViewNamePet;
         TextView mTextViewBreedPet;
-        TextView mTextViewGenderPet;
-        TextView mTextViewDescriptionPet;
         ImageView mImageViewPet;
         Button mButtonDelete;
+        Button mButtonEdit;
+
 
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewNamePet = itemView.findViewById(R.id.namePet);
             mTextViewBreedPet = itemView.findViewById(R.id.breedPet);
-            mTextViewGenderPet = itemView.findViewById(R.id.genderPet);
-            mTextViewDescriptionPet = itemView.findViewById(R.id.descriptionPet);
             mImageViewPet = itemView.findViewById(R.id.imageView_pet);
             mButtonDelete = itemView.findViewById(R.id.btnDelete);
+            mButtonEdit = itemView.findViewById(R.id.btnEdit);
 
-            mButtonDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("CLICK");
-                }
-            });
 
         }
+
+
     }
+
+
 }

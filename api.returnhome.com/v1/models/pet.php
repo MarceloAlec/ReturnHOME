@@ -67,6 +67,24 @@ class Pet{
         }
     }
 
+    public function deletePet($connection, $idPet){
+        $query = "DELETE FROM " . $this->tblPet . " WHERE idPet = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$idPet);
+        $stmt->execute();
+        $rows_affected = $stmt->rowCount();
+        if($rows_affected==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+        
+        
+        
+        
+    }
+
 
     
 
