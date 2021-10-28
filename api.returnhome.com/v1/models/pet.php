@@ -79,11 +79,27 @@ class Pet{
         else{
             return false;
         }
-        
-        
-        
-        
     }
+
+    public function updatePet($connection, $idPet, $name, $breed, $gender, $description){
+        $query = "UPDATE " . $this->tblPet . " SET name = ?,breed = ?,gender = ?,description = ? WHERE idPet = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$name);
+        $stmt->bindValue(2,$breed);
+        $stmt->bindValue(3,$gender);
+        $stmt->bindValue(4,$description);
+        $stmt->bindValue(5,$idPet);
+        $stmt->execute();
+        $rows_affected = $stmt->rowCount();
+        if($rows_affected==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
 
 
     

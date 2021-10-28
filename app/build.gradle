@@ -48,6 +48,8 @@ dependencies {
     implementation 'com.hbb20:ccp:2.5.4'
     //SPOTS DIALOG
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
+    //DIALOG PLUS
+    implementation 'com.orhanobut:dialogplus:1.11@aar'
 
 
 }

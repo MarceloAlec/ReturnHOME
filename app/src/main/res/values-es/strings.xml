@@ -23,5 +23,7 @@
     <string name="slogan_app">Encuentra a tu mascota</string>
     <string name="btn_have_an_account">YA TENGO UNA CUENTA</string>
     <string name="btn_register_now">REGISTRARME AHORA</string>
+    <string name="cardview_edit">Editar</string>
+    <string name="cardview_delete">Eliminar</string>
 
 </resources>

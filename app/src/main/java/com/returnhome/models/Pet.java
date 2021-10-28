@@ -1,6 +1,11 @@
 package com.returnhome.models;
 
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Pet {
+
 
     private int idPet;
     private String name;
@@ -10,6 +15,7 @@ public class Pet {
 
 
     public Pet(int idPet, String name, String breed, char gender, String description) {
+        this.idPet = idPet;
         this.name = name;
         this.breed = breed;
         this.gender = gender;
@@ -55,6 +61,7 @@ public class Pet {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
 
 }

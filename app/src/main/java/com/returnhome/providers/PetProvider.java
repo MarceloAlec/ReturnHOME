@@ -2,6 +2,7 @@ package com.returnhome.providers;
 
 import android.content.Context;
 
+import com.returnhome.models.Pet;
 import com.returnhome.utils.retrofit.IPetApi;
 import com.returnhome.utils.retrofit.ResponseApi;
 import com.returnhome.utils.retrofit.RetrofitClient;
@@ -31,6 +32,11 @@ public class PetProvider  {
     public Call<ResponseApi> deletePet(int idPet){
 
         return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).delete(idPet);
+    }
+
+    public Call<ResponseApi> updatePet(Pet pet){
+
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).update(pet);
     }
 
 

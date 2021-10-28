@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
+import com.returnhome.ui.activities.LoginActivity;
 import com.returnhome.ui.adapters.PetAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,12 +35,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class PetsFragment extends Fragment {
+public class PetsFragment extends Fragment implements View.OnClickListener {
 
     private PetAdapter mPetAdapter;
     private RecyclerView mRecyclerViewPets;
     private PetProvider mPetProvider;
     private AppConfig mAppConfig;
+    private FloatingActionButton mButtonAdd;
 
     public PetsFragment() {
 
@@ -52,6 +56,9 @@ public class PetsFragment extends Fragment {
         mPetProvider = new PetProvider(container.getContext());
         mRecyclerViewPets = view.findViewById(R.id.recyclerView);
         mAppConfig = new AppConfig(container.getContext());
+        mButtonAdd = view.findViewById(R.id.fab_addPet);
+
+        mButtonAdd.setOnClickListener(this);
 
         getPets();
 
@@ -76,8 +83,6 @@ public class PetsFragment extends Fragment {
         });
     }
 
-
-
     private void showList(ArrayList<Pet> pets) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
@@ -85,5 +90,10 @@ public class PetsFragment extends Fragment {
         //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
         mPetAdapter = new PetAdapter(getContext(), pets);
         mRecyclerViewPets.setAdapter(mPetAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getContext(), "Ingreso fallido", Toast.LENGTH_SHORT).show();
     }
 }

@@ -27,6 +27,8 @@
     <string name="pref_username" translatable="false">user_name</string>
     <string name="pref_user_id" translatable="false">user_id</string>
     <string name="pref_user_phonenumber" translatable="false">user_phonenumber</string>
+    <string name="cardview_edit">Edit</string>
+    <string name="cardview_delete">Delete</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

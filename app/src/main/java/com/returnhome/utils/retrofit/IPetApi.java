@@ -1,10 +1,14 @@
 package com.returnhome.utils.retrofit;
 
 
+import com.returnhome.models.Pet;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface IPetApi {
@@ -18,5 +22,8 @@ public interface IPetApi {
 
     @DELETE("delete.php")
     Call<ResponseApi> delete(@Query("id") int idClient);
+
+    @PUT("update.php")
+    Call<ResponseApi> update(@Body Pet pet);
 
 }
