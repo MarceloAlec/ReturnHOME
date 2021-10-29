@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +50,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //REEMPLAZA EL FRAGMENT LAYOUT CON ID CONTENT POR EL FRAGMENT PETS
         getSupportFragmentManager().beginTransaction().add(R.id.content, new PetsFragment()).commit();
-        setTitle(getString(R.string.nav_pet));
+        setTitle(R.string.app_name);
 
         mAppConfig = new AppConfig(this);
 
@@ -73,21 +74,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction ft = fm.beginTransaction();
 
         switch  (item.getItemId()){
-            case R.id.nav_pet:
-
-                ft.replace(R.id.content, new PetsFragment()).commit();
-
-                break;
             case R.id.nav_profile:
-                ft.replace(R.id.content, new ProfileFragment()).commit();
+                Intent intent = new Intent(HomeActivity.this, UpdateProfileActivity.class);
+                startActivity(intent);
+                //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
         }
 
-        setTitle(item.getTitle());
         //OCULTA EL NAVIGATION DRAWER
         mDrawerLayout.closeDrawers();
         //EL ITEM SELECCIONADO SE ENCUENTRA SELECCIONADO
-        return true;
+        return false;
     }
 
     @Override

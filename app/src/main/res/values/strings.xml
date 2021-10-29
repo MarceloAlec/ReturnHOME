@@ -29,6 +29,10 @@
     <string name="pref_user_phonenumber" translatable="false">user_phonenumber</string>
     <string name="cardview_edit">Edit</string>
     <string name="cardview_delete">Delete</string>
+    <string name="btn_addPet">ADD</string>
+    <string name="btn_updatePet">UPDATE</string>
+    <string name="btn_editProfile">EDIT</string>
+    <string name="btn_updateProfile">UPDATE</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

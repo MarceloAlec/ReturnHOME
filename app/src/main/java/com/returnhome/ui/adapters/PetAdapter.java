@@ -1,7 +1,6 @@
 package com.returnhome.ui.adapters;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,16 +17,13 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.ViewHolder;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.utils.retrofit.ResponseApi;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -45,7 +41,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     private RadioButton mRadioButtonMalePet;
     private RadioButton mRadioButtonFemalePet;
     private ArrayList<Pet> petArrayList;
-    private DialogPlus mDialogPlus;
+    private BottomSheetDialog mBottomSheetDialog;
     LayoutInflater inflater;
     PetProvider mPetProvider;
     Context context;
@@ -105,19 +101,18 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
                 switch (item.getItemId()) {
                     case R.id.cardview_edit:
 
-                        mDialogPlus = DialogPlus.newDialog(context)
-                                .setContentHolder(new ViewHolder(R.layout.popup_update))
+                        mBottomSheetDialog = new BottomSheetDialog(context);
+                        mBottomSheetDialog.setContentView(R.layout.popup_update);
+                        mBottomSheetDialog.setCanceledOnTouchOutside(false);
 
+                        mButtonUpdate = mBottomSheetDialog.findViewById(R.id.btnUpdateAdd);
+                        mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
+                        mTextInputBreed = mBottomSheetDialog.findViewById(R.id.textInputBreed);
+                        mTextInputDescription = mBottomSheetDialog.findViewById(R.id.textInputDescription);
+                        mRadioButtonMalePet = mBottomSheetDialog.findViewById(R.id.radioButtonMalePet);
+                        mRadioButtonFemalePet = mBottomSheetDialog.findViewById(R.id.radioButtonFemalePet);
 
-                                .create();
-
-                        View view = mDialogPlus.getHolderView();
-                        mButtonUpdate = view.findViewById(R.id.btnUpdate);
-                        mTextInputName = view.findViewById(R.id.textInputNamePet);
-                        mTextInputBreed = view.findViewById(R.id.textInputBreed);
-                        mTextInputDescription = view.findViewById(R.id.textInputDescription);
-                        mRadioButtonMalePet = view.findViewById(R.id.radioButtonMalePet);
-                        mRadioButtonFemalePet = view.findViewById(R.id.radioButtonFemalePet);
+                        mButtonUpdate.setText(R.string.btn_updatePet);
 
                         mTextInputName.setText(petArrayList.get(holder.getBindingAdapterPosition()).getName());
                         mTextInputBreed.setText(petArrayList.get(holder.getBindingAdapterPosition()).getBreed());
@@ -129,7 +124,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
                             mRadioButtonFemalePet.setChecked(true);
                         }
 
-                        mDialogPlus.show();
+                        mBottomSheetDialog.show();
 
                         mButtonUpdate.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -142,7 +137,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                     case R.id.cardview_delete:
 
-                        mPetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getIdPet()).enqueue(new Callback<ResponseApi>() {
+                        mPetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<ResponseApi>() {
                             @Override
                             public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
                                 if (response.isSuccessful()) {
@@ -167,7 +162,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     }
 
     private void clickUpdate(PetViewHolder holder) {
-        int idPet = petArrayList.get(holder.getBindingAdapterPosition()).getIdPet();
+        int idPet = petArrayList.get(holder.getBindingAdapterPosition()).getId();
         String name = mTextInputName.getText().toString();
         String breed = mTextInputBreed.getText().toString();
         String description = mTextInputDescription.getText().toString();
@@ -199,19 +194,19 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
                     petArrayList.get(position).setDescription(pet.getDescription());
                     petArrayList.get(position).setGender(pet.getGender());
                     notifyItemChanged(position);
-                    mDialogPlus.dismiss();
-
+                    mBottomSheetDialog.dismiss();
+                    Toast.makeText(context, "Actualización exitosa", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(context, "No se pudo procesar la actualización", Toast.LENGTH_SHORT).show();
-                    mDialogPlus.dismiss();
+                    Toast.makeText(context, "No hubo ninguna actualización", Toast.LENGTH_SHORT).show();
+                    mBottomSheetDialog.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseApi> call, Throwable t) {
                 Toast.makeText(context, "Actualización fallida", Toast.LENGTH_SHORT).show();
-                mDialogPlus.dismiss();
+                mBottomSheetDialog.dismiss();
             }
         });
 

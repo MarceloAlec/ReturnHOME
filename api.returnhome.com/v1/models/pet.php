@@ -9,33 +9,26 @@ class Pet{
     }
 
 
-    public function createPet(){
+    public function createPet($connection, $name, $breed, $gender, $description, $idClient){
 
-        /* $query = "SELECT * FROM " . $this->tblClient . "where email = ?";
+        $query = "INSERT INTO ".$this->tblPet . "(name, breed, gender, description, id_client) values(?, ?, ?, ?, ?)";
 
         $stmt = $connection->prepare($query);
-        $stmt->bindValue(1,$email);
-        $stmt->execute();
-
-        $num = $stmt->rowCount();
-
-        if($num == 0){
-            $query = "INSERT INTO ".$this->tblClient . "(name, email, pass, gender, phoneNumber) values(?, ?, ?, ?, ?)";
-
-            $stmt = $connection->prepare($query);
-            $stmt->bindValue(1,$name);
-            $stmt->bindValue(2,$email);
-            $stmt->bindValue(3,$password);
-            $stmt->bindValue(4,$gender);
-            $stmt->bindValue(5,$phoneNumber)
-            $stmt->execute();
-
-            $idClient=$connection->lastInsertId();
-            return $idClient;
+        $stmt->bindValue(1,$name);
+        $stmt->bindValue(2,$breed);
+        $stmt->bindValue(3,$gender);
+        $stmt->bindValue(4,$description);
+        $stmt->bindValue(5,$idClient);
+        
+        if($stmt->execute()){
+            $id=$connection->lastInsertId();
+            return array("id"=>$id);
         }
         else{
             return false;
-        } */
+        }
+
+        
     }
 
     public function readPet($connection, $idClient){
@@ -51,7 +44,7 @@ class Pet{
         
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 extract($row);
-                $e = array("idPet" => $idPet,
+                $e = array("id" => $idPet,
                            "name" => $name,
                            "breed" => $breed,
                            "gender" => $gender,
@@ -67,10 +60,10 @@ class Pet{
         }
     }
 
-    public function deletePet($connection, $idPet){
+    public function deletePet($connection, $id){
         $query = "DELETE FROM " . $this->tblPet . " WHERE idPet = ?";
         $stmt = $connection->prepare($query);
-        $stmt->bindValue(1,$idPet);
+        $stmt->bindValue(1,$id);
         $stmt->execute();
         $rows_affected = $stmt->rowCount();
         if($rows_affected==1){
@@ -81,14 +74,14 @@ class Pet{
         }
     }
 
-    public function updatePet($connection, $idPet, $name, $breed, $gender, $description){
+    public function updatePet($connection, $id, $name, $breed, $gender, $description){
         $query = "UPDATE " . $this->tblPet . " SET name = ?,breed = ?,gender = ?,description = ? WHERE idPet = ?";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(1,$name);
         $stmt->bindValue(2,$breed);
         $stmt->bindValue(3,$gender);
         $stmt->bindValue(4,$description);
-        $stmt->bindValue(5,$idPet);
+        $stmt->bindValue(5,$id);
         $stmt->execute();
         $rows_affected = $stmt->rowCount();
         if($rows_affected==1){

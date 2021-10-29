@@ -13,24 +13,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activities.HomeActivity">
-
-        </activity>
+        <activity
+            android:name=".ui.activities.UpdateProfileActivity"
+            android:exported="false" />
+        <activity android:name=".ui.activities.HomeActivity"></activity>
         <activity
             android:name=".ui.activities.LoginActivity"
-            android:parentActivityName=".ui.activities.MainActivity"/>
+            android:parentActivityName=".ui.activities.MainActivity" />
         <activity
             android:name=".ui.activities.RegisterActivity"
-            android:parentActivityName=".ui.activities.MainActivity"/>
-
-        <activity
-            android:name=".ui.activities.MainActivity">
+            android:parentActivityName=".ui.activities.MainActivity" />
+        <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 

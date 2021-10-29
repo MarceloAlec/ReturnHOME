@@ -15,7 +15,7 @@ $parameters = file_get_contents('php://input');
 $data = json_decode($parameters, true);
 
 $pet = new Pet();
-$stmt=$pet->updatePet($pdo, $data["idPet"], $data["name"], $data["breed"], $data["gender"], $data["description"]);
+$stmt=$pet->updatePet($pdo, $data["id"], $data["name"], $data["breed"], $data["gender"], $data["description"]);
 
 if($stmt){
     //MASCOTA ACTUALIZADA

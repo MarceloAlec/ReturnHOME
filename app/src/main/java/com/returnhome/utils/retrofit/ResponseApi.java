@@ -14,6 +14,9 @@ public class ResponseApi {
     @SerializedName("client")
     private Client client;
 
+    @SerializedName("pet")
+    private Pet pet;
+
     @SerializedName("pets")
     ArrayList<Pet> pets = new ArrayList<Pet>();
 
@@ -31,6 +34,14 @@ public class ResponseApi {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 
     public ArrayList<Pet> getPets() {

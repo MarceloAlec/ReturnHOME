@@ -25,5 +25,9 @@
     <string name="btn_register_now">REGISTRARME AHORA</string>
     <string name="cardview_edit">Editar</string>
     <string name="cardview_delete">Eliminar</string>
+    <string name="btn_addPet">AGREGAR</string>
+    <string name="btn_updatePet">ACTUALIZAR</string>
+    <string name="btn_editProfile">EDITAR</string>
+    <string name="btn_updateProfile">ACTUALIZAR</string>
 
 </resources>

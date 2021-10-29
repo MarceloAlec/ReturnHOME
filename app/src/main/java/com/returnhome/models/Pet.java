@@ -1,33 +1,39 @@
 package com.returnhome.models;
 
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class Pet {
 
 
-    private int idPet;
+    private int id;
     private String name;
     private String breed;
     private char gender;
     private String description;
+    private int idClient;
 
 
-    public Pet(int idPet, String name, String breed, char gender, String description) {
-        this.idPet = idPet;
+    public Pet(int id, String name, String breed, char gender, String description) {
+        this.id = id;
         this.name = name;
         this.breed = breed;
         this.gender = gender;
         this.description = description;
     }
 
-    public int getIdPet() {
-        return idPet;
+    public Pet(String name, String breed, char gender, String description, int idClient) {
+        this.name = name;
+        this.breed = breed;
+        this.gender = gender;
+        this.description = description;
+        this.idClient = idClient;
     }
 
-    public void setIdPet(int idPet) {
-        this.idPet = idPet;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -62,6 +68,11 @@ public class Pet {
         this.description = description;
     }
 
+    public int getIdClient() {
+        return idClient;
+    }
 
-
+    public void setIdClient(int idClient) {
+        this.idClient = idClient;
+    }
 }

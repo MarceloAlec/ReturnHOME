@@ -55,7 +55,7 @@ class Client{
             $stmt->execute();
 
             $idClient=$connection->lastInsertId();
-            return array("id"=>$idClient);;
+            return array("id"=>$idClient);
         }
         else{
             return false;

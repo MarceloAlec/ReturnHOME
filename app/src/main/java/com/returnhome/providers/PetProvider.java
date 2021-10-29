@@ -39,6 +39,11 @@ public class PetProvider  {
         return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).update(pet);
     }
 
+    public Call<ResponseApi> createPet(Pet pet){
+
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).create(pet);
+    }
+
 
 
 

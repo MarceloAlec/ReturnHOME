@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 
 require_once '../../config/connection.php' ;
-require_once '../../models/client.php' ;
+require_once '../../models/pet.php' ;
 
 // CREA LA CONEXION A LA BASE DE DATOS
 $pdo = new Connection();
@@ -14,21 +14,20 @@ $pdo = new Connection();
 $parameters = file_get_contents('php://input');
 $data = json_decode($parameters, true);
 
-$client = new Client();
-$stmt=$client->createClient($pdo, $data["name"], $data["email"], password_hash($data["password"],PASSWORD_DEFAULT), $data["gender"], $data["phoneNumber"] );
+$pet = new Pet();
+$stmt=$pet->createPet($pdo, $data["name"], $data["breed"], $data["gender"], $data["description"], $data["idClient"]);
 
 if($stmt){
     //CLIENTE CREADO
     http_response_code(201);
-    echo json_encode(array("message"=>"Client has been created successfully","client" => $stmt));
+    echo json_encode(array("message"=>"Pet has been created successfully","pet" => $stmt));
 }
 else{
     //CLIENTE NO AUTORIZADO
     http_response_code(401);
-    echo json_encode(array("message" => "Client already exists"));
+    echo json_encode(array("message" => "Pet already exists"));
 }
     
 ?>
-
 
 
