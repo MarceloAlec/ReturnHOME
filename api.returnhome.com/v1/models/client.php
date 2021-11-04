@@ -62,6 +62,89 @@ class Client{
         }
     }
 
+    public function readClient($connection, $idClient){
+        $query = "SELECT * FROM " . $this->tblClient . " WHERE id = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$idClient);
+        $stmt->execute();
+        $pets_num= $stmt->rowCount();
+
+        if($pets_num == 1){
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return array("id" => $result["id"],
+                        "name" => $result["name"],
+                        "email" => $result["email"],
+                        "gender" => $result["gender"],
+                        "phoneNumber" => $result["phoneNumber"]);
+            
+        }
+        else{
+           return false;
+        }
+    }
+
+    public function updateProfile($connection, $id, $name, $email, $gender, $phoneNumber){
+        $query = "UPDATE " . $this->tblClient . " SET name = ?,email = ?,gender = ?,phoneNumber = ? WHERE id = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$name);
+        $stmt->bindValue(2,$email);
+        $stmt->bindValue(3,$gender);
+        $stmt->bindValue(4,$phoneNumber);
+        $stmt->bindValue(5,$id);
+        $stmt->execute();
+        $rows_affected = $stmt->rowCount();
+        if($rows_affected==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function updatePassword($connection, $id, $newPassword, $currentPassword){
+        
+        $query = "SELECT pass FROM " . $this->tblClient . " WHERE id = ?";
+       
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
+
+        $num = $stmt->rowCount();
+
+        if($num==1){
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (password_verify($currentPassword, $result["pass"])) {
+                $query = "UPDATE " . $this->tblClient . " SET pass = ? WHERE id = ?";
+                $stmt = $connection->prepare($query);
+                $stmt->bindValue(1,password_hash($newPassword,PASSWORD_DEFAULT));
+                $stmt->bindValue(2,$id);
+                $stmt->execute();
+                $rows_affected = $stmt->rowCount();
+
+                if($rows_affected==1){
+                    return true;
+                }           
+            } 
+        }
+
+        return false;
+    }
+
+    public function deleteClient($connection, $id){
+        $query = "DELETE FROM " . $this->tblClient . " WHERE id = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$id);
+        $stmt->execute();
+        $rows_affected = $stmt->rowCount();
+        if($rows_affected==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     
 

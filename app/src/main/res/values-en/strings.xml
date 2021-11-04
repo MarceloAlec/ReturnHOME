@@ -27,7 +27,6 @@
     <string name="cardview_delete">Delete</string>
     <string name="btn_addPet">ADD</string>
     <string name="btn_updatePet">UPDATE</string>
-    <string name="btn_editProfile">EDIT</string>
     <string name="btn_updateProfile">UPDATE</string>
 
 </resources>

@@ -15,6 +15,7 @@
         <!-- Permite que navigation view sea transparente al status bar -->
         <item name="android:windowTranslucentStatus">true</item>
 
+
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">

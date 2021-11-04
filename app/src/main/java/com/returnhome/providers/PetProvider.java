@@ -16,7 +16,7 @@ public class PetProvider  {
 
     private Context context;
     //RAIZ DE LA URL QUE FORMA PARTE DE LA PETICION
-    private final String BASE_URL = "http://192.168.0.7:82/api.returnhome.com/v1/controllers/pet/";
+    private final String BASE_URL = "http://192.168.0.5:82/api.returnhome.com/v1/controllers/pet/";
 
 
     public PetProvider(Context context){

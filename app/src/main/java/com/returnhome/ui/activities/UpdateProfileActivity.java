@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -15,21 +17,31 @@ import com.returnhome.R;
 import com.returnhome.models.Client;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.retrofit.ResponseApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UpdateProfileActivity extends AppCompatActivity {
 
     private Button mButtonUpdateProfile;
     private TextInputEditText mTextInputEmail;
     private TextInputEditText mTextInputName;
-    private TextInputEditText mTextInputPassword;
+
     private RadioButton mRadioButtonMale;
+    private RadioButton mRadioButtonFemale;
     private CountryCodePicker mCountryCodePicker;
     private TextInputEditText mTextInputPhoneNumber;
     private ClientProvider mClientProvider;
-    private boolean isButtonEdit = true;
 
-    private AlertDialog mDialog;
+    private String name;
+    private String email;
+    private char gender;
+    private String code_phoneNumber;
+
     private AppConfig mAppConfig;
+    private Client mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,53 +50,90 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         initializeComponents();
 
+        mClientProvider = new ClientProvider(UpdateProfileActivity.this);
+        mAppConfig = new AppConfig(UpdateProfileActivity.this);
+
+        getClient();
+
         mButtonUpdateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickEdit();
+                clickUpdate();
             }
         });
     }
 
-    private void clickEdit() {
-
-        if(isButtonEdit){
-            mButtonUpdateProfile.setText(R.string.btn_updateProfile);
-            mTextInputName.setEnabled(true);
-            mTextInputName.setTextInputLayoutFocusedRectEnabled(true);
-            mTextInputEmail.setEnabled(true);
-            mTextInputPassword.setEnabled(true);
-            mRadioButtonMale.setEnabled(true);
-            mCountryCodePicker.setEnabled(true);
-            mTextInputPhoneNumber.setEnabled(true);
-        }
-        else{
-            String name = mTextInputName.getText().toString();
-            String email = mTextInputEmail.getText().toString();
-            String password = mTextInputPassword.getText().toString();
-            char gender = ((mRadioButtonMale.isChecked() ? 'M' : 'F'));
-            String codeNumber = mCountryCodePicker.getSelectedCountryCodeWithPlus();
-            String phoneNumber = mTextInputPhoneNumber.getText().toString();
-
-
-            if(!name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !phoneNumber.isEmpty()){
-                if(password.length() >= 6 ){
-                    //DATOS INGRESADOS CORRECTAMENTE
-                    updateClient(new Client(name,email,password,gender,codeNumber+phoneNumber));
+    private void getClient() {
+        mClientProvider.getClient(mAppConfig.getUserId()).enqueue(new Callback<ResponseApi>() {
+            @Override
+            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+                if(response.isSuccessful()){
+                    mClient = response.body().getClient();
+                    showClientInformation();
                 }
-                else{
-                    Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
-                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseApi> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void showClientInformation() {
+        if(mClient != null){
+            mTextInputName.setText(mClient.getName());
+            mTextInputEmail.setText(mClient.getEmail());
+            if(mClient.getGender() == 'M'){
+                mRadioButtonMale.setChecked(true);
             }
             else{
-                Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
+                mRadioButtonFemale.setChecked(true);
             }
+
+            String[] code_phoneNumber = mClient.getPhoneNumber().split(" ");
+
+            mTextInputPhoneNumber.setText(code_phoneNumber[1]);
+            //mCountryCodePicker.setCountryForPhoneCode(code_phoneNumber[0]);
+
+
         }
+        else{
+            mButtonUpdateProfile.setEnabled(false);
+            Toast.makeText(this, "No se pudo cargar su información", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private void clickUpdate() {
+        name = mTextInputName.getText().toString();
+        email = mTextInputEmail.getText().toString();
+        gender = ((mRadioButtonMale.isChecked() ? 'M' : 'F'));
+        code_phoneNumber = mCountryCodePicker.getSelectedCountryCodeWithPlus()+" "+mTextInputPhoneNumber.getText().toString();
 
+        if(!name.isEmpty() && !email.isEmpty() && !code_phoneNumber.isEmpty()){
+            updateClient(new Client(mAppConfig.getUserId(),name, email, gender, code_phoneNumber));
+        }
+        else{
+            Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateClient(Client client) {
+        mClientProvider.updateClient(client).enqueue(new Callback<ResponseApi>() {
+            @Override
+            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+
+                Toast.makeText(UpdateProfileActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
+                mAppConfig.saveUserName(name);
+                mAppConfig.saveUserPhoneNumber(code_phoneNumber);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseApi> call, Throwable t) {
+                Toast.makeText(UpdateProfileActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -92,18 +141,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mButtonUpdateProfile = findViewById(R.id.btnUpdateProfile);
         mTextInputName = findViewById(R.id.textInputNameUpdateProfile);
         mTextInputEmail = findViewById(R.id.textInputEmailUpdateProfile);
-        mTextInputPassword = findViewById(R.id.textInputPasswordUpdateProfile);
         mRadioButtonMale = findViewById(R.id.radioButtonMaleUpdateProfile);
+        mRadioButtonFemale = findViewById(R.id.radioButtonFemaleUpdateProfile);
         mCountryCodePicker = findViewById(R.id.countryCodePickerUpdateProfile);
         mTextInputPhoneNumber = findViewById(R.id.textInputNumberUpdateProfile);
-
-        mButtonUpdateProfile.setText(R.string.btn_editProfile);
-
-        mTextInputName.setEnabled(false);
-        mTextInputEmail.setEnabled(false);
-        mTextInputPassword.setEnabled(false);
-        mRadioButtonMale.setEnabled(false);
-        mCountryCodePicker.setEnabled(false);
-        mTextInputPhoneNumber.setEnabled(false);
     }
 }

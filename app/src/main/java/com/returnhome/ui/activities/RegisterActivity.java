@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
             if(password.length() >= 6 ){
                 //DATOS INGRESADOS CORRECTAMENTE
                 mDialog.show();
-                registerClient(new Client(name,email,password,gender,codeNumber+phoneNumber));
+                registerClient(new Client(name,email,password,gender,codeNumber+" "+phoneNumber));
             }
             else{
                 Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();

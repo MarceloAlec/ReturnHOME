@@ -166,15 +166,15 @@
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/countryCodePicker"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                app:ccpDialog_showTitle="false"
+                android:layout_gravity="center"
+                app:ccp_showFlag="false"
                 app:ccp_defaultNameCode="EC"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_weight="1.4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp">
 

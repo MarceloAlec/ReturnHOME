@@ -1,29 +1,27 @@
 <?php
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 require_once '../../config/connection.php' ;
-require_once '../../models/pet.php' ;
+require_once '../../models/client.php' ;
 
 // CREA LA CONEXION A LA BASE DE DATOS
 $pdo = new Connection();
 // OBTENER VALOR DEL PARAMETRO ID
 $id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$pet = new Pet();
-$stmt = $pet->deletePet($pdo,$id);
+$client = new Client();
+$stmt = $client->readClient($pdo,$id);
 
 if($stmt){
-    //MASCOTA ELIMINADA
+    //CLIENTE ENCONTRADO
     http_response_code(200);
-    echo json_encode(array("message" => "Your pet was successfully deleted"));
+    echo json_encode(array("message" => "Already have an account registered", "client" => $stmt));
 }
 else{
-    //NO SE PUDO COMPLETAR EL PROCESO
+    //NO SE ENCONTRO EL CLIENTE
     http_response_code(404);
-    echo json_encode(array("message" => "No pet found"));
-
+    echo json_encode(array("message" => "No client found"));
 }
 
 ?>

@@ -14,9 +14,15 @@
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activities.UpdatePasswordProfile"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.SelectOptionProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.UpdateProfileActivity"
             android:exported="false" />
-        <activity android:name=".ui.activities.HomeActivity"></activity>
+        <activity android:name=".ui.activities.HomeActivity" />
         <activity
             android:name=".ui.activities.LoginActivity"
             android:parentActivityName=".ui.activities.MainActivity" />

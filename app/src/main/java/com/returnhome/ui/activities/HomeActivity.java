@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         switch  (item.getItemId()){
             case R.id.nav_profile:
-                Intent intent = new Intent(HomeActivity.this, UpdateProfileActivity.class);
+                Intent intent = new Intent(HomeActivity.this, SelectOptionProfileActivity.class);
                 startActivity(intent);
                 //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
@@ -94,5 +94,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //PERMITE SINCRONIZAR EL ESTADO DEL ICONO HAMBURGUESA CON EL NAVIGATION VIEW
         //EN FUNCION DE SI EL MENU LATERAL ESTA ABIERTO O CERRADO
         mToggle.syncState();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mTextViewUserName.setText(mAppConfig.getUserName());
+        mTextViewUserPhoneNumber.setText(mAppConfig.getPhoneNumber());
     }
 }

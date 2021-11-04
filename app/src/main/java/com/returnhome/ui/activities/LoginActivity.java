@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.utils.AppConfig;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,8 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         if(!email.isEmpty() && !password.isEmpty()) {
             if (password.length() >= 6) {
 
-
-                HashMap<String, String> auth = new HashMap<>();
+                Map<String, String> auth = new HashMap<>();
                 auth.put("email", email);
                 auth.put("password", password);
 
