@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.returnhome.R;
 import com.returnhome.ui.fragments.PetsFragment;
-import com.returnhome.ui.fragments.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.returnhome.utils.AppConfig;
 
@@ -72,13 +71,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        Intent intent;
 
         switch  (item.getItemId()){
-            case R.id.nav_profile:
-                Intent intent = new Intent(HomeActivity.this, SelectOptionProfileActivity.class);
+            case R.id.nav_account:
+                intent = new Intent(HomeActivity.this, SelectOptionProfileActivity.class);
                 startActivity(intent);
                 //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
+
+            case R.id.nav_nfc:
+                intent = new Intent(HomeActivity.this, SelectOptionNfcActivity.class);
+                startActivity(intent);
+                //ft.replace(R.id.content, new ProfileFragment()).commit();
+                break;
+
         }
 
         //OCULTA EL NAVIGATION DRAWER

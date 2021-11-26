@@ -8,4 +8,5 @@
     <item
         android:id="@+id/cardview_delete"
         android:title="@string/cardview_delete"/>
+
 </menu>

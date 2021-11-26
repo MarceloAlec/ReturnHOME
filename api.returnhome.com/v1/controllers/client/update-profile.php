@@ -12,7 +12,6 @@ $pdo = new Connection();
 //PHP://INPUT PERMITE LEER DATOS DE UN CUERPO SOLICITADO
 $parameters = file_get_contents('php://input');
 $data = json_decode($parameters, true);
-echo $parameters;
 $client = new Client();
 $stmt=$client->updateProfile($pdo, $data["id"], $data["name"], $data["email"], $data["gender"], $data["phoneNumber"]);
 

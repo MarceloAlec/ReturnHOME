@@ -75,4 +75,9 @@ public class Pet {
     public void setIdClient(int idClient) {
         this.idClient = idClient;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

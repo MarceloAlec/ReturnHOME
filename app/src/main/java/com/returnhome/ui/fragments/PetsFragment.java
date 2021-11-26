@@ -100,12 +100,9 @@ public class PetsFragment extends Fragment  {
         if(!name.isEmpty() && !breed.isEmpty()){
             //DATOS INGRESADOS CORRECTAMENTE
             createPet(new Pet(name,breed,gender,description, mAppConfig.getUserId()));
-
-
         }
         else{
             Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
-
         }
     }
 

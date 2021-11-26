@@ -134,7 +134,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 Toast.makeText(UpdateProfileActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private void initializeComponents() {

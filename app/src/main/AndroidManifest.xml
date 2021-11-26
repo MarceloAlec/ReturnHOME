@@ -14,6 +14,12 @@
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activities.DetailWritingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.SelectOptionNfcActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.UpdatePasswordProfile"
             android:exported="false" />
         <activity

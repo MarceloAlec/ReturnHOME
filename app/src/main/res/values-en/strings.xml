@@ -12,7 +12,7 @@
     <string name="nav_pet">Pets</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
-    <string name="nav_profile">Profile</string>
+    <string name="nav_profile">Account</string>
     <string name="lbl_breedPet">Breed:</string>
     <string name="lbl_genderPet">Gender:</string>
     <string name="lbl_descriptionPet">Description:</string>

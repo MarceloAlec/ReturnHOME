@@ -10,7 +10,7 @@
     <string name="btnRegister">REGISTRAR</string>
     <string name="dialogRegister">Espera un momento</string>
     <string name="nav_pet">Mascotas</string>
-    <string name="nav_profile">Perfil</string>
+    <string name="nav_profile">Cuenta</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="lbl_breedPet">Raza:</string>

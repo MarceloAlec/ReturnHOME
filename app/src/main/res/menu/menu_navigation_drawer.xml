@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_profile"
-        android:title="@string/nav_profile"/>
+        android:id="@+id/nav_account"
+        android:title="@string/nav_profile"
+        android:icon="@drawable/profile"/>
 
+    <item
+        android:id="@+id/nav_nfc"
+        android:title="NFC"
+        android:icon="@drawable/nfc"/>
 </menu>
