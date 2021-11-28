@@ -23,7 +23,7 @@ public class SelectOptionNfcActivity extends AppCompatActivity {
         mButtonGoToWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectOptionNfcActivity.this, DetailWritingActivity.class);
+                Intent intent = new Intent(SelectOptionNfcActivity.this, MapPetHomeActivity.class);
                 startActivity(intent);
             }
         });
