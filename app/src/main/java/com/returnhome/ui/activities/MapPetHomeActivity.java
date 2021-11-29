@@ -75,6 +75,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
     private String mPetHome;
     private LatLng mPetHomeLatLng;
+    private boolean isFirsTime = true;
 
     private GoogleMap.OnCameraIdleListener mCameraListener;
 
@@ -90,6 +91,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private final static int SETTINGS_REQUEST_CODE = 2;
 
 
+
+
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
@@ -99,14 +102,18 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                 if (getApplicationContext() != null) {
 
                     mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                   
 
-                    //OBTIENE LA UBICACION EN TIEMPO REAL
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .zoom(15f)
-                            .build()
-                    ));
+                    if(isFirsTime){
+                        //OBTIENE LA UBICACION EN TIEMPO REAL
+                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                                .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                                .zoom(15f)
+                                .build()
+                        ));
+
+                        isFirsTime = false;
+                    }
+
                 }
             }
         }
@@ -123,6 +130,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
         //INICIA O DETIENE LA UBICACION DEL USUARIO
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+
 
 
         mSpinner = findViewById(R.id.spinner_pets);
@@ -216,13 +224,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                mPetHome = place.getName();
+
                 mPetHomeLatLng = place.getLatLng();
-
-                Log.d("PLACE", "Name:" + mPetHome);
-                Log.d("PLACE", "Lat:" + mPetHomeLatLng.latitude);
-                Log.d("PLACE", "Lng:" + mPetHomeLatLng.longitude);
-
                 mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
                         .target(new LatLng(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude))
                         .zoom(15f)
@@ -239,16 +242,12 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setOnCameraIdleListener(mCameraListener);
 
-
         mLocationRequest = LocationRequest.create()
-                .setInterval(1000)
-                .setFastestInterval(1000)
+                .setInterval(10000)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setSmallestDisplacement(5)
-                .setNumUpdates(1);
+                .setSmallestDisplacement(5);
 
         startLocation();
-
     }
 
 
@@ -261,6 +260,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     if (gpsActived()) {
                         mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+
                         mMap.setMyLocationEnabled(true);
                     }
                     else {
