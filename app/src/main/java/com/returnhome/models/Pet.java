@@ -1,7 +1,9 @@
 package com.returnhome.models;
 
 
-public class Pet {
+import java.io.Serializable;
+
+public class Pet implements Serializable {
 
 
     private int id;

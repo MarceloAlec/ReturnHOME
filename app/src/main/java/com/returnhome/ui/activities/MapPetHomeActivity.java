@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ListPopupWindow;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -24,7 +25,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,15 +47,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.utils.retrofit.ResponseApi;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,21 +84,22 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private String mPetHome;
     private LatLng mPetHomeLatLng;
     private boolean isFirsTime = true;
+    private boolean isPetSelected = false;
 
     private GoogleMap.OnCameraIdleListener mCameraListener;
 
     private AppConfig mAppConfig;
     private PetProvider mPetProvider;
     private ArrayList<Pet> petArrayList;
-    private ArrayAdapter mArrayAdapterPets;
-
-    //ALMACENA LA LATITUD Y LONGITUD ACTUAL
-    private LatLng mCurrentLatLng;
 
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
+    //ALMACENA LA LATITUD Y LONGITUD ACTUAL
+    private LatLng mCurrentLatLng;
 
+    private ArrayAdapter mArrayAdapterPets;
+    private Button mButtonWriteTag;
 
 
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
@@ -100,6 +109,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
             super.onLocationResult(locationResult);
             for (Location location : locationResult.getLocations()) {
                 if (getApplicationContext() != null) {
+
 
                     mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -111,13 +121,23 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                                 .build()
                         ));
 
+
                         isFirsTime = false;
                     }
+                    limitSearch();
 
                 }
             }
         }
     };
+
+    //LIMITAR LAS BUSQUEDAS POR REGION
+    private void limitSearch() {
+        //DISTANCIA PARA LIMITAR LAS BUSQUEDAS EN M
+        LatLng northSide = SphericalUtil.computeOffset(mCurrentLatLng, 5000, 0);
+        LatLng southSide = SphericalUtil.computeOffset(mCurrentLatLng, 5000, 180);
+        mAutoComplete.setLocationBias(RectangularBounds.newInstance(southSide, northSide));
+    }
 
 
     @Override
@@ -131,9 +151,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         //INICIA O DETIENE LA UBICACION DEL USUARIO
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
-
-
         mSpinner = findViewById(R.id.spinner_pets);
+        mButtonWriteTag = findViewById(R.id.btnWriteTag);
 
         mAppConfig = new AppConfig(this);
         mPetProvider = new PetProvider(this);
@@ -141,12 +160,29 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
+                isPetSelected = true;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mButtonWriteTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPetSelected && mPetHomeLatLng !=null){
+                    Intent intent = new Intent(MapPetHomeActivity.this, DetailWritingActivity.class);
+                    intent.putExtra("petHome_lat", mPetHomeLatLng.latitude);
+                    intent.putExtra("petHome_lng", mPetHomeLatLng.longitude);
+                    intent.putExtra("petHome", mPetHome);
+                    intent.putExtra("pet",(Pet)mSpinner.getSelectedItem());
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(MapPetHomeActivity.this,"Debe seleccionar una mascota previamente registrada",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -158,8 +194,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         mPlaces = Places.createClient(this);
         instanceAutoCompletePetHome();
         onCameraMove();
-
-
     }
 
     private void getPets() {
@@ -171,6 +205,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                 if (response.isSuccessful()) {
                     petArrayList = response.body().getPets();
                     showList(petArrayList);
+
                 }
             }
 
@@ -179,15 +214,18 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
             }
         });
-
-
     }
 
     private void showList(ArrayList<Pet> pets) {
-        mArrayAdapterPets = new ArrayAdapter(MapPetHomeActivity.this, R.layout.support_simple_spinner_dropdown_item, petArrayList);
+        mArrayAdapterPets = new ArrayAdapter(MapPetHomeActivity.this, R.layout.list_item, petArrayList);
         mSpinner.setAdapter(mArrayAdapterPets);
 
+
     }
+
+
+
+
 
 
     private void onCameraMove() {
@@ -200,7 +238,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                     mPetHomeLatLng = mMap.getCameraPosition().target;
                     List<Address> addressList = geocoder.getFromLocation(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude, 1);
                     String city = addressList.get(0).getLocality();
-                    String country = addressList.get(0).getCountryName();
                     String address = addressList.get(0).getAddressLine(0);
                     mPetHome = address + " " + city;
                     mAutoComplete.setText(address + " " + city);
@@ -242,10 +279,11 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setOnCameraIdleListener(mCameraListener);
 
-        mLocationRequest = LocationRequest.create()
-                .setInterval(10000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setSmallestDisplacement(5);
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(5);
 
         startLocation();
     }

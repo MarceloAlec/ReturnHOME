@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activities.WriteTagActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.MapPetHomeActivity"
             android:exported="false" />
         <activity

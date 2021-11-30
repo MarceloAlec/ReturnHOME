@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.DetailWritingActivity"
-    android:background="@color/colorPrimaryDark">
+    tools:context=".ui.activities.DetailWritingActivity">
 
 
     <fragment
@@ -14,16 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginBottom="165dp"
-        />
+        android:layout_marginBottom="175dp"/>
 
-    <com.github.florent37.shapeofview.shapes.BubbleView
+    <com.github.florent37.shapeofview.shapes.CutCornerView
         android:layout_width="match_parent"
-        android:layout_height="190dp"
-        app:shape_bubble_arrowHeight="15dp"
-        app:shape_bubble_arrowWidth="15dp"
-        app:shape_bubble_arrowPosition="top"
-        app:shape_bubble_borderRadius="20dp"
+        android:layout_height="185dp"
+        android:elevation="4dp"
+        app:shape_cutCorner_topLeftSize="10dp"
+        app:shape_cutCorner_topRightSize="10dp"
         android:layout_gravity="bottom">
 
         <View
@@ -32,36 +29,10 @@
             android:background="@color/colorPrimaryDark" />
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="30dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Seleccione la mascota:"
-                android:textSize="16sp"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:layout_gravity="left"/>
-
-            <Spinner
-                android:id="@+id/spinner_pets"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="16sp"/>
-
-        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,7 +40,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="15dp">
+                android:paddingTop="10dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -81,16 +52,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Raza"
+                        android:text="Mascota"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewBreed"
+                        android:id="@+id/textViewNamePet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="2"
                         android:textColor="@android:color/white"
                         android:textAlignment="center"
                         android:textSize="16sp" />
@@ -107,16 +77,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Genero"
+                        android:text="Raza"
                         android:textSize="16sp"
                         android:textColor="@android:color/white"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewGender"
+                        android:id="@+id/textViewBreed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="2"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -133,7 +102,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="15dp">
+                android:paddingTop="10dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -142,21 +111,18 @@
                     android:layout_weight="1"
                     android:gravity="center">
 
-
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Genero"
+                        android:text="Género"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewTime"
+                        android:id="@+id/textViewGender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Macho"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -169,22 +135,68 @@
                     android:layout_weight="1"
                     android:gravity="center">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Numero de contacto"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewPhoneNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp">
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hogar de la mascota"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewHomePet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@android:color/white"
+                        android:textAlignment="center"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
 
         </LinearLayout>
 
-    </com.github.florent37.shapeofview.shapes.BubbleView>
-
+    </com.github.florent37.shapeofview.shapes.CutCornerView>
 
     <Button
-        android:id="@+id/btnRequestNow"
+        android:id="@+id/btnWriteTagNow"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="ESCRIBIR AHORA"
@@ -196,7 +208,7 @@
         android:textColor="@android:color/white" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleImageBack"
+        android:id="@+id/btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_arrow_back"
@@ -204,4 +216,6 @@
         app:civ_circle_background_color="@color/colorPrimaryDark"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"/>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -58,6 +58,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     //GOOGLE PLACES
     implementation 'com.google.android.libraries.places:places:2.5.0'
+    //BUSQUEDAS POR REGION
+    implementation 'com.google.maps.android:android-maps-utils:2.3.0'
+    //IMAGEN CON MOVIMIENTO
+    implementation 'com.airbnb.android:lottie:4.2.2'
+
 
 
 }

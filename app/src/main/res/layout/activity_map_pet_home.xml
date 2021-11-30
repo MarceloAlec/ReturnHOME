@@ -18,17 +18,7 @@
         android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:orientation="vertical"
-        android:layout_marginTop="45dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Seleccione una mascota:"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+        android:layout_marginTop="60dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -39,11 +29,20 @@
             android:background="@android:color/white"
             app:cardCornerRadius="20dp">
 
+            <ImageView
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:src="@drawable/dog_sit"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                />
+
             <Spinner
                 android:id="@+id/spinner_pets"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:textSize="16sp"
+                android:layout_marginLeft="63dp"
+                android:layout_marginRight="5dp"
 
                 />
 
@@ -68,24 +67,21 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/pet_home"
         android:layout_gravity="center"/>
 
     <Button
-        android:id="@+id/btnRequestDriver"
+        android:id="@+id/btnWriteTag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/colorPrimaryDark"
-        android:text="SOLICITAR VIAJE"
+        android:text="ESCRIBIR ETIQUETA"
         android:textColor="@android:color/white"
         android:layout_gravity="bottom"
         android:layout_margin="20dp" />
-
-
-
 
 
 
