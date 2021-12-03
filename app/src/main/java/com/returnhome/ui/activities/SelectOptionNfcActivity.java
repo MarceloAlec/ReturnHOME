@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.returnhome.R;
+import com.returnhome.includes.Toolbar;
 
 public class SelectOptionNfcActivity extends AppCompatActivity {
 
@@ -27,5 +28,7 @@ public class SelectOptionNfcActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Toolbar.show(this, "Seleccionar opción", true);
     }
 }

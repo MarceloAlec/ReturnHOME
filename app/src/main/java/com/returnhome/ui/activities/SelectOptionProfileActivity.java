@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.returnhome.R;
+import com.returnhome.includes.Toolbar;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.utils.retrofit.ResponseApi;
@@ -39,6 +40,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
 
         mClientProvider = new ClientProvider(this);
         mAppConfig = new AppConfig(this);
+        Toolbar.show(this, "Seleccionar opción", true);
 
         mButtonGoToUpdateProfile.setOnClickListener(new View.OnClickListener() {
             @Override

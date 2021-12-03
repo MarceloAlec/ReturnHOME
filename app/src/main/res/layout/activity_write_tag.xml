@@ -7,6 +7,8 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.activities.WriteTagActivity">
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +21,7 @@
             android:layout_centerInParent="true"
             android:layout_alignParentTop="true"
             android:maxLines="3"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:textAlignment="center"
             android:textSize="18sp" />
 

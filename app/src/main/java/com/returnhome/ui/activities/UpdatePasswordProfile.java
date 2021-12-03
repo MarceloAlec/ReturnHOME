@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
+import com.returnhome.includes.Toolbar;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.utils.retrofit.ResponseApi;
@@ -42,6 +43,7 @@ public class UpdatePasswordProfile extends AppCompatActivity {
 
         mClientProvider = new ClientProvider(this);
         mAppConfig = new AppConfig(this);
+        Toolbar.show(this, "Cambiar la contraseña", true);
 
         mButtonUpdatePasswordProfile.setOnClickListener(new View.OnClickListener() {
             @Override

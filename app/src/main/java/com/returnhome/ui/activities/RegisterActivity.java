@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.returnhome.R;
+import com.returnhome.includes.Toolbar;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.utils.retrofit.ResponseApi;
 import com.returnhome.models.Client;
@@ -49,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mClientProvider = new ClientProvider(RegisterActivity.this);
         mAppConfig = new AppConfig(this);
+        Toolbar.show(this, "Registro de usuario", true);
 
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override

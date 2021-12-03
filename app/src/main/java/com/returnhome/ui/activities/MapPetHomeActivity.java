@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,6 +55,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
+import com.returnhome.includes.Toolbar;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.utils.AppConfig;
@@ -153,6 +156,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
         mSpinner = findViewById(R.id.spinner_pets);
         mButtonWriteTag = findViewById(R.id.btnWriteTag);
+
+        Toolbar.show(this, "Hogar de la mascota", true);
 
         mAppConfig = new AppConfig(this);
         mPetProvider = new PetProvider(this);
@@ -363,6 +368,12 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                 startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), SETTINGS_REQUEST_CODE);
             }
         });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
         builder.show();
 
 
@@ -399,6 +410,15 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                         ActivityCompat.requestPermissions(MapPetHomeActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                     }
                 });
+                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        //ANTES DE AGREGAR ESTE EVENTO, SI EL USARIO PRESIONABA EL BOTON DE IR HACIA ATRAS DE LA UI DEL SISTEMA EL MENSAJE QUE
+                        //SOLICITABA QUE EL USARIO ACTIVE LOS PERMISOS SE OCULTABA MOSTRANDO EL MAPA DEL MUNDO SIN REALIZAR NINGUNA ACCIÓN POR LO TANTO
+                        //SE AGREGA ESTE EVENTO DE TAL MANERA QUE SI EL USUARIO PRESIONA EL BOTON ANTES MENCIONADO FINALIZARA LA ACTIVIDAD
+                        finish();
+                    }
+                });
                 builder.show();
             }
             else {
@@ -406,6 +426,10 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
     }
+
+
+
+
 
 
 
