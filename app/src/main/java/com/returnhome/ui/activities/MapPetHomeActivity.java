@@ -229,24 +229,26 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
 
     private void onCameraMove() {
-        mCameraListener = new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                try {
-                    //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
-                    Geocoder geocoder = new Geocoder(MapPetHomeActivity.this);
-                    mPetHomeLatLng = mMap.getCameraPosition().target;
-                    List<Address> addressList = geocoder.getFromLocation(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude, 1);
-                    String city = addressList.get(0).getLocality();
-                    String address = addressList.get(0).getAddressLine(0);
-                    mPetHome = address + " " + city;
-                    mAutoComplete.setText(address + " " + city);
 
-                } catch (Exception e) {
-                    Log.d("Error: ", "Mensaje error: " + e.getMessage());
+            mCameraListener = new GoogleMap.OnCameraIdleListener() {
+                @Override
+                public void onCameraIdle() {
+                    try {
+                        //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
+                        Geocoder geocoder = new Geocoder(MapPetHomeActivity.this);
+                        mPetHomeLatLng = mMap.getCameraPosition().target;
+                        List<Address> addressList = geocoder.getFromLocation(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude, 1);
+                        String city = addressList.get(0).getLocality();
+                        String address = addressList.get(0).getAddressLine(0);
+                        mPetHome = address + " " + city;
+                        mAutoComplete.setText(address + " " + city);
+
+                    } catch (Exception e) {
+                        Log.d("Error: ", "Mensaje error: " + e.getMessage());
+                    }
                 }
-            }
-        };
+            };
+
     }
 
     private void instanceAutoCompletePetHome() {
@@ -351,16 +353,20 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void showAlertDialogNOGPS() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Por favor activa tu ubicacion para continuar")
-                .setPositiveButton("Configuraciones", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //ESPERA Y ESCUCHA HASTA QUE EL USUARIO ACTIVE EL GPS
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), SETTINGS_REQUEST_CODE);
-                    }
-                }).create().show();
+        AlertDialog builder = new AlertDialog.Builder(this).create();
+        builder.setCanceledOnTouchOutside(false);
+        builder.setMessage("Por favor activa tu ubicacion para continuar");
+        builder.setButton(AlertDialog.BUTTON_POSITIVE, "Configuraciones", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //ESPERA Y ESCUCHA HASTA QUE EL USUARIO ACTIVE EL GPS
+                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), SETTINGS_REQUEST_CODE);
+            }
+        });
+        builder.show();
+
+
+
     }
 
     @Override
@@ -381,18 +387,19 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private void checkLocationPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new AlertDialog.Builder(this)
-                        .setTitle("Proporciona los permisos para continuar")
-                        .setMessage("Esta aplicacion requiere de los permisos de ubicacion para poder utilizarse")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //HABILITA LOS PERMISOS PARA USAR LA UBICACION
-                                ActivityCompat.requestPermissions(MapPetHomeActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-                            }
-                        })
-                        .create()
-                        .show();
+
+                AlertDialog builder = new AlertDialog.Builder(this).create();
+                builder.setCanceledOnTouchOutside(false);
+                builder.setTitle("Proporciona los permisos para continuar");
+                builder.setMessage("Esta aplicacion requiere de los permisos de ubicacion para poder utilizarse");
+                builder.setButton( AlertDialog.BUTTON_POSITIVE,"OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //HABILITA LOS PERMISOS PARA USAR LA UBICACION
+                        ActivityCompat.requestPermissions(MapPetHomeActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                    }
+                });
+                builder.show();
             }
             else {
                 ActivityCompat.requestPermissions(MapPetHomeActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);

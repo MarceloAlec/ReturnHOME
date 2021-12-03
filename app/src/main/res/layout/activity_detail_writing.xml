@@ -7,27 +7,25 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.activities.DetailWritingActivity">
 
-
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginBottom="175dp"/>
+        android:layout_marginBottom="160dp"/>
 
     <com.github.florent37.shapeofview.shapes.CutCornerView
         android:layout_width="match_parent"
-        android:layout_height="185dp"
+        android:layout_height="170dp"
         android:elevation="4dp"
-        app:shape_cutCorner_topLeftSize="10dp"
         app:shape_cutCorner_topRightSize="10dp"
+        app:shape_cutCorner_topLeftSize="10dp"
         android:layout_gravity="bottom">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +38,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="10dp">
+                android:layout_marginTop="12dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -48,6 +46,11 @@
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/name_pet" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -62,7 +65,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textAlignment="center"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -73,6 +75,11 @@
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/breed" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -91,9 +98,9 @@
 
                 </LinearLayout>
 
-
-
             </LinearLayout>
+
+
 
 
             <LinearLayout
@@ -102,7 +109,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="10dp">
+                android:paddingTop="15dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -110,6 +117,11 @@
                     android:orientation="vertical"
                     android:layout_weight="1"
                     android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/gender" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -135,6 +147,11 @@
                     android:layout_weight="1"
                     android:gravity="center">
 
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/phone" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -154,41 +171,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hogar de la mascota"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textViewHomePet"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@android:color/white"
-                        android:textAlignment="center"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
 
         </LinearLayout>
@@ -208,7 +190,7 @@
         android:textColor="@android:color/white" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/btn"
+        android:id="@+id/btnReturnMapPetHome"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_arrow_back"

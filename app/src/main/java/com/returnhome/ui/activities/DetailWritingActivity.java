@@ -53,6 +53,7 @@ import com.returnhome.utils.retrofit.ResponseApi;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +69,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
     private TextView mTextViewBreed;
     private TextView mTextViewGender;
     private TextView mTextViewPhoneNumber;
-    private TextView mTextViewHomePet;
+    //private TextView mTextViewHomePet;
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -83,6 +84,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
     private LatLng mPetHomeLatLng;
 
     private Button mButtonWriteTagNow;
+    private CircleImageView mCircleImageReturnMapPetHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +95,9 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
         mTextViewBreed = findViewById(R.id.textViewBreed);
         mTextViewGender = findViewById(R.id.textViewGender);
         mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumber);
-        mTextViewHomePet = findViewById(R.id.textViewHomePet);
+        //mTextViewHomePet = findViewById(R.id.textViewHomePet);
         mButtonWriteTagNow = findViewById(R.id.btnWriteTagNow);
+        mCircleImageReturnMapPetHome = findViewById(R.id.btnReturnMapPetHome);
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
@@ -113,12 +116,25 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
         mTextViewBreed.setText(mPet.getBreed());
         mTextViewGender.setText(String.valueOf(mPet.getGender()));
         mTextViewPhoneNumber.setText(mAppConfig.getPhoneNumber());
-        mTextViewHomePet.setText(mExtraPetHome);
+//        mTextViewHomePet.setText(mExtraPetHome);
+
+        mCircleImageReturnMapPetHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mButtonWriteTagNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
+                intent.putExtra("breed",mTextViewBreed.getText().toString());
+                intent.putExtra("gender",mTextViewGender.getText().toString());
+                intent.putExtra("pet_name",mTextViewNamePet.getText().toString());
+                //intent.putExtra("pet_home",mExtraPetHome);
+                intent.putExtra("pet_home_lat",mExtraPetHomeLat);
+                intent.putExtra("pet_home_lng",mExtraPetHomeLng);
                 startActivity(intent);
             }
         });
