@@ -1,39 +1,15 @@
 package com.returnhome.ui.activities;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,29 +17,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
+import com.returnhome.ui.activities.nfc.WriteTagActivity;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
 
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class DetailWritingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private AppConfig mAppConfig;
     private PetProvider mPetProvider;
-
 
     private TextView mTextViewNamePet;
     private TextView mTextViewBreed;
@@ -131,7 +99,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
                 Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
                 intent.putExtra("breed",mTextViewBreed.getText().toString());
                 intent.putExtra("gender",mTextViewGender.getText().toString());
-                intent.putExtra("pet_name",mTextViewNamePet.getText().toString());
+                intent.putExtra("name",mTextViewNamePet.getText().toString());
                 //intent.putExtra("pet_home",mExtraPetHome);
                 intent.putExtra("pet_home_lat",mExtraPetHomeLat);
                 intent.putExtra("pet_home_lng",mExtraPetHomeLng);

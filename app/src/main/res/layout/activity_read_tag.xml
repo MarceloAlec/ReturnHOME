@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.nfc.WriteTagActivity">
-
-
+    tools:context=".ui.activities.nfc.ReadTagActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textViewEnableDeviceInfo"
+            android:id="@+id/textViewEnableDeviceReader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -26,7 +24,7 @@
             android:textSize="18sp" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animationNFC"
+            android:id="@+id/animationNfcReaderMode"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -34,16 +32,19 @@
             app:lottie_imageAssetsFolder="assets"
             app:lottie_loop="true" />
 
-            <Button
-                android:id="@+id/btnCancelWriting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:text="CANCELAR ESCRITURA"
-                android:textColor="@android:color/white"
-                android:layout_alignParentBottom="true"/>
+        <Button
+            android:id="@+id/btnCancelReading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="CANCELAR LECTURA"
+            android:textColor="@android:color/white" />
 
     </RelativeLayout>
 

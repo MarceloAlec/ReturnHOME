@@ -16,12 +16,14 @@
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.activities.WriteTagActivity"
-            android:exported="false">
-
-
-        </activity>
-
+            android:name=".ui.activities.DetailReadingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.nfc.ReadTagActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.nfc.WriteTagActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.MapPetHomeActivity"
             android:exported="false" />
