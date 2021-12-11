@@ -86,6 +86,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
 
+            case R.id.nav_found_pet:
+                intent = new Intent(HomeActivity.this, ReadTagActivity.class);
+                intent.putExtra("startedByHomeActivity",true);
+                startActivity(intent);
+                //ft.replace(R.id.content, new ProfileFragment()).commit();
+                break;
+
         }
 
         //OCULTA EL NAVIGATION DRAWER

@@ -24,9 +24,9 @@ public class PetProvider  {
     }
 
 
-    public Call<ResponseApi> getPets(int idClient){
+    public Call<ResponseApi> readPet(int id, boolean byIdClient){
 
-        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).read(idClient);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).read(id, byIdClient);
     }
 
     public Call<ResponseApi> deletePet(int idPet){

@@ -15,14 +15,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".ui.activities.MapPetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.NotificationFoundPetActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.DetailReadingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.ReadTagActivity"
+            android:name=".ui.activities.ReadTagActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.WriteTagActivity"
+            android:name=".ui.activities.WriteTagActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.MapPetHomeActivity"

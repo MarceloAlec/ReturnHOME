@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.nfc;
+package com.returnhome.ui.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -9,12 +9,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
@@ -23,18 +22,15 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.returnhome.R;
 import com.returnhome.providers.NfcProvider;
-import com.returnhome.ui.activities.DetailReadingActivity;
 import com.returnhome.utils.AppConfig;
 
-public class ReadTagActivity extends AppCompatActivity {
+public class WriteTagActivity extends AppCompatActivity {
 
     private LottieAnimationView mAnimationNfc;
-    private Button mButtonCancelReading;
-    private TextView mTextViewEnableDeviceReader;
+    private Button mButtonCancelWriting;
+    private TextView mTextViewEnableDeviceInfo;
 
     private NfcAdapter mNfcAdapter;
     private NfcProvider mNfcProvider;
@@ -43,29 +39,37 @@ public class ReadTagActivity extends AppCompatActivity {
     PendingIntent mPendingIntent;
     AppConfig mAppConfig;
 
-    private String petName;
-    private String breed;
-    private String gender;
-    private String phoneNumber;
-    private LatLng petHomeLatLng;
+
+    private double mExtraPetHomeLat;
+    private double mExtraPetHomeLng;
+    private int mExtraIdPet;
+
+    private LatLng mPetHomeLatLng;
 
     private final static int NFC_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_read_tag);
+        setContentView(R.layout.activity_write_tag);
 
-        mAnimationNfc = findViewById(R.id.animationNfcReaderMode);
-        mButtonCancelReading = findViewById(R.id.btnCancelReading);
-        mTextViewEnableDeviceReader = findViewById(R.id.textViewEnableDeviceReader);
+        mAnimationNfc = findViewById(R.id.animationNFC);
+        mButtonCancelWriting = findViewById(R.id.btnCancelWriting);
+        mTextViewEnableDeviceInfo = findViewById(R.id.textViewEnableDeviceInfo);
         mAppConfig = new AppConfig(this);
         mNfcProvider = new NfcProvider(this);
+
+        mExtraIdPet = getIntent().getIntExtra("idPet",0);
+
+        mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
+        mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
+
+        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
-            mTextViewEnableDeviceReader.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA LEERLA");
+            mTextViewEnableDeviceInfo.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
             if(!mNfcAdapter.isEnabled()){
                 showAlertDialogNONFC();
             }
@@ -74,7 +78,7 @@ public class ReadTagActivity extends AppCompatActivity {
             }
         }
         else{
-            mTextViewEnableDeviceReader.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
+            mTextViewEnableDeviceInfo.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
         }
 
         //IMPLEMENTACION DEL SISTEMA DE ENVIO EN PRIMER PLANO
@@ -89,12 +93,14 @@ public class ReadTagActivity extends AppCompatActivity {
         mTechLists = new String[][] { new String[] { Ndef.class.getName() },
                 new String[] { NdefFormatable.class.getName() }};
 
-        mButtonCancelReading.setOnClickListener(new View.OnClickListener() {
+        mButtonCancelWriting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+
     }
 
     private void showAlertDialogNONFC() {
@@ -130,6 +136,8 @@ public class ReadTagActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -151,53 +159,41 @@ public class ReadTagActivity extends AppCompatActivity {
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        try{
+            //GUARDA LA INSTANCIA DE LA ETIQUETA DESCUBIERTA
+            //CON NfcAdapter.EXTRA_TAG es usado para obtener la informacion de la etiqueta
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())
-            || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())
-            || NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-
-            //OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
-            try{
-                Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-                NdefMessage message = NfcProvider.getNdefMessage(rawMessages);
-                NdefRecord record = message.getRecords()[0];
-                String type = new String(record.getType());
-
-                if(type.equals("application/json")){
-                    String s = new String(record.getPayload());
-                    JsonParser parser = new JsonParser();
-                    JsonObject petInfo = (JsonObject) parser.parse(s);
-
-                    petName = petInfo.get("nm").toString().replace('"',' ').trim();
-                    gender = petInfo.get("gn").toString().replace('"',' ').trim();
-                    breed = petInfo.get("br").toString().replace('"',' ').trim();
-                    phoneNumber = petInfo.get("tel").toString().replace('"',' ').trim();
-                    String[] coordinates = petInfo.get("geo").toString().split(",");
-                    double latitude = Double.parseDouble(coordinates[0].replace('"',' ').trim());
-                    double longitude = Double.parseDouble(coordinates[1].replace('"',' ').trim());
-                    petHomeLatLng = new LatLng(latitude,longitude);
-
-                    goToDetailReadingActivity();
-
-                }
-                else{
-                    Toast.makeText(this, "Los datos en la etiqueta no se encuentra en formato Json", Toast.LENGTH_LONG).show();
-                }
-            }
-            catch(Exception e){
-                Toast.makeText(this, "Error"+ e.toString(), Toast.LENGTH_LONG).show();
-            }
+            NdefMessage newMessage = NfcProvider.createNdefMessage(mExtraIdPet, mAppConfig.getPhoneNumber(), mPetHomeLatLng);
+            showWritingInfo(mNfcProvider.writeNdefMessageToTag(newMessage, tag));
         }
+        catch(Exception e){
+            Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
-    private void goToDetailReadingActivity(){
-        Intent intent = new Intent(ReadTagActivity.this, DetailReadingActivity.class);
-        intent.putExtra("name",petName);
-        intent.putExtra("gender",gender);
-        intent.putExtra("breed",breed);
-        intent.putExtra("phone_number",phoneNumber);
-        intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
-        intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
-        startActivity(intent);
+    private void showWritingInfo(String message){
+        AlertDialog builder = new AlertDialog.Builder(this).create();
+        builder.setCanceledOnTouchOutside(false);
+        builder.setTitle("NFC Writer Mode");
+        builder.setIcon(R.drawable.edit);
+        builder.setMessage(message);
+        builder.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(NfcProvider.isWritingSuccess()){
+                    Intent intent = new Intent(WriteTagActivity.this, SelectOptionNfcActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
     }
+
+
+
+
 }

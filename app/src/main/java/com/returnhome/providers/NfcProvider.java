@@ -39,12 +39,10 @@ public class NfcProvider {
         this.context = context;
     }
 
-    public static NdefMessage createNdefMessage(String petName, String breed, String gender, String phoneNumber, LatLng petHomeCoordinates){
+    public static NdefMessage createNdefMessage(int idPet, String phoneNumber, LatLng petHomeCoordinates){
 
         JsonObject petInfo = new JsonObject();
-        petInfo.addProperty("nm",petName);
-        petInfo.addProperty("br", breed);
-        petInfo.addProperty("gn",gender);
+        petInfo.addProperty("id",idPet);
         petInfo.addProperty("tel",phoneNumber);
         petInfo.addProperty("geo",petHomeCoordinates.latitude + "," + petHomeCoordinates.longitude);
 

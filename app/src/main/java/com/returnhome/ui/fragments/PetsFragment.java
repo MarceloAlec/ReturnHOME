@@ -140,7 +140,7 @@ public class PetsFragment extends Fragment  {
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        mPetProvider.getPets(idClient).enqueue(new Callback<ResponseApi>() {
+        mPetProvider.readPet(idClient, true).enqueue(new Callback<ResponseApi>() {
             @Override
             public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
                 if(response.isSuccessful()){

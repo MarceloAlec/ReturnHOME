@@ -60,6 +60,27 @@ class Pet{
         }
     }
 
+    public function readSinglePet($connection, $idPet){
+        $query = "SELECT idPet, name, breed, gender, description FROM " . $this->tblPet . " WHERE idPet = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$idPet);
+        $stmt->execute();
+        $pets_num= $stmt->rowCount();
+
+        if($pets_num == 1){
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return array("id" => $result["idPet"],
+                        "name" => $result["name"],
+                        "breed" => $result["breed"],
+                        "gender" => $result["gender"],
+                        "description" => $result["description"]);
+        }
+        else{
+           return false;
+        }
+    }
+
     public function deletePet($connection, $id){
         $query = "DELETE FROM " . $this->tblPet . " WHERE idPet = ?";
         $stmt = $connection->prepare($query);

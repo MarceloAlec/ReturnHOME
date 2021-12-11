@@ -21,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.ui.activities.nfc.WriteTagActivity;
 import com.returnhome.utils.AppConfig;
 
 
@@ -97,10 +96,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
-                intent.putExtra("breed",mTextViewBreed.getText().toString());
-                intent.putExtra("gender",mTextViewGender.getText().toString());
-                intent.putExtra("name",mTextViewNamePet.getText().toString());
-                //intent.putExtra("pet_home",mExtraPetHome);
+                intent.putExtra("idPet",mPet.getId());
                 intent.putExtra("pet_home_lat",mExtraPetHomeLat);
                 intent.putExtra("pet_home_lng",mExtraPetHomeLng);
                 startActivity(intent);

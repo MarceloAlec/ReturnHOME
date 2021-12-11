@@ -22,14 +22,13 @@ public interface IPetApi {
     Call<ResponseApi> create(@Body Pet pet);
 
     @GET("read.php")
-    Call<ResponseApi> read(@Query("id") int idClient);
+    Call<ResponseApi> read(@Query("id") int id, @Query("byIdClient") boolean byIdClient);
 
     @PUT("update.php")
     Call<ResponseApi> update(@Body Pet pet);
 
     @DELETE("delete.php")
-    Call<ResponseApi> delete(@Query("id") int idClient);
-
+    Call<ResponseApi> delete(@Query("id") int idPet);
 
 
 }

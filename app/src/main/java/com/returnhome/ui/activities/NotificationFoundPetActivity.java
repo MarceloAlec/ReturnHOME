@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,56 +27,60 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailReadingActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NotificationFoundPetActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private double mExtraPetLat;
+    private double mExtraPetLng;
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
+
     private int mExtraIdPet;
     private String mExtraPhoneNumber;
 
-
-
+    private LatLng mPetLatLng;
     private LatLng mPetHomeLatLng;
 
-
-    private CircleImageView mCircleImageGoToSelectOptionNfc;
+    private GoogleMap mMap;
+    private SupportMapFragment mMapFragment;
+    private LocationRequest mLocationRequest;
 
     private TextView mTextViewPetName;
     private TextView mTextViewBreed;
     private TextView mTextViewGender;
     private TextView mTextViewPhoneNumber;
 
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
-    private LocationRequest mLocationRequest;
+    private CircleImageView mCircleImageGoToSelectOptionNfc;
 
     private PetProvider mPetProvider;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_reading);
+        setContentView(R.layout.activity_notification_found_pet);
 
-        mTextViewPetName = findViewById(R.id.textViewNamePetReading);
-        mTextViewBreed = findViewById(R.id.textViewBreedReading);
-        mTextViewGender = findViewById(R.id.textViewGenderReading);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberReading);
-
-        mPetProvider = new PetProvider(this);
-
-        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToSelectOpcionNfc);
-
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mMapFragment.getMapAsync(this);
-
-
+        mExtraPetLat = getIntent().getDoubleExtra("pet_lat", 0);
+        mExtraPetLng = getIntent().getDoubleExtra("pet_lng", 0);
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
         mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
 
+        mTextViewPetName = findViewById(R.id.textViewNamePetNotification);
+        mTextViewBreed = findViewById(R.id.textViewBreedNotification);
+        mTextViewGender = findViewById(R.id.textViewGenderNotification);
+        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberNotification);
+        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToMapPetHome);
+
+
+
+
+        mPetLatLng = new LatLng(mExtraPetLat, mExtraPetLng);
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
+
+        mPetProvider = new PetProvider(this);
+
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
 
         mTextViewPhoneNumber.setText(mExtraPhoneNumber);
 
@@ -86,9 +89,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
         mCircleImageGoToSelectOptionNfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailReadingActivity.this, SelectOptionNfcActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -104,8 +105,8 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mTextViewPetName.getText()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit)));
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar").icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home)));
 
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
@@ -126,6 +127,9 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                     mTextViewPetName.setText(pet.getName());
                     mTextViewBreed.setText(pet.getBreed());
                     mTextViewGender.setText(String.valueOf(pet.getGender()));
+
+
+
                 }
             }
 
