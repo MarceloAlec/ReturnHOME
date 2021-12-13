@@ -13,12 +13,21 @@ public class RetrofitClient {
     private static Retrofit retrofit;
 
 
-    public static Retrofit getClient(String url){
+    public static Retrofit getClientForRH(String url){
         retrofit = new Retrofit.Builder()
                             .baseUrl(url)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
         return retrofit;
+    }
+
+    public static Retrofit getClientForFCM(String url) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return  retrofit;
     }
 
 

@@ -20,6 +20,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -37,6 +38,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
+import com.returnhome.models.Pet;
+import com.returnhome.models.RHResponse;
+import com.returnhome.providers.PetProvider;
+import com.returnhome.providers.TokenProvider;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -52,6 +61,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private final static int SETTINGS_REQUEST_CODE = 2;
 
     private LatLng mPetLatLng;
+    private LatLng mPetHomeLatLng;
     private Marker mMarker;
 
     private Button mButtonGoToNotificationFoundPet;
@@ -60,6 +70,14 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private double mExtraPetHomeLng;
     private int mExtraIdPet;
     private String mExtraPhoneNumber;
+
+    private TokenProvider mTokenProvider;
+    private PetProvider mPetProvider;
+
+    private TextView mTextViewPetName;
+    private TextView mTextViewBreed;
+    private TextView mTextViewGender;
+    private TextView mTextViewPhoneNumber;
 
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -96,6 +114,11 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_pet);
 
+        mTextViewPetName = findViewById(R.id.textViewNamePetNotification);
+        mTextViewBreed = findViewById(R.id.textViewBreedNotification);
+        mTextViewGender = findViewById(R.id.textViewGenderNotification);
+        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberNotification);
+
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
 
@@ -106,25 +129,27 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
         mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
 
+        mTextViewPhoneNumber.setText(mExtraPhoneNumber);
 
-        mButtonGoToNotificationFoundPet = findViewById(R.id.btnGoToNotificationFoundPet);
+        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        Toolbar.show(this, "Ubicacion de la mascota", true);
+        mTokenProvider = new TokenProvider();
+        mPetProvider = new PetProvider(this);
+
+        mButtonGoToNotificationFoundPet = findViewById(R.id.btnGoToSendNotification);
+
+        Toolbar.show(this, "Ubicación de la mascota", true);
+
+        getPet();
 
         mButtonGoToNotificationFoundPet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MapPetActivity.this, NotificationFoundPetActivity.class);
-                intent.putExtra("idPet", mExtraIdPet);
-                intent.putExtra("pet_lat", mPetLatLng.latitude);
-                intent.putExtra("pet_lng", mPetLatLng.longitude);
-                intent.putExtra("pet_home_lat", mExtraPetHomeLat);
-                intent.putExtra("pet_home_lng", mExtraPetHomeLng);
-                intent.putExtra("phone_number", mExtraPhoneNumber);
 
-                startActivity(intent);
             }
         });
+
+        generateToken();
     }
 
     @Override
@@ -138,6 +163,8 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
+
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home)));
 
         startLocation();
     }
@@ -269,5 +296,32 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
                 ActivityCompat.requestPermissions(MapPetActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
         }
+    }
+
+    private void getPet() {
+        mPetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                if(response.isSuccessful()){
+                    Pet pet = response.body().getPet();
+                    mTextViewPetName.setText(pet.getName());
+                    mTextViewBreed.setText(pet.getBreed());
+                    mTextViewGender.setText(String.valueOf(pet.getGender()));
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+    private void generateToken(){
+        mTokenProvider.create();
     }
 }

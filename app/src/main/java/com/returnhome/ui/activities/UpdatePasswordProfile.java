@@ -12,7 +12,7 @@ import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,9 +82,9 @@ public class UpdatePasswordProfile extends AppCompatActivity {
     }
 
     private void updatePassword(Map<String, String> password) {
-        mClientProvider.updateClient(password).enqueue(new Callback<ResponseApi>() {
+        mClientProvider.updateClient(password).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(UpdatePasswordProfile.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                     finish();
@@ -95,7 +95,7 @@ public class UpdatePasswordProfile extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
                 Toast.makeText(UpdatePasswordProfile.this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show();
             }
         });

@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 import com.returnhome.models.Client;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -98,9 +98,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
-        mClientProvider.registerClient(client).enqueue(new Callback<ResponseApi>() {
+        mClientProvider.registerClient(client).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
                 mDialog.dismiss();
 
@@ -124,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
 
                 Toast.makeText(RegisterActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
             }

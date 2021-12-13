@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -13,7 +12,7 @@ import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,9 +71,9 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
     }
 
     private void deleteAccount() {
-        mClientProvider.deleteAccount(mAppConfig.getUserId()).enqueue(new Callback<ResponseApi>() {
+        mClientProvider.deleteAccount(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(SelectOptionProfileActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
                     mAppConfig.updateLoginStatus(false);
@@ -88,7 +87,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
                 Toast.makeText(SelectOptionProfileActivity.this, "No se pudo eliminar su cuenta", Toast.LENGTH_SHORT).show();
             }
         });

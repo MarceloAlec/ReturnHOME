@@ -15,12 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.activities.SendNotificationActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".services.FirebaseMessagingClient"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".ui.activities.MapPetActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activities.NotificationFoundPetActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.DetailReadingActivity"

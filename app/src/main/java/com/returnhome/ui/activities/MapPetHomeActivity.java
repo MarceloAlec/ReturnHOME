@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ListPopupWindow;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -22,14 +21,10 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,10 +38,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
@@ -59,10 +52,8 @@ import com.returnhome.includes.Toolbar;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -204,9 +195,9 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        mPetProvider.readPet(idClient, true).enqueue(new Callback<ResponseApi>() {
+        mPetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if (response.isSuccessful()) {
                     petArrayList = response.body().getPets();
                     showList(petArrayList);
@@ -215,7 +206,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
 
             }
         });

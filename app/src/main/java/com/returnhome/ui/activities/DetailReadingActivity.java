@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,7 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -118,9 +117,9 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void getPet() {
-        mPetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<ResponseApi>() {
+        mPetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     Pet pet = response.body().getPet();
                     mTextViewPetName.setText(pet.getName());
@@ -130,7 +129,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
 
             }
         });

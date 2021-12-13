@@ -22,7 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
 import java.util.ArrayList;
 
@@ -139,9 +139,9 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                     case R.id.cardview_delete:
 
-                        mPetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<ResponseApi>() {
+                        mPetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<RHResponse>() {
                             @Override
-                            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+                            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                                 if (response.isSuccessful()) {
                                     petArrayList.remove(holder.getBindingAdapterPosition());
                                     notifyItemRemoved(holder.getBindingAdapterPosition());
@@ -149,7 +149,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseApi> call, Throwable t) {
+                            public void onFailure(Call<RHResponse> call, Throwable t) {
                                 Toast.makeText(context, "Eliminación fallida", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -185,9 +185,9 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     }
 
     private void updatePet(Pet pet, int position) {
-        mPetProvider.updatePet(pet).enqueue(new Callback<ResponseApi>() {
+        mPetProvider.updatePet(pet).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 
 
                 if(response.isSuccessful()){
@@ -206,7 +206,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
                 Toast.makeText(context, "Actualización fallida", Toast.LENGTH_SHORT).show();
                 mBottomSheetDialog.dismiss();
             }

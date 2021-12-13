@@ -21,7 +21,7 @@ import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.adapters.PetAdapter;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
 import java.util.ArrayList;
 
@@ -107,9 +107,9 @@ public class PetsFragment extends Fragment  {
     }
 
     private void createPet(Pet pet) {
-        mPetProvider.createPet(pet).enqueue(new Callback<ResponseApi>() {
+        mPetProvider.createPet(pet).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     pet.setId(response.body().getPet().getId());
                     petArrayList.add(pet);
@@ -129,7 +129,7 @@ public class PetsFragment extends Fragment  {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
                 Toast.makeText(getContext(), "Ocurrio un problema al agregar", Toast.LENGTH_SHORT).show();
             }
         });
@@ -140,9 +140,9 @@ public class PetsFragment extends Fragment  {
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        mPetProvider.readPet(idClient, true).enqueue(new Callback<ResponseApi>() {
+        mPetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     petArrayList = response.body().getPets();
                     showList(petArrayList);
@@ -150,7 +150,7 @@ public class PetsFragment extends Fragment  {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
 
             }
         });

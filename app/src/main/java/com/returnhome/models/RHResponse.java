@@ -1,4 +1,4 @@
-package com.returnhome.utils.retrofit;
+package com.returnhome.models;
 
 import com.google.gson.annotations.SerializedName;
 import com.returnhome.models.Client;
@@ -6,7 +6,7 @@ import com.returnhome.models.Pet;
 
 import java.util.ArrayList;
 
-public class ResponseApi {
+public class RHResponse {
 
     @SerializedName("message")
     private String message;

@@ -2,12 +2,9 @@ package com.returnhome.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -17,7 +14,7 @@ import com.returnhome.R;
 import com.returnhome.models.Client;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,9 +61,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void getClient() {
-        mClientProvider.getClient(mAppConfig.getUserId()).enqueue(new Callback<ResponseApi>() {
+        mClientProvider.getClient(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     mClient = response.body().getClient();
                     showClientInformation();
@@ -74,7 +71,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
 
             }
         });
@@ -119,9 +116,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void updateClient(Client client) {
-        mClientProvider.updateClient(client).enqueue(new Callback<ResponseApi>() {
+        mClientProvider.updateClient(client).enqueue(new Callback<RHResponse>() {
             @Override
-            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 
                 Toast.makeText(UpdateProfileActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
                 mAppConfig.saveUserName(name);
@@ -130,7 +127,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseApi> call, Throwable t) {
+            public void onFailure(Call<RHResponse> call, Throwable t) {
                 Toast.makeText(UpdateProfileActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
             }
         });

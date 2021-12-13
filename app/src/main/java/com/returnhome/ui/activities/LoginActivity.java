@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.returnhome.R;
-import com.returnhome.utils.retrofit.ResponseApi;
+import com.returnhome.models.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.utils.AppConfig;
@@ -67,9 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                 auth.put("email", email);
                 auth.put("password", password);
 
-                mClientProvider.authClient(auth).enqueue(new Callback<ResponseApi>() {
+                mClientProvider.authClient(auth).enqueue(new Callback<RHResponse>() {
                     @Override
-                    public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+                    public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 
                         if(response.isSuccessful()){
 
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseApi> call, Throwable t) {
+                    public void onFailure(Call<RHResponse> call, Throwable t) {
 
                         Toast.makeText(LoginActivity.this, "Ingreso fallido", Toast.LENGTH_SHORT).show();
                     }
