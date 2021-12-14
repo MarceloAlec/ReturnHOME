@@ -55,6 +55,16 @@ public class AppConfig {
         return sharedPreferences.getString(context.getString(R.string.pref_user_phonenumber), "Unknown");
     }
 
+    public void saveUserToken(String token) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.pref_user_token),token);
+        editor.apply();
+    }
+
+    public String getToken(){
+        return sharedPreferences.getString(context.getString(R.string.pref_user_token), "Unknown");
+    }
+
 
 
 

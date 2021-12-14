@@ -25,7 +25,6 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
     private LinearLayout mButtonChangePassword;
     private LinearLayout mButtonGoToUpdateProfile;
 
-    private ClientProvider mClientProvider;
     private AppConfig mAppConfig;
 
     @Override
@@ -37,7 +36,6 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
         mButtonDeleteProfile = findViewById(R.id.btnDeleteProfile);
         mButtonChangePassword = findViewById(R.id.btnChangePassword);
 
-        mClientProvider = new ClientProvider(this);
         mAppConfig = new AppConfig(this);
         Toolbar.show(this, "Seleccionar opción", true);
 
@@ -71,7 +69,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
     }
 
     private void deleteAccount() {
-        mClientProvider.deleteAccount(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
+        ClientProvider.deleteAccount(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){

@@ -15,7 +15,7 @@ $parameters = file_get_contents('php://input');
 $data = json_decode($parameters, true);
 
 $client = new Client();
-$stmt=$client->createClient($pdo, $data["name"], $data["email"], password_hash($data["password"],PASSWORD_DEFAULT), $data["gender"], $data["phoneNumber"] );
+$stmt=$client->createClient($pdo, $data["name"], $data["email"], password_hash($data["password"],PASSWORD_DEFAULT), $data["gender"], $data["phoneNumber"], $data["token"] );
 
 if($stmt){
     //CLIENTE CREADO

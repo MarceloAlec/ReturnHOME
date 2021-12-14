@@ -8,14 +8,16 @@ public class Client {
     private String password;
     private char gender;
     private String phoneNumber;
+    private String token;
 
 
-    public Client(String name, String email, String password, char gender, String phoneNumber) {
+    public Client(String name, String email, String password, char gender, String phoneNumber, String token) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.token = token;
     }
 
     public Client(int id, String name, String email, char gender, String phoneNumber) {
@@ -76,5 +78,11 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getToken() {
+        return token;
+    }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

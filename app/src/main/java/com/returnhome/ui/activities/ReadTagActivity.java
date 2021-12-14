@@ -36,7 +36,6 @@ public class ReadTagActivity extends AppCompatActivity {
     private TextView mTextViewEnableDeviceReader;
 
     private NfcAdapter mNfcAdapter;
-    private NfcProvider mNfcProvider;
     private String[][] mTechLists;
     IntentFilter[] mFilters;
     PendingIntent mPendingIntent;
@@ -59,7 +58,7 @@ public class ReadTagActivity extends AppCompatActivity {
         mButtonCancelReading = findViewById(R.id.btnCancelReading);
         mTextViewEnableDeviceReader = findViewById(R.id.textViewEnableDeviceReader);
         mAppConfig = new AppConfig(this);
-        mNfcProvider = new NfcProvider(this);
+
 
         mExtraStartedByHomeActivity = getIntent().getBooleanExtra("startedByHomeActivity", false);
 

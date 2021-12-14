@@ -9,12 +9,12 @@ import retrofit2.Call;
 
 public class NotificationProvider {
 
-    private String url = "https://fcm.googleapis.com";
+    private static String BASE_URL = "https://fcm.googleapis.com";
 
     public NotificationProvider() {
     }
 
-    public Call<FCMResponse> sendNotification(FCMBody body) {
-        return RetrofitClient.getClientForFCM(url).create(IFCMApi.class).send(body);
+    public static Call<FCMResponse> sendNotification(FCMBody body) {
+        return RetrofitClient.getClient(BASE_URL).create(IFCMApi.class).send(body);
     }
 }

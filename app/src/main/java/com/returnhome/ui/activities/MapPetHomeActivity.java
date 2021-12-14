@@ -83,7 +83,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap.OnCameraIdleListener mCameraListener;
 
     private AppConfig mAppConfig;
-    private PetProvider mPetProvider;
     private ArrayList<Pet> petArrayList;
 
     private final static int LOCATION_REQUEST_CODE = 1;
@@ -151,7 +150,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         Toolbar.show(this, "Hogar de la mascota", true);
 
         mAppConfig = new AppConfig(this);
-        mPetProvider = new PetProvider(this);
         getPets();
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -195,7 +193,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        mPetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
+        PetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if (response.isSuccessful()) {

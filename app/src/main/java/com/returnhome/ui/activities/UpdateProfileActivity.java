@@ -30,7 +30,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private RadioButton mRadioButtonFemale;
     private CountryCodePicker mCountryCodePicker;
     private TextInputEditText mTextInputPhoneNumber;
-    private ClientProvider mClientProvider;
 
     private String name;
     private String email;
@@ -47,7 +46,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         initializeComponents();
 
-        mClientProvider = new ClientProvider(UpdateProfileActivity.this);
         mAppConfig = new AppConfig(UpdateProfileActivity.this);
 
         getClient();
@@ -61,7 +59,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void getClient() {
-        mClientProvider.getClient(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
+        ClientProvider.getClient(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
@@ -116,7 +114,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void updateClient(Client client) {
-        mClientProvider.updateClient(client).enqueue(new Callback<RHResponse>() {
+        ClientProvider.updateClient(client).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 

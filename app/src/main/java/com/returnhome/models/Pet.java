@@ -11,7 +11,7 @@ public class Pet implements Serializable {
     private String breed;
     private char gender;
     private String description;
-    private int idClient;
+    private int id_client;
 
 
     public Pet(int id, String name, String breed, char gender, String description) {
@@ -27,7 +27,7 @@ public class Pet implements Serializable {
         this.breed = breed;
         this.gender = gender;
         this.description = description;
-        this.idClient = idClient;
+        this.id_client = idClient;
     }
 
     public int getId() {
@@ -70,12 +70,12 @@ public class Pet implements Serializable {
         this.description = description;
     }
 
-    public int getIdClient() {
-        return idClient;
+    public int getId_client() {
+        return id_client;
     }
 
-    public void setIdClient(int idClient) {
-        this.idClient = idClient;
+    public void setId_client(int id_client) {
+        this.id_client = id_client;
     }
 
     @Override

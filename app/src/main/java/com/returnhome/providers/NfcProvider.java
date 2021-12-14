@@ -27,16 +27,10 @@ import java.util.Locale;
 
 public class NfcProvider {
 
-    private Context context;
     private static boolean isWritingSuccess = false;
 
     public static boolean isWritingSuccess() {
         return isWritingSuccess;
-    }
-
-
-    public NfcProvider(Context context){
-        this.context = context;
     }
 
     public static NdefMessage createNdefMessage(int idPet, String phoneNumber, LatLng petHomeCoordinates){
@@ -53,7 +47,7 @@ public class NfcProvider {
 
     }
 
-    public String writeNdefMessageToTag(NdefMessage message, Tag tag) {
+    public static String writeNdefMessageToTag(NdefMessage message, Tag tag) {
 
         int size = message.toByteArray().length;
         try {

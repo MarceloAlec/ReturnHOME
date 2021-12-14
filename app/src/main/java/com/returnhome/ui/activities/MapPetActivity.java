@@ -41,7 +41,6 @@ import com.returnhome.includes.Toolbar;
 import com.returnhome.models.Pet;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.providers.TokenProvider;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,15 +63,14 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private LatLng mPetHomeLatLng;
     private Marker mMarker;
 
-    private Button mButtonGoToNotificationFoundPet;
+    private Button mButtonGoToSendNotification;
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
     private int mExtraIdPet;
     private String mExtraPhoneNumber;
+    private int idClient;
 
-    private TokenProvider mTokenProvider;
-    private PetProvider mPetProvider;
 
     private TextView mTextViewPetName;
     private TextView mTextViewBreed;
@@ -133,23 +131,25 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        mTokenProvider = new TokenProvider();
-        mPetProvider = new PetProvider(this);
-
-        mButtonGoToNotificationFoundPet = findViewById(R.id.btnGoToSendNotification);
+        mButtonGoToSendNotification = findViewById(R.id.btnGoToSendNotification);
 
         Toolbar.show(this, "Ubicación de la mascota", true);
 
         getPet();
 
-        mButtonGoToNotificationFoundPet.setOnClickListener(new View.OnClickListener() {
+        mButtonGoToSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MapPetActivity.this, SendNotificationActivity.class);
+                intent.putExtra("id_client",idClient);
+                intent.putExtra("pet_name",mTextViewPetName.getText());
+                intent.putExtra("pet_lat",mPetHomeLatLng.latitude);
+                intent.putExtra("pet_lng",mPetHomeLatLng.longitude);
+                startActivity(intent);
             }
         });
 
-        generateToken();
+
     }
 
     @Override
@@ -299,7 +299,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void getPet() {
-        mPetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
+        PetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
@@ -307,7 +307,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
                     mTextViewPetName.setText(pet.getName());
                     mTextViewBreed.setText(pet.getBreed());
                     mTextViewGender.setText(String.valueOf(pet.getGender()));
-
+                    idClient = pet.getId_client();
 
                 }
             }
@@ -321,7 +321,5 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-    private void generateToken(){
-        mTokenProvider.create();
-    }
+
 }

@@ -13,35 +13,27 @@ import retrofit2.Call;
 
 public class PetProvider  {
 
-
-    private Context context;
     //RAIZ DE LA URL QUE FORMA PARTE DE LA PETICION
-    private final String BASE_URL = "http://192.168.0.5:82/api.returnhome.com/v1/controllers/pet/";
+    private static final String BASE_URL = "http://192.168.0.5:82/api.returnhome.com/v1/controllers/pet/";
 
+    public static Call<RHResponse> readPet(int id, boolean byIdClient){
 
-    public PetProvider(Context context){
-        this.context = context;
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).read(id, byIdClient);
     }
 
+    public static Call<RHResponse> deletePet(int idPet){
 
-    public Call<RHResponse> readPet(int id, boolean byIdClient){
-
-        return RetrofitClient.getClientForRH(BASE_URL).create(IPetApi.class).read(id, byIdClient);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).delete(idPet);
     }
 
-    public Call<RHResponse> deletePet(int idPet){
+    public static Call<RHResponse> updatePet(Pet pet){
 
-        return RetrofitClient.getClientForRH(BASE_URL).create(IPetApi.class).delete(idPet);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).update(pet);
     }
 
-    public Call<RHResponse> updatePet(Pet pet){
+    public static Call<RHResponse> createPet(Pet pet){
 
-        return RetrofitClient.getClientForRH(BASE_URL).create(IPetApi.class).update(pet);
-    }
-
-    public Call<RHResponse> createPet(Pet pet){
-
-        return RetrofitClient.getClientForRH(BASE_URL).create(IPetApi.class).create(pet);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).create(pet);
     }
 
 

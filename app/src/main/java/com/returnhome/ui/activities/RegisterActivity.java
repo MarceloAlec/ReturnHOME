@@ -19,6 +19,9 @@ import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton mRadioButtonMale;
     private CountryCodePicker mCountryCodePicker;
     private TextInputEditText mTextInputPhoneNumber;
-    private ClientProvider mClientProvider;
+
 
     private AlertDialog mDialog;
     private AppConfig mAppConfig;
@@ -48,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         //MENSAJE DE ESPERA PARA EL PROCESO DE REGISTRO
         mDialog = new SpotsDialog.Builder().setContext(RegisterActivity.this).setMessage(R.string.dialogRegister).build();
 
-        mClientProvider = new ClientProvider(RegisterActivity.this);
+
         mAppConfig = new AppConfig(this);
         Toolbar.show(this, "Registro de usuario", true);
 
@@ -58,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                 clickRegister();
             }
         });
+
 
     }
 
@@ -85,7 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
             if(password.length() >= 6 ){
                 //DATOS INGRESADOS CORRECTAMENTE
                 mDialog.show();
-                registerClient(new Client(name,email,password,gender,codeNumber+" "+phoneNumber));
+
+                registerClient(new Client(name,email,password,gender,codeNumber+" "+phoneNumber, mAppConfig.getToken()));
             }
             else{
                 Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
@@ -98,7 +103,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
-        mClientProvider.registerClient(client).enqueue(new Callback<RHResponse>() {
+
+        ClientProvider.registerClient(client).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
@@ -110,7 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
                     mAppConfig.saveUserName(client.getName());
                     mAppConfig.saveUserId(response.body().getClient().getId());
                     mAppConfig.saveUserPhoneNumber(client.getPhoneNumber());
-
 
                     Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                     //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY

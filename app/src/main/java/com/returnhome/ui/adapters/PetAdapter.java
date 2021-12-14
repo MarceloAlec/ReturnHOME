@@ -43,14 +43,12 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     private ArrayList<Pet> petArrayList;
     private BottomSheetDialog mBottomSheetDialog;
     LayoutInflater inflater;
-    PetProvider mPetProvider;
     Context context;
 
     public PetAdapter(Context context, ArrayList<Pet> petArrayList){
         this.context=context;
         this.inflater = LayoutInflater.from(context);
         this.petArrayList = petArrayList;
-        mPetProvider = new PetProvider(context);
     }
 
     @NonNull
@@ -139,7 +137,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                     case R.id.cardview_delete:
 
-                        mPetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<RHResponse>() {
+                        PetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<RHResponse>() {
                             @Override
                             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                                 if (response.isSuccessful()) {
@@ -185,7 +183,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     }
 
     private void updatePet(Pet pet, int position) {
-        mPetProvider.updatePet(pet).enqueue(new Callback<RHResponse>() {
+        PetProvider.updatePet(pet).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 

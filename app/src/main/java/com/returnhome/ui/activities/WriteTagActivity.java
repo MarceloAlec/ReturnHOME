@@ -33,7 +33,6 @@ public class WriteTagActivity extends AppCompatActivity {
     private TextView mTextViewEnableDeviceInfo;
 
     private NfcAdapter mNfcAdapter;
-    private NfcProvider mNfcProvider;
     private String[][] mTechLists;
     IntentFilter[] mFilters;
     PendingIntent mPendingIntent;
@@ -57,7 +56,6 @@ public class WriteTagActivity extends AppCompatActivity {
         mButtonCancelWriting = findViewById(R.id.btnCancelWriting);
         mTextViewEnableDeviceInfo = findViewById(R.id.textViewEnableDeviceInfo);
         mAppConfig = new AppConfig(this);
-        mNfcProvider = new NfcProvider(this);
 
         mExtraIdPet = getIntent().getIntExtra("idPet",0);
 
@@ -165,7 +163,7 @@ public class WriteTagActivity extends AppCompatActivity {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             NdefMessage newMessage = NfcProvider.createNdefMessage(mExtraIdPet, mAppConfig.getPhoneNumber(), mPetHomeLatLng);
-            showWritingInfo(mNfcProvider.writeNdefMessageToTag(newMessage, tag));
+            showWritingInfo(NfcProvider.writeNdefMessageToTag(newMessage, tag));
         }
         catch(Exception e){
             Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show();

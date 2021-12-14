@@ -28,7 +28,7 @@ public class UpdatePasswordProfile extends AppCompatActivity {
     private TextInputEditText mTextConfirmNewInputPassword;
     private Button mButtonUpdatePasswordProfile;
 
-    private ClientProvider mClientProvider;
+
     private AppConfig mAppConfig;
 
     @Override
@@ -41,7 +41,6 @@ public class UpdatePasswordProfile extends AppCompatActivity {
         mTextConfirmNewInputPassword = findViewById(R.id.textInputConfirmNewPasswordUpdateProfile);
         mButtonUpdatePasswordProfile = findViewById(R.id.btnUpdatePasswordProfile);
 
-        mClientProvider = new ClientProvider(this);
         mAppConfig = new AppConfig(this);
         Toolbar.show(this, "Cambiar la contraseña", true);
 
@@ -82,7 +81,7 @@ public class UpdatePasswordProfile extends AppCompatActivity {
     }
 
     private void updatePassword(Map<String, String> password) {
-        mClientProvider.updateClient(password).enqueue(new Callback<RHResponse>() {
+        ClientProvider.updateClient(password).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){

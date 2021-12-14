@@ -30,7 +30,6 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
 
 
     private AppConfig mAppConfig;
-    private PetProvider mPetProvider;
 
     private TextView mTextViewNamePet;
     private TextView mTextViewBreed;
@@ -69,7 +68,6 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
 
-        mPetProvider = new PetProvider(DetailWritingActivity.this);
         mAppConfig = new AppConfig(DetailWritingActivity.this);
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("petHome_lat", 0);

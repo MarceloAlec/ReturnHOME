@@ -50,7 +50,6 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
     private SupportMapFragment mMapFragment;
     private LocationRequest mLocationRequest;
 
-    private PetProvider mPetProvider;
 
 
     @Override
@@ -63,7 +62,6 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
         mTextViewGender = findViewById(R.id.textViewGenderReading);
         mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberReading);
 
-        mPetProvider = new PetProvider(this);
 
         mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToSelectOpcionNfc);
 
@@ -104,7 +102,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                 .setSmallestDisplacement(5);
 
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mTextViewPetName.getText()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
 
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
@@ -117,7 +115,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void getPet() {
-        mPetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
+        PetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){

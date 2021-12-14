@@ -32,6 +32,7 @@
     <string name="btn_addPet">ADD</string>
     <string name="btn_updatePet">UPDATE</string>
     <string name="btn_updateProfile">UPDATE</string>
+    <string name="pref_user_token" translatable="false">user_token</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 

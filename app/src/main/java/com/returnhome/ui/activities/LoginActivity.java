@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText mTextInputEmail;
     private TextInputEditText mTextInputPassword;
 
-    private ClientProvider mClientProvider;
     private AppConfig mAppConfig;
 
 
@@ -38,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
 
         initializeComponents();
 
-        mClientProvider = new ClientProvider(LoginActivity.this);
         mAppConfig = new AppConfig(this);
 
 
@@ -67,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 auth.put("email", email);
                 auth.put("password", password);
 
-                mClientProvider.authClient(auth).enqueue(new Callback<RHResponse>() {
+                ClientProvider.authClient(auth).enqueue(new Callback<RHResponse>() {
                     @Override
                     public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 

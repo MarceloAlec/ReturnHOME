@@ -34,7 +34,6 @@ public class PetsFragment extends Fragment  {
 
     private PetAdapter mPetAdapter;
     private RecyclerView mRecyclerViewPets;
-    private PetProvider mPetProvider;
     private AppConfig mAppConfig;
     private FloatingActionButton mFloatingButtonAdd;
     private BottomSheetDialog mBottomSheetDialog;
@@ -55,7 +54,6 @@ public class PetsFragment extends Fragment  {
 
         View view = inflater.inflate(R.layout.fragment_pets, container, false);
 
-        mPetProvider = new PetProvider(container.getContext());
         petArrayList = new ArrayList<>();
         mRecyclerViewPets = view.findViewById(R.id.recyclerView);
         mAppConfig = new AppConfig(container.getContext());
@@ -107,7 +105,7 @@ public class PetsFragment extends Fragment  {
     }
 
     private void createPet(Pet pet) {
-        mPetProvider.createPet(pet).enqueue(new Callback<RHResponse>() {
+        PetProvider.createPet(pet).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
@@ -140,7 +138,7 @@ public class PetsFragment extends Fragment  {
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        mPetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
+        PetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){

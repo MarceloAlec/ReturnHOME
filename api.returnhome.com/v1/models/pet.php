@@ -32,7 +32,7 @@ class Pet{
     }
 
     public function readPet($connection, $idClient){
-        $query = "SELECT idPet, name, breed, gender, description FROM " . $this->tblPet . " WHERE id_client = ?";
+        $query = "SELECT idPet, name, breed, gender, description, id_client FROM " . $this->tblPet . " WHERE id_client = ?";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(1,$idClient);
         $stmt->execute();
@@ -48,7 +48,8 @@ class Pet{
                            "name" => $name,
                            "breed" => $breed,
                            "gender" => $gender,
-                           "description" => $description);
+                           "description" => $description,
+                           "id_client" => $id_client);
         
                 array_push($pets_array, $e);
             }
@@ -61,7 +62,7 @@ class Pet{
     }
 
     public function readSinglePet($connection, $idPet){
-        $query = "SELECT idPet, name, breed, gender, description FROM " . $this->tblPet . " WHERE idPet = ?";
+        $query = "SELECT idPet, name, breed, gender, description, id_client FROM " . $this->tblPet . " WHERE idPet = ?";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(1,$idPet);
         $stmt->execute();
@@ -74,7 +75,8 @@ class Pet{
                         "name" => $result["name"],
                         "breed" => $result["breed"],
                         "gender" => $result["gender"],
-                        "description" => $result["description"]);
+                        "description" => $result["description"],
+                        "id_client" => $result["id_client"]);
         }
         else{
            return false;

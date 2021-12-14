@@ -33,7 +33,7 @@ class Client{
         }
     }
 
-    public function createClient($connection, $name, $email, $password, $gender, $phoneNumber){
+    public function createClient($connection, $name, $email, $password, $gender, $phoneNumber, $token){
 
         $query = "SELECT * FROM " . $this->tblClient . " WHERE email = ?";
 
@@ -44,7 +44,7 @@ class Client{
         $num = $stmt->rowCount();
 
         if($num == 0){
-            $query = "INSERT INTO ".$this->tblClient . "(name, email, pass, gender, phoneNumber) values(?, ?, ?, ?, ?)";
+            $query = "INSERT INTO ".$this->tblClient . "(name, email, pass, gender, phoneNumber, token) values(?, ?, ?, ?, ?, ?)";
 
             $stmt = $connection->prepare($query);
             $stmt->bindValue(1,$name);
@@ -52,14 +52,14 @@ class Client{
             $stmt->bindValue(3,$password);
             $stmt->bindValue(4,$gender);
             $stmt->bindValue(5,$phoneNumber);
-            $stmt->execute();
+            $stmt->bindValue(6,$token);
 
-            $idClient=$connection->lastInsertId();
-            return array("id"=>$idClient);
+            if($stmt->execute()){
+                $idClient=$connection->lastInsertId();
+                return array("id"=>$idClient);
+            }
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
     public function readClient($connection, $idClient){
@@ -75,7 +75,8 @@ class Client{
                         "name" => $result["name"],
                         "email" => $result["email"],
                         "gender" => $result["gender"],
-                        "phoneNumber" => $result["phoneNumber"]);
+                        "phoneNumber" => $result["phoneNumber"],
+                        "token" => $result["token"]);
             
         }
         else{
