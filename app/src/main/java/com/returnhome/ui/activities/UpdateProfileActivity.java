@@ -16,6 +16,7 @@ import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.models.RHResponse;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +40,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private AppConfig mAppConfig;
     private Client mClient;
 
+    private CircleImageView mCircleImageGoToSelectionOptionProfile;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clickUpdate();
+            }
+        });
+
+        mCircleImageGoToSelectionOptionProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -139,5 +150,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mRadioButtonFemale = findViewById(R.id.radioButtonFemaleUpdateProfile);
         mCountryCodePicker = findViewById(R.id.countryCodePickerUpdateProfile);
         mTextInputPhoneNumber = findViewById(R.id.textInputNumberUpdateProfile);
+        mCircleImageGoToSelectionOptionProfile = findViewById(R.id.btnGoToSelectOptionProfile);
     }
 }

@@ -1,6 +1,7 @@
 package com.returnhome.ui.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -137,20 +139,24 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                     case R.id.cardview_delete:
 
-                        PetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<RHResponse>() {
+                        AlertDialog builder = new AlertDialog.Builder(context).create();
+                        builder.setTitle("ReturnHOME");
+                        builder.setMessage("Esta seguro que desea eliminar su mascota?");
+                        builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
-                                if (response.isSuccessful()) {
-                                    petArrayList.remove(holder.getBindingAdapterPosition());
-                                    notifyItemRemoved(holder.getBindingAdapterPosition());
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<RHResponse> call, Throwable t) {
-                                Toast.makeText(context, "Eliminación fallida", Toast.LENGTH_SHORT).show();
+                            public void onClick(DialogInterface dialog, int which) {
+                                deletePet(holder);
                             }
                         });
+                        builder.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                builder.cancel();
+                            }
+                        });
+
+                        builder.show();
+
                     return true;
 
                     default:
@@ -159,6 +165,24 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             }
         });
         popupMenuCardView.show();
+    }
+
+
+    private void deletePet(PetViewHolder holder){
+        PetProvider.deletePet(petArrayList.get(holder.getBindingAdapterPosition()).getId()).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                if (response.isSuccessful()) {
+                    petArrayList.remove(holder.getBindingAdapterPosition());
+                    notifyItemRemoved(holder.getBindingAdapterPosition());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+                Toast.makeText(context, "Eliminación fallida", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void clickUpdate(PetViewHolder holder) {

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.returnhome.utils.AppConfig;
@@ -41,21 +42,27 @@ public class FirebaseMessagingClient extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
         String title = data.get("title");
         String body = data.get("body");
+        String petName = data.get("pet_name");
+        double pet_lat = Double.valueOf(data.get("pet_lat"));
+        double pet_lng  = Double.valueOf(data.get("pet_lng"));
+
+        LatLng petLatLng = new LatLng(pet_lat, pet_lng);
+
 
         if (title != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                showNotificationApiOreo(title, body);
+                showNotificationApiOreo(title, body, petName, petLatLng);
 
             }
             else{
-                showNotification(title, body);
+                showNotification(title, body, petName, petLatLng);
             }
 
         }
 
     }
 
-    private void showNotification(String title, String body) {
+    private void showNotification(String title, String body, String petName, LatLng petLatLng) {
         PendingIntent intent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -65,7 +72,7 @@ public class FirebaseMessagingClient extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotificationApiOreo(String title, String body) {
+    private void showNotificationApiOreo(String title, String body, String petName, LatLng petLatLng) {
         PendingIntent intent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 

@@ -30,16 +30,6 @@
             android:textSize="50sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/slogan_app"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryLight"
-            android:layout_marginBottom="60dp"
-            android:textSize="20sp"
-            android:textStyle="italic|bold"/>
-
         <Button
             android:id="@+id/btnGoToLogin"
             android:layout_width="match_parent"

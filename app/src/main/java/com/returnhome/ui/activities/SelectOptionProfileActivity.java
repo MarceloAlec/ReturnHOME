@@ -1,9 +1,12 @@
 package com.returnhome.ui.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
     private LinearLayout mButtonDeleteProfile;
     private LinearLayout mButtonChangePassword;
     private LinearLayout mButtonGoToUpdateProfile;
+    private LinearLayout mButtonLogOut;
 
     private AppConfig mAppConfig;
 
@@ -35,6 +39,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
         mButtonGoToUpdateProfile = findViewById(R.id.btnEditProfile);
         mButtonDeleteProfile = findViewById(R.id.btnDeleteProfile);
         mButtonChangePassword = findViewById(R.id.btnChangePassword);
+        mButtonLogOut = findViewById(R.id.btnLogOut);
 
         mAppConfig = new AppConfig(this);
         Toolbar.show(this, "Seleccionar opción", true);
@@ -62,25 +67,76 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
             }
         });
 
+        mButtonLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialogLogOut();
+            }
+        });
+
     }
 
     private void clickDelete() {
-        deleteAccount();
+        showAlertDialogDeleteAccount();
     }
 
-    private void deleteAccount() {
+    private void showAlertDialogDeleteAccount() {
+        AlertDialog builder = new AlertDialog.Builder(this).create();
+        builder.setTitle("ReturnHOME");
+        builder.setMessage("Esta seguro que desea eliminar su cuenta?");
+        builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteAccount();
+            }
+        });
+        builder.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                builder.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void showAlertDialogLogOut() {
+        AlertDialog builder = new AlertDialog.Builder(this).create();
+        builder.setTitle("ReturnHOME");
+        builder.setMessage("Esta seguro que desea cerrar sesion?");
+        builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                logout();
+            }
+        });
+        builder.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                builder.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void logout(){
+        mAppConfig.updateLoginStatus(false);
+        mAppConfig.saveUserPhoneNumber(null);
+        mAppConfig.saveUserName(null);
+        mAppConfig.saveUserId(0);
+        Intent intent = new Intent(SelectOptionProfileActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void deleteAccount(){
         ClientProvider.deleteAccount(mAppConfig.getUserId()).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(SelectOptionProfileActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
-                    mAppConfig.updateLoginStatus(false);
-                    mAppConfig.saveUserPhoneNumber(null);
-                    mAppConfig.saveUserName(null);
-                    mAppConfig.saveUserId(0);
-                    Intent intent = new Intent(SelectOptionProfileActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    logout();
                 }
             }
 

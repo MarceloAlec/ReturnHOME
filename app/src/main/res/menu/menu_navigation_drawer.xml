@@ -16,7 +16,6 @@
         android:id="@+id/nav_found_pet"
         android:title="Encontré una mascota"
         android:icon="@drawable/found_pet"/>
-
     </group>
 
 </menu>

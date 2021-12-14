@@ -71,28 +71,44 @@ public class SendNotificationActivity extends AppCompatActivity {
 
     private void sendNotification(){
         String token = client.getToken();
-        Map<String, String> map = new HashMap<>();
-        map.put("title","MASCOTA ENCONTRADA");
-        map.put("body",mExtraPetName+" fue encontrada en Lat: "+mExtraPetLat+", Lng: "+mExtraPetLng);
-        FCMBody fcmBody = new FCMBody(token, "high", map);
-        NotificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
-            @Override
-            public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                if(response.body() != null){
-                    if(response.body().getSuccess() == 1){
-                        mTextViewNotificationInfo.setText("LA NOTIFICACION SE HA ENVIADO CORRECTAMENTE");
+        if(!token.equals("Unknown") || !token.equals(null)){
+            Map<String, String> map = new HashMap<>();
+            map.put("title","Mascota encontrada");
+            map.put("body",mExtraPetName+ "fue encontrada en las coordenadas:" +
+                    "\nLatitud: "+mExtraPetLat+"" +
+                    "\nLongitud: "+mExtraPetLng
+            );
+            map.put("pet_name",mExtraPetName);
+            map.put("pet_lat",String.valueOf(mExtraPetLng));
+            map.put("pet_lng",String.valueOf(mExtraPetLat));
+            FCMBody fcmBody = new FCMBody(token, "high", map);
+            NotificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
+                @Override
+                public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                    if(response.body() != null){
+                        if(response.body().getSuccess() == 1){
+                            mTextViewNotificationInfo.setText("LA NOTIFICACION SE HA ENVIADO CORRECTAMENTE");
+                        }
+                        else{
+                            mTextViewNotificationInfo.setText("NO SE PUDO ENVIAR LA NOTIFICACION");
+                        }
                     }
                     else{
                         mTextViewNotificationInfo.setText("NO SE PUDO ENVIAR LA NOTIFICACION");
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<FCMResponse> call, Throwable t) {
-                mTextViewNotificationInfo.setText("NO SE PUDO ENVIAR LA NOTIFICACION");
-            }
-        });
+                }
+
+                @Override
+                public void onFailure(Call<FCMResponse> call, Throwable t) {
+                    mTextViewNotificationInfo.setText("NO SE PUDO ENVIAR LA NOTIFICACION");
+                }
+            });
+        }
+        else{
+            mTextViewNotificationInfo.setText("NO SE PUDO ENVIAR LA NOTIFICACION");
+        }
+
 
     }
 
