@@ -61,7 +61,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setAutoCancel(true)
                 .setSound(soundUri)
                 .addAction(showPetFoundAction)
-                .setSmallIcon(R.drawable.ic_pet)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
     }
@@ -75,7 +75,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(soundUri)
-                .setSmallIcon(R.drawable.ic_pet)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .addAction(showPetFoundAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }

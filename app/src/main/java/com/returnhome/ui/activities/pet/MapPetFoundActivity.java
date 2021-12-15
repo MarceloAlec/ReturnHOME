@@ -79,7 +79,7 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetLatLng).title(mExtraPetName).icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetLatLng).title(mExtraPetName+" se encuentra aquí").icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit))).showInfoWindow();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
