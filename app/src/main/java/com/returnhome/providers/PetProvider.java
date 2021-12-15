@@ -1,7 +1,5 @@
 package com.returnhome.providers;
 
-import android.content.Context;
-
 import com.returnhome.models.Pet;
 import com.returnhome.utils.retrofit.IPetApi;
 import com.returnhome.models.RHResponse;

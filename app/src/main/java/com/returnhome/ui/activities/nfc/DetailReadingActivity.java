@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.nfc;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,7 +67,6 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
-
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);

@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.nfc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
+import com.returnhome.ui.activities.pet.MapPetHomeActivity;
 
 public class SelectOptionNfcActivity extends AppCompatActivity {
 

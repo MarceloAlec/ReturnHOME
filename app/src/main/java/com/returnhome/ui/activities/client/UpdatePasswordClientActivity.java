@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdatePasswordProfile extends AppCompatActivity {
+public class UpdatePasswordClientActivity extends AppCompatActivity {
 
     private TextInputEditText mTextCurrentInputPassword;
     private TextInputEditText mTextNewInputPassword;
@@ -85,17 +85,17 @@ public class UpdatePasswordProfile extends AppCompatActivity {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(UpdatePasswordProfile.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdatePasswordClientActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else{
-                    Toast.makeText(UpdatePasswordProfile.this, "La contraseña actual es incorrecta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdatePasswordClientActivity.this, "La contraseña actual es incorrecta", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHResponse> call, Throwable t) {
-                Toast.makeText(UpdatePasswordProfile.this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdatePasswordClientActivity.this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show();
             }
         });
 

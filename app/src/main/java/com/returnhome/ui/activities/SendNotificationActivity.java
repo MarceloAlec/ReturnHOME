@@ -74,13 +74,13 @@ public class SendNotificationActivity extends AppCompatActivity {
         if(!token.equals("Unknown") || !token.equals(null)){
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
-            map.put("body",mExtraPetName+ "fue encontrada en las coordenadas:" +
+            map.put("body",mExtraPetName+" fue encontrada en las siguientes coordenadas:" +
                     "\nLatitud: "+mExtraPetLat+"" +
                     "\nLongitud: "+mExtraPetLng
             );
             map.put("pet_name",mExtraPetName);
-            map.put("pet_lat",String.valueOf(mExtraPetLng));
-            map.put("pet_lng",String.valueOf(mExtraPetLat));
+            map.put("pet_lat",String.valueOf(mExtraPetLat));
+            map.put("pet_lng",String.valueOf(mExtraPetLng));
             FCMBody fcmBody = new FCMBody(token, "high", map);
             NotificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
                 @Override

@@ -15,12 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
+
+        <receiver
+            android:name=".receivers.ViewPetFoundReceiver"
+            android:enabled="true" />
+
+        <activity
+            android:name=".ui.activities.pet.MapPetFoundActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.SendNotificationActivity"
             android:exported="false" />
 
         <service
-            android:name=".services.FirebaseMessagingClient"
+            android:name=".services.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -28,36 +36,36 @@
         </service>
 
         <activity
-            android:name=".ui.activities.MapPetActivity"
+            android:name=".ui.activities.pet.MapPetActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.DetailReadingActivity"
+            android:name=".ui.activities.nfc.DetailReadingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.ReadTagActivity"
+            android:name=".ui.activities.nfc.ReadTagActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.WriteTagActivity"
+            android:name=".ui.activities.nfc.WriteTagActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.MapPetHomeActivity"
+            android:name=".ui.activities.pet.MapPetHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.DetailWritingActivity"
+            android:name=".ui.activities.nfc.DetailWritingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.SelectOptionNfcActivity"
+            android:name=".ui.activities.nfc.SelectOptionNfcActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.UpdatePasswordProfile"
+            android:name=".ui.activities.client.UpdatePasswordClientActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.SelectOptionProfileActivity"
+            android:name=".ui.activities.client.SelectOptionProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.UpdateProfileActivity"
+            android:name=".ui.activities.client.UpdateProfileActivity"
             android:exported="false" />
-        <activity android:name=".ui.activities.HomeActivity" />
+        <activity android:name=".ui.activities.client.HomeActivity" />
         <activity
             android:name=".ui.activities.LoginActivity"
             android:parentActivityName=".ui.activities.MainActivity" />
@@ -75,6 +83,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
     </application>
 
 </manifest>

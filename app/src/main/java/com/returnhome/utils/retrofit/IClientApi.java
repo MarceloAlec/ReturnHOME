@@ -32,6 +32,9 @@ public interface IClientApi {
     @PUT("update-profile.php")
     Call<RHResponse> update(@Body Client client);
 
+    @PUT("update-token.php")
+    Call<RHResponse> updateToken(@Body Map<String,String> tokenInfo);
+
     @PUT("change-password.php")
     Call<RHResponse> update(@Body Map<String, String> password);
 

@@ -4,8 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/MarceloA/.gradle/caches/transforms-3/43711b72eaf2f529e5b9b1576380fb27/transformed/appcompat-1.3.1/res/layout/support_simple_spinner_dropdown_item.xml" value="0.3859375" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable-anydpi-v24/ic_house.xml" value="0.40208333333333335" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.40208333333333335" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/background_color.xml" value="0.20315315315315316" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/background_popupmenu.xml" value="0.1796875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/ic_home.xml" value="0.22239583333333332" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/ic_launcher_background.xml" value="0.40208333333333335" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/ic_logout.xml" value="0.30833333333333335" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.34774774774774775" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.34774774774774775" />
@@ -20,6 +24,7 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_main2.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet.xml" value="0.25" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_found.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_home.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_house.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_navigation.xml" value="0.1891891891891892" />
@@ -53,6 +58,8 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/menu/menu_navigation_drawer.xml" value="0.33378378378378376" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/menu/menu_nfc_cardview.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/menu/navigation_drawer.xml" value="0.1891891891891892" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.40208333333333335" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.40208333333333335" />
       </map>
     </option>
   </component>

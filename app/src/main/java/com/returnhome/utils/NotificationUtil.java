@@ -54,54 +54,21 @@ public class NotificationUtil extends ContextWrapper {
 
     //PARA CREAR NOTIFICACIONES EN VERSIONES 26 O SUPERIOR DE ANDROID
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotification(String title, String body, PendingIntent intent, Uri soundUri) {
+    public Notification.Builder getNotification(String title, String body, Uri soundUri, Notification.Action showPetFoundAction) {
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(soundUri)
-                .setContentIntent(intent)
+                .addAction(showPetFoundAction)
                 .setSmallIcon(R.drawable.ic_pet)
-                .setStyle(new Notification.BigTextStyle()
-                        .bigText(body).setBigContentTitle(title));
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotificationActions(String title,
-                                                       String body,
-                                                       Uri soundUri,
-                                                       Notification.Action acceptAction ,
-                                                       Notification.Action cancelAction) {
-        return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(soundUri)
-                .setSmallIcon(R.drawable.ic_pet)
-                .addAction(acceptAction)
-                .addAction(cancelAction)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
     }
 
     //PARA VERSIONES INFERIORES A ANDROID OREO
-    public NotificationCompat.Builder getNotificationOldAPI(String title, String body, PendingIntent intent, Uri soundUri) {
-        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(soundUri)
-                .setContentIntent(intent)
-                .setSmallIcon(R.drawable.ic_pet)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
-    }
 
-    public NotificationCompat.Builder getNotificationOldAPIActions(
-            String title,
-            String body,
-            Uri soundUri,
-            NotificationCompat.Action acceptAction,
-            NotificationCompat.Action cancelAction) {
+    public NotificationCompat.Builder getNotificationOldAPI(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction) {
 
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
@@ -109,8 +76,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setAutoCancel(true)
                 .setSound(soundUri)
                 .setSmallIcon(R.drawable.ic_pet)
-                .addAction(acceptAction)
-                .addAction(cancelAction)
+                .addAction(showPetFoundAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 }

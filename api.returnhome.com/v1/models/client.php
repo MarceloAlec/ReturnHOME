@@ -102,6 +102,22 @@ class Client{
         }
     }
 
+    public function updateToken($connection, $id, $token){
+        $query = "UPDATE " . $this->tblClient . " SET token = ? WHERE id = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$token);
+        $stmt->bindValue(2,$id);
+        
+        $stmt->execute();
+       
+        if($stmt){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function updatePassword($connection, $id, $newPassword, $currentPassword){
         
         $query = "SELECT pass FROM " . $this->tblClient . " WHERE id = ?";

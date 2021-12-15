@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.WriteTagActivity">
+    tools:context=".ui.activities.nfc.WriteTagActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

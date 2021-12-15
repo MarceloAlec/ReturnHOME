@@ -15,14 +15,18 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.returnhome.R;
+import com.returnhome.receivers.ViewPetFoundReceiver;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.utils.NotificationUtil;
 
 import java.util.Map;
 
-public class FirebaseMessagingClient extends FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private AppConfig mAppConfig;
+
+    private static final int NOTIFICATION_CODE = 100;
 
 
 
@@ -30,7 +34,6 @@ public class FirebaseMessagingClient extends FirebaseMessagingService {
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
         mAppConfig = new AppConfig(getApplicationContext());
-        mAppConfig.saveUserToken(s);
 
     }
 
@@ -43,8 +46,8 @@ public class FirebaseMessagingClient extends FirebaseMessagingService {
         String title = data.get("title");
         String body = data.get("body");
         String petName = data.get("pet_name");
-        double pet_lat = Double.valueOf(data.get("pet_lat"));
-        double pet_lng  = Double.valueOf(data.get("pet_lng"));
+        double pet_lat = Double.parseDouble(data.get("pet_lat"));
+        double pet_lng  = Double.parseDouble(data.get("pet_lng"));
 
         LatLng petLatLng = new LatLng(pet_lat, pet_lng);
 
@@ -63,21 +66,44 @@ public class FirebaseMessagingClient extends FirebaseMessagingService {
     }
 
     private void showNotification(String title, String body, String petName, LatLng petLatLng) {
-        PendingIntent intent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        Intent showPetFoundIntent = new Intent(this, ViewPetFoundReceiver.class);
+        showPetFoundIntent.putExtra("pet_name", petName);
+        showPetFoundIntent.putExtra("pet_lat", petLatLng.latitude);
+        showPetFoundIntent.putExtra("pet_lng", petLatLng.longitude);
+        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action showPetFoundAction= new NotificationCompat.Action.Builder(
+                R.mipmap.ic_launcher,
+                "VER EN MAPA",
+                viewPendingIntent
+        ).build();
+
+
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationUtil notificationUtil = new NotificationUtil(getBaseContext());
-        NotificationCompat.Builder builder = notificationUtil.getNotificationOldAPI(title, body, intent, sound);
+        NotificationCompat.Builder builder = notificationUtil.getNotificationOldAPI(title, body, sound, showPetFoundAction);
         notificationUtil.getManager().notify(1, builder.build());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void showNotificationApiOreo(String title, String body, String petName, LatLng petLatLng) {
-        PendingIntent intent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+        Intent showPetFoundIntent = new Intent(this, ViewPetFoundReceiver.class);
+        showPetFoundIntent.putExtra("pet_name", petName);
+        showPetFoundIntent.putExtra("pet_lat", petLatLng.latitude);
+        showPetFoundIntent.putExtra("pet_lng", petLatLng.longitude);
+        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Action showPetFoundAction= new Notification.Action.Builder(
+                R.mipmap.ic_launcher,
+                "VER EN MAPA",
+                viewPendingIntent
+        ).build();
+
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationUtil notificationUtil = new NotificationUtil(getBaseContext());
-        Notification.Builder builder = notificationUtil.getNotification(title, body, intent, sound);
+        Notification.Builder builder = notificationUtil.getNotification(title, body, sound, showPetFoundAction);
         notificationUtil.getManager().notify(1, builder.build());
     }
 }

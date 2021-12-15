@@ -1,7 +1,5 @@
 package com.returnhome.providers;
 
-import android.content.Context;
-
 import com.returnhome.models.RHResponse;
 import com.returnhome.models.Client;
 import com.returnhome.utils.retrofit.IClientApi;
@@ -36,6 +34,10 @@ public class ClientProvider {
 
     public static Call<RHResponse> updateClient(Map<String, String> password){
         return RetrofitClient.getClient(BASE_URL).create(IClientApi.class).update(password);
+    }
+
+    public static Call<RHResponse> updateToken(Map<String,String> tokenInfo){
+        return RetrofitClient.getClient(BASE_URL).create(IClientApi.class).updateToken(tokenInfo);
     }
 
     public static Call<RHResponse> deleteAccount(int idClient){

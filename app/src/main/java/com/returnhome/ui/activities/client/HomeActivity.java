@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.client;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.returnhome.R;
+import com.returnhome.ui.activities.nfc.ReadTagActivity;
+import com.returnhome.ui.activities.nfc.SelectOptionNfcActivity;
 import com.returnhome.ui.fragments.PetsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.returnhome.utils.AppConfig;

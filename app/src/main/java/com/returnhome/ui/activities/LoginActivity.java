@@ -1,17 +1,23 @@
 package com.returnhome.ui.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
+import com.returnhome.providers.TokenProvider;
+import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
 import java.util.HashMap;
@@ -60,39 +66,20 @@ public class LoginActivity extends AppCompatActivity {
 
         if(!email.isEmpty() && !password.isEmpty()) {
             if (password.length() >= 6) {
-
                 Map<String, String> auth = new HashMap<>();
                 auth.put("email", email);
                 auth.put("password", password);
-
-                ClientProvider.authClient(auth).enqueue(new Callback<RHResponse>() {
+                TokenProvider.create().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
-                    public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
-
-                        if(response.isSuccessful()){
-
-                            mAppConfig.updateLoginStatus(true);
-                            mAppConfig.saveUserName(response.body().getClient().getName());
-                            mAppConfig.saveUserId(response.body().getClient().getId());
-                            mAppConfig.saveUserPhoneNumber(response.body().getClient().getPhoneNumber());
-
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                            //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                    public void onComplete(@NonNull Task<String> task) {
+                        if(task.isSuccessful()){
+                            authClient(auth, task.getResult());
                         }
                         else{
-                            Toast.makeText(LoginActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                    @Override
-                    public void onFailure(Call<RHResponse> call, Throwable t) {
-
-                        Toast.makeText(LoginActivity.this, "Ingreso fallido", Toast.LENGTH_SHORT).show();
-                    }
                 });
-
             }
             else{
                 Toast.makeText(this, "La contraseña debe tener mas de 6 caracteres", Toast.LENGTH_SHORT).show();
@@ -104,6 +91,64 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void authClient(Map<String,String> auth, String token){
+        ClientProvider.authClient(auth).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+
+                if(response.isSuccessful()){
+                    Map<String, String> tokenInfo = new HashMap<>();
+                    tokenInfo.put("idClient", String.valueOf(response.body().getClient().getId()));
+                    tokenInfo.put("token", token);
+                    String name = response.body().getClient().getName();
+                    int id = response.body().getClient().getId();
+                    String phoneNumber = response.body().getClient().getPhoneNumber();
+
+                    updateToken(tokenInfo, name, id, phoneNumber);
+
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+
+                Toast.makeText(LoginActivity.this, "Ingreso fallido", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateToken(Map<String, String> tokenInfo, String name, int id, String phoneNumber){
+
+        ClientProvider.updateToken(tokenInfo).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                if(response.isSuccessful()){
+
+                    mAppConfig.updateLoginStatus(true);
+                    mAppConfig.saveUserName(name);
+                    mAppConfig.saveUserId(id);
+                    mAppConfig.saveUserPhoneNumber(phoneNumber);
+
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

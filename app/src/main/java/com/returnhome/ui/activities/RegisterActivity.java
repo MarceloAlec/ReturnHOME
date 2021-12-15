@@ -1,26 +1,29 @@
 package com.returnhome.ui.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
+import com.returnhome.providers.TokenProvider;
+import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.models.RHResponse;
 import com.returnhome.models.Client;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -77,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void clickRegister() {
+
         String name = mTextInputName.getText().toString();
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
@@ -90,7 +94,21 @@ public class RegisterActivity extends AppCompatActivity {
                 //DATOS INGRESADOS CORRECTAMENTE
                 mDialog.show();
 
-                registerClient(new Client(name,email,password,gender,codeNumber+" "+phoneNumber, mAppConfig.getToken()));
+                TokenProvider.create().addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+
+                        if(task.isSuccessful()){
+
+                            registerClient(new Client(name,email,password,gender,codeNumber+" "+phoneNumber, task.getResult()));
+                        }
+                        else{
+                            Toast.makeText(RegisterActivity.this, "No se pudo obtener el token del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
             }
             else{
                 Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();

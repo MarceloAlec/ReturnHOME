@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.nfc;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;

@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 

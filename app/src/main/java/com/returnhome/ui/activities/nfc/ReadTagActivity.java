@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.nfc;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.returnhome.R;
 import com.returnhome.providers.NfcProvider;
+import com.returnhome.ui.activities.pet.MapPetActivity;
 import com.returnhome.utils.AppConfig;
 
 public class ReadTagActivity extends AppCompatActivity {

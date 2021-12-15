@@ -1,29 +1,16 @@
 package com.returnhome.providers;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Parcelable;
-import android.provider.Settings;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonObject;
-import com.returnhome.R;
-import com.returnhome.ui.activities.SelectOptionNfcActivity;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class NfcProvider {
 

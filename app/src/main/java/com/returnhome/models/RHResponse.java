@@ -1,8 +1,7 @@
 package com.returnhome.models;
 
 import com.google.gson.annotations.SerializedName;
-import com.returnhome.models.Client;
-import com.returnhome.models.Pet;
+
 
 import java.util.ArrayList;
 
