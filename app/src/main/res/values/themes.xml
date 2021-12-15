@@ -23,6 +23,10 @@
         <item name="titleTextColor">@color/colorIcons</item>
     </style>
 
+    <style name="SplashTheme" parent="Theme.ReturnHOME">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
 
 
 

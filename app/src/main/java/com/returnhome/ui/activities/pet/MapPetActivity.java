@@ -154,6 +154,15 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //ElIMINA LA ACTUALIZACION DEL GPS
+        if(mLocationCallback !=null && mFusedLocation != null){
+            mFusedLocation.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
+    @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

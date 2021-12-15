@@ -191,6 +191,15 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         onCameraMove();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //ElIMINA LA ACTUALIZACION DEL GPS
+        if(mLocationCallback !=null && mFusedLocation != null){
+            mFusedLocation.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
