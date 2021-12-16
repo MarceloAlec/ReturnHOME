@@ -115,6 +115,21 @@ class Pet{
         }
     }
 
+    public function updateStatusMissing($connection, $id, $isMissing){
+        $query = "UPDATE " . $this->tblPet . " SET isMissing = ? WHERE idPet = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bindValue(1,$isMissing);
+        $stmt->bindValue(2,$idPet);
+        $stmt->execute();
+        $rows_affected = $stmt->rowCount();
+        if($rows_affected==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
 
 

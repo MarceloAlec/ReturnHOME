@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+
     <item
         android:id="@+id/nav_account"
         android:title="@string/nav_profile"
@@ -16,6 +16,6 @@
         android:id="@+id/nav_found_pet"
         android:title="Encontré una mascota"
         android:icon="@drawable/found_pet"/>
-    </group>
+
 
 </menu>

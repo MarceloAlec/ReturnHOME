@@ -30,7 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class PetsFragment extends Fragment  {
+public class PetFragment extends Fragment  {
 
     private PetAdapter mPetAdapter;
     private RecyclerView mRecyclerViewPets;
@@ -44,9 +44,11 @@ public class PetsFragment extends Fragment  {
     private RadioButton mRadioButtonMalePet;
     private ArrayList<Pet> petArrayList;
 
-    public PetsFragment() {
+    public PetFragment() {
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,11 +58,11 @@ public class PetsFragment extends Fragment  {
 
         petArrayList = new ArrayList<>();
         mRecyclerViewPets = view.findViewById(R.id.recyclerView);
-        mAppConfig = new AppConfig(container.getContext());
+        mAppConfig = new AppConfig(getContext());
         mFloatingButtonAdd = view.findViewById(R.id.fab_addPet);
-        mBottomSheetDialog = new BottomSheetDialog(container.getContext());
+        mBottomSheetDialog = new BottomSheetDialog(getContext());
         mBottomSheetDialog.setContentView(R.layout.popup_update);
-        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+        mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
         mButtonAdd = mBottomSheetDialog.findViewById(R.id.btnUpdateAdd);
         mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
@@ -163,5 +165,16 @@ public class PetsFragment extends Fragment  {
         mRecyclerViewPets.setAdapter(mPetAdapter);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Toast.makeText(getContext(), "Metodo on start", Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(getContext(), "Metodo on resume", Toast.LENGTH_SHORT).show();
+
+    }
 }

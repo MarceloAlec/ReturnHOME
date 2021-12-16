@@ -34,6 +34,8 @@
     <string name="btn_updateProfile">UPDATE</string>
     <string name="pref_user_token" translatable="false">user_token</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
 
 
 </resources>

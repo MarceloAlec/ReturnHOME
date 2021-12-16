@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.returnhome.R;
 import com.returnhome.ui.activities.nfc.ReadTagActivity;
 import com.returnhome.ui.activities.nfc.SelectOptionNfcActivity;
-import com.returnhome.ui.fragments.PetsFragment;
+import com.returnhome.ui.adapters.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.returnhome.utils.AppConfig;
 
@@ -33,6 +36,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private ActionBarDrawerToggle mToggle;
     private AppConfig mAppConfig;
+
+    private ViewPagerAdapter mViewPagerAdapter;
+    private ViewPager2 mViewPager2;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +56,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        //REEMPLAZA EL FRAGMENT LAYOUT CON ID CONTENT POR EL FRAGMENT PETS
-        getSupportFragmentManager().beginTransaction().add(R.id.content, new PetsFragment()).commit();
+        mTabLayout = findViewById(R.id.tabLayout);
+        mViewPager2 = findViewById(R.id.viewPager2);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        mViewPager2.setAdapter(mViewPagerAdapter);
+
         setTitle(R.string.app_name);
+
+        String[] headerTab = new String[]{"Mis Mascotas", "Mascotas desaparecidas"};
+        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> tab.setText(headerTab[position])).attach();
 
         mAppConfig = new AppConfig(this);
 
@@ -67,12 +80,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mHeaderView = mNavigationView.getHeaderView(0);
         mTextViewUserName = mHeaderView.findViewById(R.id.textView_userName);
         mTextViewUserPhoneNumber =mHeaderView.findViewById(R.id.textView_phoneNumber);
-    }
+        }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
         Intent intent;
 
         switch  (item.getItemId()){
