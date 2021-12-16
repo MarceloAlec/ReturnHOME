@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -77,6 +78,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private TextView mTextViewBreed;
     private TextView mTextViewGender;
     private TextView mTextViewPhoneNumber;
+
 
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
     LocationCallback mLocationCallback = new LocationCallback() {

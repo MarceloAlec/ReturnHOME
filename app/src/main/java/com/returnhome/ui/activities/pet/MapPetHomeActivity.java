@@ -148,7 +148,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         mSpinner = findViewById(R.id.spinner_pets);
         mButtonWriteTag = findViewById(R.id.btnWriteTag);
 
-        Toolbar.show(this, "Ubicacion de la mascota", true);
+        Toolbar.show(this, "Hogar de la mascota", true);
 
         mAppConfig = new AppConfig(this);
         getPets();
