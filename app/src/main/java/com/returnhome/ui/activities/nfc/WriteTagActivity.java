@@ -23,8 +23,16 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.maps.model.LatLng;
 import com.returnhome.R;
+import com.returnhome.models.Pet;
+import com.returnhome.models.RHResponse;
 import com.returnhome.providers.NfcProvider;
+import com.returnhome.providers.PetProvider;
+import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WriteTagActivity extends AppCompatActivity {
 
@@ -58,7 +66,6 @@ public class WriteTagActivity extends AppCompatActivity {
         mAppConfig = new AppConfig(this);
 
         mExtraIdPet = getIntent().getIntExtra("idPet",0);
-
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
 
@@ -182,7 +189,7 @@ public class WriteTagActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(NfcProvider.isWritingSuccess()){
-                    Intent intent = new Intent(WriteTagActivity.this, SelectOptionNfcActivity.class);
+                    Intent intent = new Intent(WriteTagActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }

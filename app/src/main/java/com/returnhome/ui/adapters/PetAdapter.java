@@ -62,7 +62,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         //EL ATTACHTOROOT SERA FALSE PARA NO CARGAR  LOS ITEMS EN EL RECYCLER MUY RAPIDO
         //CON EL INFLATER SE PROCEDE A DIBUJAR LA VISTA
         //COMO PARAMETRO TAMBIEN SE INDICA EL DISEÑO QUE TENDRA CADA ITEM DE LA LISTA
-        View view = inflater.inflate(R.layout.list_pets, parent, false);
+        View view = inflater.inflate(R.layout.cardview_my_pets, parent, false);
         //SE ENVIA LA VISTA AL CONSTRUCTOR DE LA CLASE PETSVIEWHOLDER
         PetAdapter.PetViewHolder petsViewHolder = new PetAdapter.PetViewHolder(view);
         return petsViewHolder;
@@ -105,7 +105,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                         mBottomSheetDialog = new BottomSheetDialog(context);
                         mBottomSheetDialog.setContentView(R.layout.popup_update);
-                        mBottomSheetDialog.setCanceledOnTouchOutside(false);
+                        mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
                         mButtonUpdate = mBottomSheetDialog.findViewById(R.id.btnUpdateAdd);
                         mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
@@ -159,12 +159,48 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                     return true;
 
+                    case R.id.cardview_missing_pet:
+                        int idPet = petArrayList.get(holder.getBindingAdapterPosition()).getId();
+                        Pet pet = new Pet(idPet,true);
+                        updateStatusMissingPet(pet);
+
+                        return true;
+
+                    case R.id.cardview_found_pet:
+                        int idPet1= petArrayList.get(holder.getBindingAdapterPosition()).getId();
+                        Pet pet1 = new Pet(idPet1,false);
+                        updateStatusMissingPet(pet1);
+
+                        return true;
+
                     default:
                         return false;
                 }
             }
         });
         popupMenuCardView.show();
+    }
+
+    private void updateStatusMissingPet(Pet pet){
+
+        PetProvider.updateStatusMissingPet(pet).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+
+                if(response.isSuccessful()){
+
+                    Toast.makeText(context, "Mascota reportada ", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(context, "No se pudo reportar ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+                Toast.makeText(context, "El reporte ha fallado", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

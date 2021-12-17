@@ -57,7 +57,7 @@ public class PetFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_pets, container, false);
 
         petArrayList = new ArrayList<>();
-        mRecyclerViewPets = view.findViewById(R.id.recyclerView);
+        mRecyclerViewPets = view.findViewById(R.id.recyclerViewMyPets);
         mAppConfig = new AppConfig(getContext());
         mFloatingButtonAdd = view.findViewById(R.id.fab_addPet);
         mBottomSheetDialog = new BottomSheetDialog(getContext());
@@ -140,13 +140,14 @@ public class PetFragment extends Fragment  {
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        PetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
+        PetProvider.readPet(idClient, 1).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     petArrayList = response.body().getPets();
                     showList(petArrayList);
                 }
+
             }
 
             @Override
@@ -165,16 +166,10 @@ public class PetFragment extends Fragment  {
         mRecyclerViewPets.setAdapter(mPetAdapter);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Toast.makeText(getContext(), "Metodo on start", Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-        Toast.makeText(getContext(), "Metodo on resume", Toast.LENGTH_SHORT).show();
 
     }
 }

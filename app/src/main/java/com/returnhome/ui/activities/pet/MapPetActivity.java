@@ -69,9 +69,10 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
-    private int mExtraIdPet;
+
     private String mExtraPhoneNumber;
-    private int idClient;
+    private Pet mExtraPet;
+
 
 
     private TextView mTextViewPetName;
@@ -127,10 +128,13 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
-        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
+        mExtraPet = (Pet)getIntent().getSerializableExtra("pet");
 
         mTextViewPhoneNumber.setText(mExtraPhoneNumber);
+        mTextViewPetName.setText(mExtraPet.getName());
+        mTextViewBreed.setText(mExtraPet.getBreed());
+        mTextViewGender.setText(String.valueOf(mExtraPet.getGender()));
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
@@ -138,14 +142,12 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
 
         Toolbar.show(this, "Ubicación de la mascota", true);
 
-        getPet();
-
         mButtonGoToSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MapPetActivity.this, SendNotificationActivity.class);
-                intent.putExtra("id_client",idClient);
-                intent.putExtra("pet_name",mTextViewPetName.getText());
+                intent.putExtra("idClient",mExtraPet.getId_client());
+                intent.putExtra("pet_name",mExtraPet.getName());
                 intent.putExtra("pet_lat",mPetLatLng.latitude);
                 intent.putExtra("pet_lng",mPetLatLng.longitude);
                 startActivity(intent);
@@ -176,7 +178,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home)));
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home)));
 
         startLocation();
     }
@@ -310,28 +312,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-    private void getPet() {
-        PetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
-            @Override
-            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
-                if(response.isSuccessful()){
-                    Pet pet = response.body().getPet();
-                    mTextViewPetName.setText(pet.getName());
-                    mTextViewBreed.setText(pet.getBreed());
-                    mTextViewGender.setText(String.valueOf(pet.getGender()));
-                    idClient = pet.getId_client();
 
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RHResponse> call, Throwable t) {
-
-            }
-        });
-
-
-    }
 
 
 }

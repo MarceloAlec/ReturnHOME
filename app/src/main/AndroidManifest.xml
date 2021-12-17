@@ -54,9 +54,6 @@
             android:name=".ui.activities.nfc.DetailWritingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.SelectOptionNfcActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.client.UpdatePasswordClientActivity"
             android:exported="false" />
         <activity

@@ -107,17 +107,18 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
 
                     mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    if(isFirsTime){
-                        //OBTIENE LA UBICACION EN TIEMPO REAL
-                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                                .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                                .zoom(15f)
-                                .build()
-                        ));
+
+                    //OBTIENE LA UBICACION EN TIEMPO REAL
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .zoom(15f)
+                            .build()
+                    ));
 
 
-                        isFirsTime = false;
-                    }
+
+
+                    mFusedLocation.removeLocationUpdates(mLocationCallback);
                     limitSearch();
 
                 }
@@ -151,7 +152,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         Toolbar.show(this, "Hogar de la mascota", true);
 
         mAppConfig = new AppConfig(this);
-        getPets();
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -171,7 +172,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                     Intent intent = new Intent(MapPetHomeActivity.this, DetailWritingActivity.class);
                     intent.putExtra("petHome_lat", mPetHomeLatLng.latitude);
                     intent.putExtra("petHome_lng", mPetHomeLatLng.longitude);
-                    intent.putExtra("petHome", mPetHome);
                     intent.putExtra("pet",(Pet)mSpinner.getSelectedItem());
                     startActivity(intent);
                 }
@@ -192,6 +192,13 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        getPets();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         //ElIMINA LA ACTUALIZACION DEL GPS
@@ -203,7 +210,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
-        PetProvider.readPet(idClient, true).enqueue(new Callback<RHResponse>() {
+        PetProvider.readPet(idClient, 1).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if (response.isSuccessful()) {
@@ -305,7 +312,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                     if (gpsActived()) {
                         mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
-                        mMap.setMyLocationEnabled(true);
                     }
                     else {
                         showAlertDialogNOGPS();
@@ -329,7 +335,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                 //AL EJECTUTARSE EL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
                 if (gpsActived()) {
                     mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                    mMap.setMyLocationEnabled(true);
                 } else {
                     showAlertDialogNOGPS();
                 }
@@ -339,7 +344,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         } else {
             if (gpsActived()) {
                 mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                mMap.setMyLocationEnabled(true);
             } else {
                 showAlertDialogNOGPS();
             }
@@ -387,7 +391,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                 return;
             }
             mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-            mMap.setMyLocationEnabled(true);
         }
         else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActived()){
             showAlertDialogNOGPS();

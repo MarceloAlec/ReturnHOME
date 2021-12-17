@@ -29,12 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAppConfig = new AppConfig(this);
 
-        if(mAppConfig.isUserLogin()){
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
         //AÑADE EL EVENTO CLICK A LOS BOTONES
         mButtonGoToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,5 +54,17 @@ public class MainActivity extends AppCompatActivity {
     private void initializeComponents() {
         mButtonGoToLogin = findViewById(R.id.btnGoToLogin);
         mButttonGoToRegister = findViewById(R.id.btnGoToRegister);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAppConfig.isUserLogin()){
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
     }
 }

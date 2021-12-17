@@ -1,6 +1,8 @@
 package com.returnhome.models;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Pet implements Serializable {
@@ -11,6 +13,7 @@ public class Pet implements Serializable {
     private String breed;
     private char gender;
     private String description;
+    private boolean missing;
     private int id_client;
 
 
@@ -28,6 +31,12 @@ public class Pet implements Serializable {
         this.gender = gender;
         this.description = description;
         this.id_client = idClient;
+    }
+
+
+    public Pet(int id, boolean missing) {
+        this.id = id;
+        this.missing = missing;
     }
 
     public int getId() {
@@ -78,8 +87,18 @@ public class Pet implements Serializable {
         this.id_client = id_client;
     }
 
+    public boolean isMissing() {
+        return missing;
+    }
+
+    public void setMissing(boolean missing) {
+        this.missing = missing;
+    }
+
     @Override
     public String toString() {
         return name;
     }
+
+
 }

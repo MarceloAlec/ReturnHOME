@@ -23,10 +23,13 @@ public interface IPetApi {
     Call<RHResponse> create(@Body Pet pet);
 
     @GET("read.php")
-    Call<RHResponse> read(@Query("id") int id, @Query("byIdClient") boolean byIdClient);
+    Call<RHResponse> read(@Query("id") int id, @Query("action") int action);
 
     @PUT("update.php")
     Call<RHResponse> update(@Body Pet pet);
+
+    @PUT("update-status-missing.php")
+    Call<RHResponse> updateStatusMissing(@Body Pet pet);
 
     @DELETE("delete.php")
     Call<RHResponse> delete(@Query("id") int idPet);

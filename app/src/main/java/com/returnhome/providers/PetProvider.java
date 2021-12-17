@@ -14,9 +14,9 @@ public class PetProvider  {
     //RAIZ DE LA URL QUE FORMA PARTE DE LA PETICION
     private static final String BASE_URL = "http://192.168.0.5:82/api.returnhome.com/v1/controllers/pet/";
 
-    public static Call<RHResponse> readPet(int id, boolean byIdClient){
+    public static Call<RHResponse> readPet(int id, int action){
 
-        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).read(id, byIdClient);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).read(id, action);
     }
 
     public static Call<RHResponse> deletePet(int idPet){
@@ -27,6 +27,11 @@ public class PetProvider  {
     public static Call<RHResponse> updatePet(Pet pet){
 
         return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).update(pet);
+    }
+
+    public static Call<RHResponse> updateStatusMissingPet(Pet pet){
+
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).updateStatusMissing(pet);
     }
 
     public static Call<RHResponse> createPet(Pet pet){

@@ -26,9 +26,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.returnhome.R;
+import com.returnhome.models.Client;
+import com.returnhome.models.Pet;
+import com.returnhome.models.RHResponse;
 import com.returnhome.providers.NfcProvider;
+import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.activities.pet.MapPetActivity;
 import com.returnhome.utils.AppConfig;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReadTagActivity extends AppCompatActivity {
 
@@ -42,13 +50,14 @@ public class ReadTagActivity extends AppCompatActivity {
     PendingIntent mPendingIntent;
     AppConfig mAppConfig;
 
-    private int idPet;
+    private Pet pet;
+    private Client client;
     private String phoneNumber;
     private LatLng petHomeLatLng;
 
     private final static int NFC_REQUEST_CODE = 1;
 
-    private boolean mExtraStartedByHomeActivity;
+    private boolean mExtraFoundPet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,7 @@ public class ReadTagActivity extends AppCompatActivity {
         mAppConfig = new AppConfig(this);
 
 
-        mExtraStartedByHomeActivity = getIntent().getBooleanExtra("startedByHomeActivity", false);
+        mExtraFoundPet = getIntent().getBooleanExtra("foundPet", false);
 
 
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
@@ -170,15 +179,14 @@ public class ReadTagActivity extends AppCompatActivity {
                     JsonParser parser = new JsonParser();
                     JsonObject petInfo = (JsonObject) parser.parse(s);
 
-                    idPet = Integer.valueOf(petInfo.get("id").toString().replace('"',' ').trim());
+                    int idPet = Integer.valueOf(petInfo.get("id").toString().replace('"',' ').trim());
                     phoneNumber = petInfo.get("tel").toString().replace('"',' ').trim();
                     String[] coordinates = petInfo.get("geo").toString().split(",");
                     double latitude = Double.parseDouble(coordinates[0].replace('"',' ').trim());
                     double longitude = Double.parseDouble(coordinates[1].replace('"',' ').trim());
                     petHomeLatLng = new LatLng(latitude,longitude);
 
-                    goToDetailReadingOrMapPetActivity();
-
+                    getPet(idPet);
                 }
                 else{
                     Toast.makeText(this, "Los datos en la etiqueta no se encuentra en formato Json", Toast.LENGTH_LONG).show();
@@ -191,23 +199,55 @@ public class ReadTagActivity extends AppCompatActivity {
     }
 
     private void goToDetailReadingOrMapPetActivity(){
-        if(mExtraStartedByHomeActivity){
-            Intent intent = new Intent(ReadTagActivity.this, MapPetActivity.class);
-            intent.putExtra("idPet",idPet);
-            intent.putExtra("phone_number",phoneNumber);
-            intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
-            intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
-            startActivity(intent);
-            finish();
+        if(mExtraFoundPet){
+            if(pet.isMissing()){
+                Intent intent = new Intent(ReadTagActivity.this, MapPetActivity.class);
+                intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
+                intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
+                intent.putExtra("phone_number",phoneNumber);
+                intent.putExtra("pet",pet);
+                startActivity(intent);
+                finish();
+            }
+            else{
+                Toast.makeText(this, "La mascota no esta reportada como desaparecida", Toast.LENGTH_LONG).show();
+            }
+
         }
         else{
             Intent intent = new Intent(ReadTagActivity.this, DetailReadingActivity.class);
-            intent.putExtra("idPet",idPet);
-            intent.putExtra("phone_number",phoneNumber);
             intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
             intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
+            intent.putExtra("phone_number",phoneNumber);
+            intent.putExtra("pet",pet);
             startActivity(intent);
         }
+    }
+
+    private void getPet(int idPet) {
+       PetProvider.readPet(idPet, 2).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                if(response.isSuccessful()){
+                    pet = response.body().getPet();
+                    phoneNumber = response.body().getClient().getPhoneNumber();
+                    goToDetailReadingOrMapPetActivity();
+                }
+                else{
+                    Toast.makeText(ReadTagActivity.this, "La etiqueta no corresponde a una mascota registrada", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+
+            }
+        });
+
+
+
+
+
 
     }
 }

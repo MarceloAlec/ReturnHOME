@@ -34,7 +34,6 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
     private TextView mTextViewBreed;
     private TextView mTextViewGender;
     private TextView mTextViewPhoneNumber;
-    //private TextView mTextViewHomePet;
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -43,7 +42,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
-    private String mExtraPetHome;
+
     private Pet mPet;
 
     private LatLng mPetHomeLatLng;
@@ -60,7 +59,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
         mTextViewBreed = findViewById(R.id.textViewBreed);
         mTextViewGender = findViewById(R.id.textViewGender);
         mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumber);
-        //mTextViewHomePet = findViewById(R.id.textViewHomePet);
+
         mButtonWriteTagNow = findViewById(R.id.btnWriteTagNow);
         mCircleImageReturnMapPetHome = findViewById(R.id.btnReturnMapPetHome);
 
@@ -71,16 +70,14 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("petHome_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("petHome_lng", 0);
-        mExtraPetHome = getIntent().getStringExtra("petHome");
         mPet = (Pet)getIntent().getSerializableExtra("pet");
-
-        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
         mTextViewNamePet.setText(mPet.getName());
         mTextViewBreed.setText(mPet.getBreed());
         mTextViewGender.setText(String.valueOf(mPet.getGender()));
         mTextViewPhoneNumber.setText(mAppConfig.getPhoneNumber());
-//        mTextViewHomePet.setText(mExtraPetHome);
+
+        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
         mCircleImageReturnMapPetHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,13 +90,12 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
-                intent.putExtra("idPet",mPet.getId());
+                intent.putExtra("idPet", mPet.getId());
                 intent.putExtra("pet_home_lat",mExtraPetHomeLat);
                 intent.putExtra("pet_home_lng",mExtraPetHomeLng);
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -121,7 +117,5 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
                         .zoom(15f)
                         .build()
         ));
-
     }
-
 }

@@ -2,11 +2,10 @@ package com.returnhome.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.returnhome.R;
@@ -16,7 +15,7 @@ import com.returnhome.models.FCMResponse;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.providers.NotificationProvider;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.ui.activities.client.HomeActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class SendNotificationActivity extends AppCompatActivity {
     private String mExtraPetName;
     private int mExtraIdClient;
 
-    private CircleImageView mCircleImageReturnMapPetHome;
+    private CircleImageView mCircleImageGoToHome;
 
     private Client client;
 
@@ -48,10 +47,10 @@ public class SendNotificationActivity extends AppCompatActivity {
 
         mAnimationNotification = findViewById(R.id.animationNotification);
 
-        mCircleImageReturnMapPetHome = findViewById(R.id.btnGoToMapPet);
+        mCircleImageGoToHome = findViewById(R.id.btnGoToHomeFromSendNotification);
         mTextViewNotificationInfo = findViewById(R.id.textViewNotificacionInfo);
 
-        mExtraIdClient = getIntent().getIntExtra("id_client", 0);
+        mExtraIdClient = getIntent().getIntExtra("idClient", 0);
         mExtraPetName = getIntent().getStringExtra("pet_name");
         mExtraPetLat = getIntent().getDoubleExtra("pet_lat", 0);
         mExtraPetLng = getIntent().getDoubleExtra("pet_lng", 0);
@@ -60,10 +59,12 @@ public class SendNotificationActivity extends AppCompatActivity {
 
         getClient();
 
-        mCircleImageReturnMapPetHome.setOnClickListener(new View.OnClickListener() {
+        mCircleImageGoToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(SendNotificationActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -71,7 +72,7 @@ public class SendNotificationActivity extends AppCompatActivity {
 
     private void sendNotification(){
         String token = client.getToken();
-        if(!token.equals("Unknown") || !token.equals(null)){
+        if(!token.equals("")){
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
             map.put("body",mExtraPetName+" fue encontrada en las siguientes coordenadas:" +

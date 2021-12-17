@@ -21,6 +21,7 @@ import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.models.RHResponse;
+import com.returnhome.ui.activities.client.HomeActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -31,8 +32,8 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
-    private int mExtraIdPet;
     private String mExtraPhoneNumber;
+    private Pet mExtraPet;
 
 
 
@@ -70,19 +71,20 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
-        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
+        mExtraPet = (Pet)getIntent().getSerializableExtra("pet");
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
+        mTextViewPetName.setText(mExtraPet.getName());
+        mTextViewBreed.setText(mExtraPet.getBreed());
+        mTextViewGender.setText(String.valueOf(mExtraPet.getGender()));
         mTextViewPhoneNumber.setText(mExtraPhoneNumber);
-
-        getPet();
 
         mCircleImageGoToSelectOptionNfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailReadingActivity.this, SelectOptionNfcActivity.class);
+                Intent intent = new Intent(DetailReadingActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -101,7 +103,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                 .setSmallestDisplacement(5);
 
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
 
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
@@ -113,24 +115,5 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
 
     }
 
-    private void getPet() {
-        PetProvider.readPet(mExtraIdPet, false).enqueue(new Callback<RHResponse>() {
-            @Override
-            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
-                if(response.isSuccessful()){
-                    Pet pet = response.body().getPet();
-                    mTextViewPetName.setText(pet.getName());
-                    mTextViewBreed.setText(pet.getBreed());
-                    mTextViewGender.setText(String.valueOf(pet.getGender()));
-                }
-            }
 
-            @Override
-            public void onFailure(Call<RHResponse> call, Throwable t) {
-
-            }
-        });
-
-
-    }
 }

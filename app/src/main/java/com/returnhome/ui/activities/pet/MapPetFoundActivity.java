@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.location.LocationRequest;
@@ -18,12 +17,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
-import com.returnhome.includes.Toolbar;
-import com.returnhome.ui.activities.MainActivity;
 import com.returnhome.ui.activities.client.HomeActivity;
-import com.returnhome.ui.activities.client.SelectOptionProfileActivity;
-import com.returnhome.ui.activities.nfc.DetailReadingActivity;
-import com.returnhome.ui.activities.nfc.SelectOptionNfcActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
