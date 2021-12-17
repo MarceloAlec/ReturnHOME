@@ -3,6 +3,7 @@
 class Pet{
 
     private $tblPet = "tblpet";
+    private $tblClient = "tblclient";
 
     public function __construct(){
 
@@ -31,7 +32,7 @@ class Pet{
         
     }
 
-    public function readPet($connection, $idClient){
+    public function readPetByClient($connection, $idClient){
         $query = "SELECT idPet, name, breed, gender, description, id_client FROM " . $this->tblPet . " WHERE id_client = ?";
         $stmt = $connection->prepare($query);
         $stmt->bindValue(1,$idClient);
@@ -61,8 +62,14 @@ class Pet{
         }
     }
 
-    public function readSinglePet($connection, $idPet){
-        $query = "SELECT idPet, name, breed, gender, description, id_client FROM " . $this->tblPet . " WHERE idPet = ?";
+    public function readPetById($connection, $idPet){
+
+        $query = "SELECT *, tblclient.name AS client_name, tblpet.name AS pet_name, tblclient.gender AS client_gender, tblpet.gender AS pet_gender 
+                  FROM " . $this->tblClient . 
+                  " INNER JOIN tblpet 
+                  on tblclient.id = tblpet.id_client  
+                  WHERE idPet = ?";
+       
         $stmt = $connection->prepare($query);
         $stmt->bindValue(1,$idPet);
         $stmt->execute();
@@ -71,13 +78,53 @@ class Pet{
         if($pets_num == 1){
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return array("id" => $result["idPet"],
-                        "name" => $result["name"],
-                        "breed" => $result["breed"],
-                        "gender" => $result["gender"],
-                        "description" => $result["description"],
-                        "id_client" => $result["id_client"]);
+
+            
+            $pet = array("id" => $result["idPet"],
+                         "name" => $result["pet_name"],
+                         "breed" => $result["breed"],
+                         "gender" => $result["pet_gender"],
+                         "description" => $result["description"],
+                         "missing" => filter_var($result["isMissing"], FILTER_VALIDATE_BOOLEAN),
+                         "id_client" => $result["id_client"]);
+
+            $client = array("id" => $result["id"],
+                            "name" => $result["client_name"],
+                            "email" => $result["email"],
+                            "gender" => $result["client_gender"],
+                            "phoneNumber" => $result["phoneNumber"]);
+
+            return array($pet, $client);
         }
+        else{
+           return false;
+        }
+    }
+
+    public function readMissingPet($connection){
+        $query = "SELECT idPet, name, breed, gender, description, id_client FROM " . $this->tblPet . " WHERE isMissing = true";
+        $stmt = $connection->prepare($query);
+        $stmt->execute();
+        $missing_pets_num= $stmt->rowCount();
+
+        if($missing_pets_num > 0){
+
+            $pets_array = array();
+        
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                extract($row);
+                $e = array("id" => $idPet,
+                           "name" => $name,
+                           "breed" => $breed,
+                           "gender" => $gender,
+                           "description" => $description,
+                           "id_client" => $id_client);
+        
+                array_push($pets_array, $e);
+            }
+            return $pets_array;
+        }
+        
         else{
            return false;
         }
@@ -115,14 +162,15 @@ class Pet{
         }
     }
 
-    public function updateStatusMissing($connection, $id, $isMissing){
+    public function updateStatusMissing($connection, $id, $missing){
         $query = "UPDATE " . $this->tblPet . " SET isMissing = ? WHERE idPet = ?";
         $stmt = $connection->prepare($query);
-        $stmt->bindValue(1,$isMissing);
-        $stmt->bindValue(2,$idPet);
+        $stmt->bindValue(1,$missing);
+        $stmt->bindValue(2,$id);
         $stmt->execute();
         $rows_affected = $stmt->rowCount();
-        if($rows_affected==1){
+        
+        if($rows_affected==1){   
             return true;
         }
         else{
