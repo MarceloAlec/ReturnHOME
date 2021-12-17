@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/cardview_edit"
-        android:title="@string/cardview_edit"/>
-    <item
-        android:id="@+id/cardview_delete"
-        android:title="@string/cardview_delete"/>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/cardview_edit"
+            android:title="@string/cardview_edit"/>
+        <item
+            android:id="@+id/cardview_delete"
+            android:title="@string/cardview_delete"/>
+
+
+        <item android:title="Reportar como">
+            <menu>
+                <item
+                    android:id="@+id/cardview_missing_pet"
+                    android:title="Desaparecida"/>
+                <item
+                    android:id="@+id/cardview_found_pet"
+                    android:title="Encontrada"/>
+            </menu>
+        </item>
+
+
+
+
 
 </menu>

@@ -2,20 +2,45 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:title="NFC">
+            <menu>
+                <item
+                    android:id="@+id/nav_write_tag"
+                    android:icon="@drawable/edit"
+                    android:title="Escribir etiqueta" />
+
+                <item
+                    android:id="@+id/nav_read_tag"
+                    android:icon="@drawable/readnfc"
+                    android:title="Leer etiqueta"/>
+
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:checkableBehavior="single">
+        <item
+
+            android:title="Notificación">
+            <menu>
+                <item
+                    android:id="@+id/nav_found_pet"
+                    android:title="Mascota encontrada"
+                    android:icon="@drawable/found_pet"/>
+
+            </menu>
+        </item>
+    </group>
+
+
+
     <item
         android:id="@+id/nav_account"
-        android:title="@string/nav_profile"
-        android:icon="@drawable/profile"/>
-
-    <item
-        android:id="@+id/nav_nfc"
-        android:title="Nfc"
-        android:icon="@drawable/nfc"/>
-
-    <item
-        android:id="@+id/nav_found_pet"
-        android:title="Encontré una mascota"
-        android:icon="@drawable/found_pet"/>
-
+        android:title="Ajustes"
+        android:icon="@drawable/ic_settings"/>
 
 </menu>
