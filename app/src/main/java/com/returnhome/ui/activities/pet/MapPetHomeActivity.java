@@ -115,9 +115,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                             .build()
                     ));
 
-
-
-
                     mFusedLocation.removeLocationUpdates(mLocationCallback);
                     limitSearch();
 

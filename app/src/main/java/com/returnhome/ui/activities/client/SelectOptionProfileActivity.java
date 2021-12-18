@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
 import com.returnhome.providers.ClientProvider;
+import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.TokenProvider;
 import com.returnhome.ui.activities.MainActivity;
 import com.returnhome.utils.AppConfig;
@@ -172,6 +173,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
     }
 
     private void logout(){
+        NotificationProvider.unsuscribeMissingPet();
         mAppConfig.updateLoginStatus(false);
         mAppConfig.saveUserPhoneNumber(null);
         mAppConfig.saveUserName(null);

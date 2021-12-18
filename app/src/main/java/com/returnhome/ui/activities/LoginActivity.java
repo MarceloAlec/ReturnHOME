@@ -16,6 +16,7 @@ import com.returnhome.R;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
+import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.TokenProvider;
 import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
@@ -128,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
+
+                    NotificationProvider.suscribeMissingPet();
 
                     mAppConfig.updateLoginStatus(true);
                     mAppConfig.saveUserName(name);

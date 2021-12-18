@@ -2,6 +2,7 @@ package com.returnhome.ui.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +23,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
+import com.returnhome.models.FCMBody;
+import com.returnhome.models.FCMResponse;
 import com.returnhome.models.Pet;
+import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.models.RHResponse;
+import com.returnhome.ui.activities.pet.MapPetReportedActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -161,8 +168,13 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                     case R.id.cardview_missing_pet:
                         int idPet = petArrayList.get(holder.getBindingAdapterPosition()).getId();
-                        Pet pet = new Pet(idPet,true);
-                        updateStatusMissingPet(pet);
+                        String petName = petArrayList.get(holder.getBindingAdapterPosition()).getName();
+
+                        Intent intent = new Intent(context, MapPetReportedActivity.class);
+                        intent.putExtra("idPet",idPet);
+                        intent.putExtra("pet_name",petName);
+                        context.startActivity(intent);
+
 
                         return true;
 
@@ -188,11 +200,10 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 
                 if(response.isSuccessful()){
-
-                    Toast.makeText(context, "Mascota reportada ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Mascota reportada como encontrada", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(context, "No se pudo reportar ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "La mascota ya fue reportada como encontrada", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -202,6 +213,8 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             }
         });
     }
+
+
 
 
     private void deletePet(PetViewHolder holder){

@@ -28,6 +28,8 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_found.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_home.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_house.xml" value="0.3859375" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_last_location.xml" value="0.2203125" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_navigation.xml" value="0.1891891891891892" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_notification_found_pet.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_read_tag.xml" value="0.25" />
@@ -40,6 +42,7 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_write_tag.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/app_bar_main.xml" value="0.2" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/cardview_missing_pets.xml" value="0.3859375" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/cardview_my_pets.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/content_main.xml" value="0.12027027027027028" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_gallery.xml" value="0.12027027027027028" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_home.xml" value="0.12027027027027028" />

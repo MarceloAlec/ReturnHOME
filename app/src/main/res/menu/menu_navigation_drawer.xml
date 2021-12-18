@@ -29,7 +29,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_found_pet"
-                    android:title="Mascota encontrada"
+                    android:title="Encontré una mascota"
                     android:icon="@drawable/found_pet"/>
 
             </menu>

@@ -45,32 +45,54 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
         String title = data.get("title");
         String body = data.get("body");
-        String petName = data.get("pet_name");
-        double pet_lat = Double.parseDouble(data.get("pet_lat"));
-        double pet_lng  = Double.parseDouble(data.get("pet_lng"));
 
-        LatLng petLatLng = new LatLng(pet_lat, pet_lng);
 
 
         if (title != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                showNotificationApiOreo(title, body, petName, petLatLng);
+
+                int  idPet = Integer.valueOf(data.get("idPet"));
+                String petName = data.get("pet_name");
+                double pet_lat = Double.parseDouble(data.get("pet_lat"));
+                double pet_lng  = Double.parseDouble(data.get("pet_lng"));
+                LatLng petLatLng = new LatLng(pet_lat, pet_lng);
+
+                if(title.contains("MASCOTA ENCONTRADA")){
+                    showNotificationApiOreo(title, body, idPet, petName, petLatLng, false);
+                }
+                else{
+                    showNotificationApiOreo(title, body, idPet, petName, petLatLng, true);
+                }
 
             }
             else{
-                showNotification(title, body, petName, petLatLng);
+                int  idPet = Integer.valueOf(data.get("idPet"));
+                String petName = data.get("pet_name");
+                double pet_lat = Double.parseDouble(data.get("pet_lat"));
+                double pet_lng  = Double.parseDouble(data.get("pet_lng"));
+
+                LatLng petLatLng = new LatLng(pet_lat, pet_lng);
+
+                if(title.contains("MASCOTA ENCONTRADA")){
+                    showNotification(title, body, idPet, petName, petLatLng, false);
+                }
+                else{
+                    showNotification(title, body, idPet, petName, petLatLng, true);
+                }
             }
 
         }
 
     }
 
-    private void showNotification(String title, String body, String petName, LatLng petLatLng) {
+    private void showNotification(String title, String body, int idPet, String petName, LatLng petLatLng, boolean isMissing) {
 
         Intent showPetFoundIntent = new Intent(this, ViewPetFoundReceiver.class);
+        showPetFoundIntent.putExtra("idPet", idPet);
         showPetFoundIntent.putExtra("pet_name", petName);
         showPetFoundIntent.putExtra("pet_lat", petLatLng.latitude);
         showPetFoundIntent.putExtra("pet_lng", petLatLng.longitude);
+        showPetFoundIntent.putExtra("isMissing", isMissing);
         PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action showPetFoundAction= new NotificationCompat.Action.Builder(
@@ -87,12 +109,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotificationApiOreo(String title, String body, String petName, LatLng petLatLng) {
+    private void showNotificationApiOreo(String title, String body, int idPet, String petName, LatLng petLatLng, boolean isMissing) {
 
         Intent showPetFoundIntent = new Intent(this, ViewPetFoundReceiver.class);
+        showPetFoundIntent.putExtra("idPet", idPet);
         showPetFoundIntent.putExtra("pet_name", petName);
         showPetFoundIntent.putExtra("pet_lat", petLatLng.latitude);
         showPetFoundIntent.putExtra("pet_lng", petLatLng.longitude);
+        showPetFoundIntent.putExtra("isMissing", isMissing);
         PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action showPetFoundAction= new Notification.Action.Builder(

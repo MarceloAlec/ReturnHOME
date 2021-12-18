@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
+import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.TokenProvider;
 import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
@@ -121,7 +122,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerClient(Client client){
 
-
         ClientProvider.registerClient(client).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
@@ -129,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
                 mDialog.dismiss();
 
                 if(response.isSuccessful()){
+                    NotificationProvider.suscribeMissingPet();
 
                     mAppConfig.updateLoginStatus(true);
                     mAppConfig.saveUserName(client.getName());

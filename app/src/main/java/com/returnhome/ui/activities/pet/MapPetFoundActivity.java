@@ -26,6 +26,8 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
     private double mExtraPetLat;
     private double mExtraPetLng;
     private String mExtraPetName;
+    private int mExtraIdPet;
+    private boolean mExtraIsMissing;
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -45,9 +47,11 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
 
         mCircleImageGoToHome = findViewById(R.id.btnGoToHome);
 
+        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPetName = getIntent().getStringExtra("pet_name");
         mExtraPetLat = getIntent().getDoubleExtra("pet_lat", 0);
         mExtraPetLng = getIntent().getDoubleExtra("pet_lng", 0);
+        mExtraIsMissing = getIntent().getBooleanExtra("isMissing", false);
 
         mPetLatLng = new LatLng(mExtraPetLat, mExtraPetLng);
 
@@ -73,7 +77,14 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetLatLng).title(mExtraPetName+" se encuentra aquí").icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit))).showInfoWindow();
+        if(mExtraIsMissing){
+            mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Vista por ultima vez aqui").icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit))).showInfoWindow();
+
+        }
+        else{
+            mMap.addMarker(new MarkerOptions().position(mPetLatLng).title(mExtraPetName+" se encuentra aquí").icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit))).showInfoWindow();
+
+        }
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
