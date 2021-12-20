@@ -11,6 +11,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NfcProvider {
 
@@ -34,7 +36,8 @@ public class NfcProvider {
 
     }
 
-    public static String writeNdefMessageToTag(NdefMessage message, Tag tag) {
+    public static Map<String, String> writeNdefMessageToTag(NdefMessage message, Tag tag) {
+        Map<String, String> writingInfo = new HashMap<>();
 
         int size = message.toByteArray().length;
         try {
@@ -42,15 +45,20 @@ public class NfcProvider {
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                    return "La etiqueta es de solo lectura";
+                    writingInfo.put("isSuccess","NOK");
+                    writingInfo.put("message","La etiqueta es de solo lectura");
+                    return writingInfo;
                 }
                 if (ndef.getMaxSize() < size) {
-                    return "Los datos a ser escritos (" + size + " bytes) superan el tamaño de la etiqueta ("+ ndef.getMaxSize() + "bytes)";
+                    writingInfo.put("isSuccess","NOK");
+                    writingInfo.put("message","Los datos a ser escritos ("+ size +" bytes) superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
+                    return writingInfo;
                 }
                 ndef.writeNdefMessage(message);
                 ndef.close();
-                isWritingSuccess = true;
-                return "Los datos se han escrito exitosamente";
+                writingInfo.put("isSuccess","OK");
+                writingInfo.put("message", "Los datos se han escrito exitosamente");
+                return writingInfo;
             } else {
                 NdefFormatable ndefFormat = NdefFormatable.get(tag);
                 if (ndefFormat != null) {
@@ -58,17 +66,24 @@ public class NfcProvider {
                         ndefFormat.connect();
                         ndefFormat.format(message);
                         ndefFormat.close();
-                        isWritingSuccess = true;
-                        return "Los datos se han escrito exitosamente";
+                        writingInfo.put("isSuccess","OK");
+                        writingInfo.put("message", "Los datos se han escrito exitosamente");
+                        return writingInfo;
                     } catch (IOException e) {
-                        return "El formato de la etiqueta no es soportado";
+                        writingInfo.put("isSuccess","NOK");
+                        writingInfo.put("message", "El formato de la etiqueta no es soportado");
+                        return writingInfo;
                     }
                 } else {
-                    return "La etiqueta no soporta datos NDEF";
+                    writingInfo.put("isSuccess","NOK");
+                    writingInfo.put("message", "La etiqueta no soporta datos NDEF");
+                    return writingInfo;
                 }
             }
         } catch (Exception e) {
-            return "No se pudo escribir los datos a la etiqueta";
+            writingInfo.put("isSuccess","NOK");
+            writingInfo.put("message", "No se pudo escribir los datos a la etiqueta");
+            return writingInfo;
         }
     }
 

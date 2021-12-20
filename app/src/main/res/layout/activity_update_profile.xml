@@ -53,7 +53,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/user" />
+                android:src="@drawable/ic_user" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -85,7 +85,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/email" />
+                android:src="@drawable/ic_email" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -118,7 +118,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/gender"/>
+                android:src="@drawable/ic_gender"/>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -210,9 +210,9 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="left"
-        android:layout_marginTop="105dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/profile"
+        android:src="@drawable/ic_user"
         />
 
     <de.hdodenhof.circleimageview.CircleImageView

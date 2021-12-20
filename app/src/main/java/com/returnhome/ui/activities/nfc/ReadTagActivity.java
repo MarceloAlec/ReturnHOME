@@ -34,6 +34,7 @@ import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.activities.pet.MapPetReportedFoundActivity;
 import com.returnhome.utils.AppConfig;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +42,7 @@ import retrofit2.Response;
 public class ReadTagActivity extends AppCompatActivity {
 
     private LottieAnimationView mAnimationNfc;
-    private Button mButtonCancelReading;
+    private CircleImageView mGoToHome;
     private TextView mTextViewEnableDeviceReader;
 
     private NfcAdapter mNfcAdapter;
@@ -51,7 +52,6 @@ public class ReadTagActivity extends AppCompatActivity {
     AppConfig mAppConfig;
 
     private Pet pet;
-    private Client client;
     private String phoneNumber;
     private LatLng petHomeLatLng;
 
@@ -64,14 +64,11 @@ public class ReadTagActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_tag);
 
-        mAnimationNfc = findViewById(R.id.animationNfcReaderMode);
-        mButtonCancelReading = findViewById(R.id.btnCancelReading);
-        mTextViewEnableDeviceReader = findViewById(R.id.textViewEnableDeviceReader);
+        initializeComponents();
+
         mAppConfig = new AppConfig(this);
 
-
         mExtraFoundPet = getIntent().getBooleanExtra("foundPet", false);
-
 
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -100,12 +97,18 @@ public class ReadTagActivity extends AppCompatActivity {
         mTechLists = new String[][] { new String[] { Ndef.class.getName() },
                 new String[] { NdefFormatable.class.getName() }};
 
-        mButtonCancelReading.setOnClickListener(new View.OnClickListener() {
+        mGoToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+    }
+
+    private void initializeComponents() {
+        mAnimationNfc = findViewById(R.id.animationNfc);
+        mGoToHome = findViewById(R.id.btnGoToHomeFromReadTag);
+        mTextViewEnableDeviceReader = findViewById(R.id.textViewEnableDeviceReader);
     }
 
     private void showAlertDialogNONFC() {

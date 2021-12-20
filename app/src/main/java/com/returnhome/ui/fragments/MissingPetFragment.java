@@ -10,14 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.adapters.MissingPetAdapter;
-import com.returnhome.ui.adapters.PetAdapter;
-import com.returnhome.utils.AppConfig;
 
 import java.util.ArrayList;
 
@@ -49,7 +46,6 @@ public class MissingPetFragment extends Fragment {
     }
 
     private void getMissingPets() {
-
 
         PetProvider.readPet(0, 3).enqueue(new Callback<RHResponse>() {
             @Override

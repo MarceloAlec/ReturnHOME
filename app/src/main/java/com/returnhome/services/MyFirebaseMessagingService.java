@@ -131,7 +131,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationUtil notificationUtil = new NotificationUtil(getBaseContext());
-        NotificationCompat.Builder builder = notificationUtil.getNotificationOldAPIPetFound(title, body, sound, showPetFoundAction, contactAction);
+        NotificationCompat.Builder builder = notificationUtil.getNotificationPetFound(title, body, sound, showPetFoundAction, contactAction);
         notificationUtil.getManager().notify(1, builder.build());
     }
 
@@ -152,7 +152,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationUtil notificationUtil = new NotificationUtil(getBaseContext());
-        NotificationCompat.Builder builder = notificationUtil.getNotificationOldAPIPetMissing(title, body, sound, showPetMissingAction);
+        NotificationCompat.Builder builder = notificationUtil.getNotificationPetMissing(title, body, sound, showPetMissingAction);
         notificationUtil.getManager().notify(1, builder.build());
     }
 

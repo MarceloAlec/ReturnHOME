@@ -82,9 +82,8 @@ public class NotificationUtil extends ContextWrapper {
                         .bigText(body).setBigContentTitle(title));
     }
 
-    //PARA VERSIONES INFERIORES A ANDROID OREO
 
-    public NotificationCompat.Builder getNotificationOldAPIPetMissing(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction) {
+    public NotificationCompat.Builder getNotificationPetMissing(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction) {
 
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
@@ -97,7 +96,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 
-    public NotificationCompat.Builder getNotificationOldAPIPetFound(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction, NotificationCompat.Action contactAction) {
+    public NotificationCompat.Builder getNotificationPetFound(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction, NotificationCompat.Action contactAction) {
 
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)

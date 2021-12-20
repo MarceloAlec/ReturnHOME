@@ -29,13 +29,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SelectOptionProfileActivity extends AppCompatActivity {
+public class SelectOptionProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private LinearLayout mButtonDeleteProfile;
-    private LinearLayout mButtonChangePassword;
-    private LinearLayout mButtonGoToUpdateProfile;
-    private LinearLayout mButtonLogOut;
+    private LinearLayout mDeleteAccount;
+    private LinearLayout mUpdatePassword;
+    private LinearLayout mGoToUpdateProfile;
+    private LinearLayout mLogOut;
 
     private AppConfig mAppConfig;
 
@@ -44,43 +44,24 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_option_profile);
 
-        mButtonGoToUpdateProfile = findViewById(R.id.btnEditProfile);
-        mButtonDeleteProfile = findViewById(R.id.btnDeleteProfile);
-        mButtonChangePassword = findViewById(R.id.btnChangePassword);
-        mButtonLogOut = findViewById(R.id.btnLogOut);
+        initializeComponents();
 
         mAppConfig = new AppConfig(this);
+
         Toolbar.show(this, "Seleccionar opción", true);
+    }
 
-        mButtonGoToUpdateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SelectOptionProfileActivity.this, UpdateProfileActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        mButtonDeleteProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickDelete();
-            }
-        });
+    private void initializeComponents(){
+        mGoToUpdateProfile = findViewById(R.id.btnUpdateProfile);
+        mDeleteAccount = findViewById(R.id.btnDeleteAccount);
+        mUpdatePassword = findViewById(R.id.btnUpdatePassword);
+        mLogOut = findViewById(R.id.btnLogOut);
 
-        mButtonChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SelectOptionProfileActivity.this, UpdatePasswordClientActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        mButtonLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialogLogOut();
-            }
-        });
+        mGoToUpdateProfile.setOnClickListener(this);
+        mDeleteAccount.setOnClickListener(this);
+        mUpdatePassword.setOnClickListener(this);
+        mLogOut.setOnClickListener(this);
 
     }
 
@@ -125,6 +106,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 TokenProvider.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -135,7 +117,7 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
                             updateToken(tokenInfo);
                         }
                         else{
-                            Toast.makeText(SelectOptionProfileActivity.this,"No se pudo cerrar sesion", Toast.LENGTH_SHORT);
+                            Toast.makeText(SelectOptionProfileActivity.this,"No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -201,5 +183,33 @@ public class SelectOptionProfileActivity extends AppCompatActivity {
                 Toast.makeText(SelectOptionProfileActivity.this, "No se pudo eliminar su cuenta", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+
+        switch (v.getId()){
+            case R.id.btnUpdateProfile:
+                intent = new Intent(SelectOptionProfileActivity.this, UpdateProfileActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btnDeleteAccount:
+                clickDelete();
+                break;
+
+            case R.id.btnUpdatePassword:
+                intent = new Intent(SelectOptionProfileActivity.this, UpdatePasswordClientActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btnLogOut:
+                showAlertDialogLogOut();
+                break;
+
+
+        }
     }
 }

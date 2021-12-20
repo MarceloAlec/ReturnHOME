@@ -36,7 +36,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="7dp"
             android:textColor="@color/colorAccent"
-            android:textSize="17sp"
+            android:textSize="19sp"
             android:textStyle="bold"/>
 
         <LinearLayout
@@ -157,7 +157,7 @@
         android:id="@+id/btnGoToHomeFromPetMissing"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_home"
+        android:src="@drawable/ic_home_white"
         android:layout_gravity="left|top"
         app:civ_circle_background_color="@color/colorPrimaryDark"
         android:layout_marginTop="20dp"

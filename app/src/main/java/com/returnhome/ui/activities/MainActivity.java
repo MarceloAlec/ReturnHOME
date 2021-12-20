@@ -11,7 +11,7 @@ import com.returnhome.R;
 import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     //PARA REFERENCIAR LOS BOTONES
     private Button mButtonGoToLogin;
@@ -30,31 +30,33 @@ public class MainActivity extends AppCompatActivity {
         mAppConfig = new AppConfig(this);
 
         //AÑADE EL EVENTO CLICK A LOS BOTONES
-        mButtonGoToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //SE CREA UNA INTENCION PARA PASAR DE UNA ACTIVIDAD A OTRA
-                //TOMA COMO ARGUMENTOS EL CONTEXTO ACTUAL Y LA ACTIVIDAD A DIRIGIRSE
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        mButtonGoToLogin.setOnClickListener(this);
 
-        mButttonGoToRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
+        mButttonGoToRegister.setOnClickListener(this);
     }
 
     private void initializeComponents() {
         mButtonGoToLogin = findViewById(R.id.btnGoToLogin);
         mButttonGoToRegister = findViewById(R.id.btnGoToRegister);
     }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()){
+
+            case R.id.btnGoToLogin:
+                 intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btnGoToRegister:
+                intent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
 
     @Override
     protected void onStart() {

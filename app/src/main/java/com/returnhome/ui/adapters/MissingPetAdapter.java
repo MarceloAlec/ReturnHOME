@@ -8,10 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 
@@ -19,9 +17,6 @@ import java.util.ArrayList;
 
 public class MissingPetAdapter extends RecyclerView.Adapter<MissingPetAdapter.MissingPetViewHolder>{
 
-    private TextInputEditText mTextInputName;
-    private TextInputEditText mTextInputBreed;
-    private TextInputEditText mTextInputDescription;
     private ArrayList<Pet> petArrayList;
 
     LayoutInflater inflater;
@@ -51,8 +46,6 @@ public class MissingPetAdapter extends RecyclerView.Adapter<MissingPetAdapter.Mi
     public int getItemCount() {
         return petArrayList.size();
     }
-
-
 
 
     public class MissingPetViewHolder extends RecyclerView.ViewHolder {

@@ -35,7 +35,7 @@ public interface IClientApi {
     @PUT("update-token.php")
     Call<RHResponse> updateToken(@Body Map<String,String> tokenInfo);
 
-    @PUT("change-password.php")
+    @PUT("update-password.php")
     Call<RHResponse> update(@Body Map<String, String> password);
 
     @DELETE("delete.php")

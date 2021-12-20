@@ -77,7 +77,7 @@
                 android:layout_centerVertical="true"
                 android:orientation="vertical"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/menu_cardview" />
+                android:src="@drawable/ic_menu_cardview" />
 
         </RelativeLayout>
 

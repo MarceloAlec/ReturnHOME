@@ -26,7 +26,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/name_pet"/>
+        android:src="@drawable/ic_pet_name"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/breed"/>
+            android:src="@drawable/ic_breed"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -94,7 +94,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/gender"/>
+            android:src="@drawable/ic_gender"/>
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -137,7 +137,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/description"/>
+            android:src="@drawable/ic_description"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnUpdateAdd"
+        android:id="@+id/btnUpdateAddPet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ACTUALIZAR | AGREGAR"

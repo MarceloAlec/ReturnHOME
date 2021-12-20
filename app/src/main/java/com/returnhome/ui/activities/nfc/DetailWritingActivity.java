@@ -25,7 +25,7 @@ import com.returnhome.utils.AppConfig;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailWritingActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class DetailWritingActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
 
     private AppConfig mAppConfig;
@@ -48,25 +48,17 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
     private LatLng mPetHomeLatLng;
 
     private Button mButtonWriteTagNow;
-    private CircleImageView mCircleImageReturnMapPetHome;
+    private CircleImageView mGoToMapPetHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_writing);
 
-        mTextViewNamePet = findViewById(R.id.textViewNamePet);
-        mTextViewBreed = findViewById(R.id.textViewBreed);
-        mTextViewGender = findViewById(R.id.textViewGender);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumber);
+        initializeComponents();
 
-        mButtonWriteTagNow = findViewById(R.id.btnWriteTagNow);
-        mCircleImageReturnMapPetHome = findViewById(R.id.btnReturnMapPetHome);
-
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
-
-        mAppConfig = new AppConfig(DetailWritingActivity.this);
+        mAppConfig = new AppConfig(this);
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("petHome_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("petHome_lng", 0);
@@ -79,23 +71,21 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        mCircleImageReturnMapPetHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        mGoToMapPetHome.setOnClickListener(this);
 
-        mButtonWriteTagNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
-                intent.putExtra("idPet", mPet.getId());
-                intent.putExtra("pet_home_lat",mExtraPetHomeLat);
-                intent.putExtra("pet_home_lng",mExtraPetHomeLng);
-                startActivity(intent);
-            }
-        });
+        mButtonWriteTagNow.setOnClickListener(this);
+    }
+
+
+
+    private void initializeComponents() {
+        mTextViewNamePet = findViewById(R.id.textViewNamePet);
+        mTextViewBreed = findViewById(R.id.textViewBreed);
+        mTextViewGender = findViewById(R.id.textViewGender);
+        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumber);
+        mButtonWriteTagNow = findViewById(R.id.btnWriteTagNow);
+        mGoToMapPetHome = findViewById(R.id.btnGoToMapPetHome);
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
     @Override
@@ -109,7 +99,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
@@ -117,5 +107,22 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
                         .zoom(15f)
                         .build()
         ));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnWriteTagNow:
+                Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
+                intent.putExtra("idPet", mPet.getId());
+                intent.putExtra("pet_home_lat",mExtraPetHomeLat);
+                intent.putExtra("pet_home_lng",mExtraPetHomeLng);
+                startActivity(intent);
+                break;
+
+            case R.id.btnGoToMapPetHome:
+                finish();
+                break;
+        }
     }
 }

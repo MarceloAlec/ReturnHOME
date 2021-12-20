@@ -11,7 +11,6 @@ import retrofit2.Call;
 
 public class PetProvider  {
 
-    //RAIZ DE LA URL QUE FORMA PARTE DE LA PETICION
     private static final String BASE_URL = "http://192.168.0.5:82/api.returnhome.com/v1/controllers/pet/";
 
     public static Call<RHResponse> readPet(int id, int action){

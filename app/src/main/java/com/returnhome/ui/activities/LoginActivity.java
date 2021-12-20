@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mButtonSignIn;
     private TextInputEditText mTextInputEmail;
@@ -48,20 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mAppConfig = new AppConfig(this);
 
+        mButtonSignIn.setOnClickListener(this);
+        mCircleImageGoToMain.setOnClickListener(this);
 
-        mButtonSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        mCircleImageGoToMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void initializeComponents() {
@@ -70,6 +59,23 @@ public class LoginActivity extends AppCompatActivity {
         mButtonSignIn = findViewById(R.id.btnSignIn);
         mCircleImageGoToMain = findViewById(R.id.btnGoToMain);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnSignIn:
+                login();
+                break;
+
+            case R.id.btnGoToMain:
+                finish();
+                break;
+
+        }
+    }
+
+
+
 
     private void login(){
         String email = mTextInputEmail.getText().toString();
@@ -163,5 +169,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

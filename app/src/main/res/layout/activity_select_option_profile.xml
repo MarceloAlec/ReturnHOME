@@ -7,8 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.activities.client.SelectOptionProfileActivity">
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +15,7 @@
         <include layout="@layout/action_toolbar"></include>
 
         <LinearLayout
-            android:id="@+id/btnChangePassword"
+            android:id="@+id/btnUpdatePassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="5dp"
@@ -29,7 +27,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:src="@drawable/password"/>
+                android:src="@drawable/ic_password"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -42,10 +40,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnEditProfile"
+            android:id="@+id/btnUpdateProfile"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-
             android:background="?android:selectableItemBackground"
             android:orientation="horizontal">
 
@@ -54,7 +51,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:src="@drawable/edit"/>
+                android:src="@drawable/ic_edit"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -67,7 +64,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnDeleteProfile"
+            android:id="@+id/btnDeleteAccount"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="?android:selectableItemBackground"
@@ -78,7 +75,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:src="@drawable/delete"/>
+                android:src="@drawable/ic_delete"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -89,7 +86,6 @@
                 android:layout_gravity="center_vertical"/>
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,7 +107,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/logout"/>
+                    android:src="@drawable/ic_logout"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -123,14 +119,8 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
 
-
-
-
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

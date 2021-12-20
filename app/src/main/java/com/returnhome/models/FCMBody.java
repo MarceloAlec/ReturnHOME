@@ -3,6 +3,7 @@ package com.returnhome.models;
 import java.util.Map;
 
 public class FCMBody {
+
     private String to;
     private String priority;
     private String ttl;
@@ -23,9 +24,6 @@ public class FCMBody {
         this.data = data;
     }
 
-
-    // Getter Methods
-
     public String getTo() {
         return to;
     }
@@ -33,10 +31,6 @@ public class FCMBody {
     public String getPriority() {
         return priority;
     }
-
-
-
-    // Setter Methods
 
     public void setTo( String to ) {
         this.to = to;

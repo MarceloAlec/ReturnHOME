@@ -28,7 +28,6 @@ public class UpdatePasswordClientActivity extends AppCompatActivity {
     private TextInputEditText mTextConfirmNewInputPassword;
     private Button mButtonUpdatePasswordProfile;
 
-
     private AppConfig mAppConfig;
 
     @Override
@@ -36,10 +35,7 @@ public class UpdatePasswordClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_password_profile);
 
-        mTextCurrentInputPassword = findViewById(R.id.textInputCurrentPasswordUpdateProfile);
-        mTextNewInputPassword = findViewById(R.id.textInputNewPasswordUpdateProfile);
-        mTextConfirmNewInputPassword = findViewById(R.id.textInputConfirmNewPasswordUpdateProfile);
-        mButtonUpdatePasswordProfile = findViewById(R.id.btnUpdatePasswordProfile);
+        initializeComponents();
 
         mAppConfig = new AppConfig(this);
         Toolbar.show(this, "Cambiar la contraseña", true);
@@ -50,6 +46,14 @@ public class UpdatePasswordClientActivity extends AppCompatActivity {
                 clickUpdate();
             }
         });
+    }
+
+    private void initializeComponents(){
+        mTextCurrentInputPassword = findViewById(R.id.textInputCurrentPasswordUpdateProfile);
+        mTextNewInputPassword = findViewById(R.id.textInputNewPasswordUpdateProfile);
+        mTextConfirmNewInputPassword = findViewById(R.id.textInputConfirmNewPasswordUpdateProfile);
+        mButtonUpdatePasswordProfile = findViewById(R.id.btnUpdatePasswordProfile);
+
     }
 
     private void clickUpdate() {
@@ -81,7 +85,7 @@ public class UpdatePasswordClientActivity extends AppCompatActivity {
     }
 
     private void updatePassword(Map<String, String> password) {
-        ClientProvider.updateClient(password).enqueue(new Callback<RHResponse>() {
+        ClientProvider.updatePassword(password).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){

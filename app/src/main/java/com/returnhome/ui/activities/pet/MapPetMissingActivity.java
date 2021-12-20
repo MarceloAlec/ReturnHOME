@@ -56,9 +56,7 @@ public class MapPetMissingActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_pet_missing);
 
-        mTextViewPetName = findViewById(R.id.textViewPetNameMissing);
-        mTextViewBreed = findViewById(R.id.textViewPetBreedMissing);
-        mTextViewGender = findViewById(R.id.textViewPetGenderMissing);
+        initializeComponents();
 
         mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPetName = getIntent().getStringExtra("pet_name");
@@ -67,10 +65,7 @@ public class MapPetMissingActivity extends AppCompatActivity implements OnMapRea
 
         mPetMissingLatLng = new LatLng(mExtraPetLat, mExtraPetLng);
 
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
-
-        mCircleImageGoToHome = findViewById(R.id.btnGoToHomeFromPetMissing);
 
         getPet(mExtraIdPet);
 
@@ -82,8 +77,14 @@ public class MapPetMissingActivity extends AppCompatActivity implements OnMapRea
                 startActivity(intent);
             }
         });
+    }
 
-
+    private void initializeComponents(){
+        mTextViewPetName = findViewById(R.id.textViewPetNameMissing);
+        mTextViewBreed = findViewById(R.id.textViewPetBreedMissing);
+        mTextViewGender = findViewById(R.id.textViewPetGenderMissing);
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mCircleImageGoToHome = findViewById(R.id.btnGoToHomeFromPetMissing);
     }
 
     @Override

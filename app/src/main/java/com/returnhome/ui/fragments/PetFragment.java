@@ -19,7 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
 import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.ui.adapters.PetAdapter;
+import com.returnhome.ui.adapters.MyPetAdapter;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.models.RHResponse;
 
@@ -30,9 +30,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class PetFragment extends Fragment  {
+public class PetFragment extends Fragment implements View.OnClickListener {
 
-    private PetAdapter mPetAdapter;
+    private MyPetAdapter mMyPetAdapter;
     private RecyclerView mRecyclerViewPets;
     private AppConfig mAppConfig;
     private FloatingActionButton mFloatingButtonAdd;
@@ -48,8 +48,6 @@ public class PetFragment extends Fragment  {
 
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,34 +58,43 @@ public class PetFragment extends Fragment  {
         mRecyclerViewPets = view.findViewById(R.id.recyclerViewMyPets);
         mAppConfig = new AppConfig(getContext());
         mFloatingButtonAdd = view.findViewById(R.id.fab_addPet);
+
+        initializeComponents();
+
+        mFloatingButtonAdd.setOnClickListener(this);
+
+        mButtonAdd.setOnClickListener(this);
+
+        getPets();
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab_addPet:
+                clickAdd();
+                break;
+
+            case R.id.btnUpdateAddPet:
+                mButtonAdd.setText(R.string.btn_addPet);
+                mBottomSheetDialog.show();
+                break;
+        }
+    }
+
+    private void initializeComponents(){
         mBottomSheetDialog = new BottomSheetDialog(getContext());
         mBottomSheetDialog.setContentView(R.layout.popup_update);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
-        mButtonAdd = mBottomSheetDialog.findViewById(R.id.btnUpdateAdd);
+        mButtonAdd = mBottomSheetDialog.findViewById(R.id.btnUpdateAddPet);
         mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
         mTextInputBreed = mBottomSheetDialog.findViewById(R.id.textInputBreed);
         mTextInputDescription = mBottomSheetDialog.findViewById(R.id.textInputDescription);
         mRadioButtonMalePet = mBottomSheetDialog.findViewById(R.id.radioButtonMalePet);
 
-        mFloatingButtonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mButtonAdd.setText(R.string.btn_addPet);
-                mBottomSheetDialog.show();
-            }
-        });
-
-        mButtonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickAdd();
-            }
-        });
-
-        getPets();
-
-        return view;
     }
 
     private void clickAdd() {
@@ -136,7 +143,6 @@ public class PetFragment extends Fragment  {
 
     }
 
-
     private void getPets() {
         int idClient = mAppConfig.getUserId();
 
@@ -162,14 +168,15 @@ public class PetFragment extends Fragment  {
         //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
         mRecyclerViewPets.setLayoutManager(linearLayoutManager);
         //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
-        mPetAdapter = new PetAdapter(getContext(), pets);
-        mRecyclerViewPets.setAdapter(mPetAdapter);
+        mMyPetAdapter = new MyPetAdapter(getContext(), pets);
+        mRecyclerViewPets.setAdapter(mMyPetAdapter);
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
 
     }
+
+
 }

@@ -63,7 +63,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapPetReportedFoundActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapPetReportedFoundActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -81,7 +81,7 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
     private Marker mMarker;
 
     private Button mButtonGoToSendNotification;
-    private CircleImageView mCircleImageReturnMapPetHome;
+    private CircleImageView mGoToHome;
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
@@ -117,7 +117,7 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
                     }
 
                     //OBTIENE LA UBICACION EN TIEMPO REAL
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
                             .target(mPetLatLng)
                             .zoom(15f)
                             .build()
@@ -134,19 +134,11 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_pet_reported_found);
 
-        mTextViewPetName = findViewById(R.id.textViewNamePetNotification);
-        mTextViewBreed = findViewById(R.id.textViewBreedNotification);
-        mTextViewGender = findViewById(R.id.textViewGenderNotification);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberNotification);
-        mCircleImageReturnMapPetHome = findViewById(R.id.btnGoToHomeFromReportedFound);
-        mImageViewCallUser = findViewById(R.id.imageViewCallUserReportedFound);
-        mButtonGoToSendNotification = findViewById(R.id.btnGoToSendNotification);
+        initializeComponents();
 
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
 
         mAppConfig = new AppConfig(this);
-
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
@@ -162,39 +154,49 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        mButtonGoToSendNotification = findViewById(R.id.btnGoToSendNotification);
-
         Toolbar.show(this, "Ubicación de la mascota", true);
 
-        mButtonGoToSendNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mButtonGoToSendNotification.setOnClickListener(this);
+
+        mGoToHome.setOnClickListener(this);
+
+        mImageViewCallUser.setOnClickListener(this);
+    }
+
+
+    private void initializeComponents(){
+        mTextViewPetName = findViewById(R.id.textViewNamePetNotification);
+        mTextViewBreed = findViewById(R.id.textViewBreedNotification);
+        mTextViewGender = findViewById(R.id.textViewGenderNotification);
+        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberNotification);
+        mGoToHome = findViewById(R.id.btnGoToHomeFromReportedFound);
+        mImageViewCallUser = findViewById(R.id.imageViewCallUserReportedFound);
+        mButtonGoToSendNotification = findViewById(R.id.btnGoToSendNotification);
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnGoToSendNotification:
                 getClientSendNotification();
-            }
-        });
+                break;
 
-        mCircleImageReturnMapPetHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.btnGoToHomeFromReportedFound:
                 finish();
-            }
-        });
+                break;
 
-        mImageViewCallUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.imageViewCallUserReportedFound:
                 dialPhoneNumber(mExtraPhoneNumber);
-            }
-        });
+                break;
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //ElIMINA LA ACTUALIZACION DEL GPS
-        if(mLocationCallback !=null && mFusedLocation != null){
-            mFusedLocation.removeLocationUpdates(mLocationCallback);
-        }
+        stopLocation();
     }
 
     @Override
@@ -209,7 +211,7 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home)));
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
 
         startLocation();
     }
@@ -412,6 +414,12 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         }
     }
 
+    private void stopLocation(){
+        if(mLocationCallback !=null && mFusedLocation != null){
+            mFusedLocation.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
     public void dialPhoneNumber(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
@@ -419,4 +427,6 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
             startActivity(intent);
         }
     }
+
+
 }

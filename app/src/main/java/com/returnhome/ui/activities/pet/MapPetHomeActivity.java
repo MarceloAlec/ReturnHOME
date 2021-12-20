@@ -76,9 +76,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private PlacesClient mPlaces;
     private AutocompleteSupportFragment mAutoComplete;
 
-    private String mPetHome;
     private LatLng mPetHomeLatLng;
-    private boolean isFirsTime = true;
     private boolean isPetSelected = false;
 
     private GoogleMap.OnCameraIdleListener mCameraListener;
@@ -104,9 +102,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
             for (Location location : locationResult.getLocations()) {
                 if (getApplicationContext() != null) {
 
-
                     mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
 
                     //OBTIENE LA UBICACION EN TIEMPO REAL
                     mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
@@ -114,10 +110,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                             .zoom(15f)
                             .build()
                     ));
-
-                    mFusedLocation.removeLocationUpdates(mLocationCallback);
                     limitSearch();
-
+                    stopLocation();
                 }
             }
         }
@@ -137,14 +131,12 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_pet_home);
 
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        initializeComponents();
+
         mMapFragment.getMapAsync(this);
 
         //INICIA O DETIENE LA UBICACION DEL USUARIO
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-
-        mSpinner = findViewById(R.id.spinner_pets);
-        mButtonWriteTag = findViewById(R.id.btnWriteTag);
 
         Toolbar.show(this, "Hogar de la mascota", true);
 
@@ -165,7 +157,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         mButtonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPetSelected && mPetHomeLatLng !=null){
+                if(isPetSelected){
                     Intent intent = new Intent(MapPetHomeActivity.this, DetailWritingActivity.class);
                     intent.putExtra("petHome_lat", mPetHomeLatLng.latitude);
                     intent.putExtra("petHome_lng", mPetHomeLatLng.longitude);
@@ -173,7 +165,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(MapPetHomeActivity.this,"Debe seleccionar una mascota previamente registrada",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapPetHomeActivity.this,"Debe seleccionar una mascota previamente registrada en la aplicación",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -188,6 +180,12 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         onCameraMove();
     }
 
+    private void initializeComponents() {
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mSpinner = findViewById(R.id.spinner_pets);
+        mButtonWriteTag = findViewById(R.id.btnWriteTag);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -198,7 +196,11 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //ElIMINA LA ACTUALIZACION DEL GPS
+
+        stopLocation();
+    }
+
+    private void stopLocation(){
         if(mLocationCallback !=null && mFusedLocation != null){
             mFusedLocation.removeLocationUpdates(mLocationCallback);
         }
@@ -227,17 +229,9 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private void showList(ArrayList<Pet> pets) {
         mArrayAdapterPets = new ArrayAdapter(MapPetHomeActivity.this, R.layout.list_item, petArrayList);
         mSpinner.setAdapter(mArrayAdapterPets);
-
-
     }
 
-
-
-
-
-
     private void onCameraMove() {
-
             mCameraListener = new GoogleMap.OnCameraIdleListener() {
                 @Override
                 public void onCameraIdle() {
@@ -248,7 +242,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                         List<Address> addressList = geocoder.getFromLocation(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude, 1);
                         String city = addressList.get(0).getLocality();
                         String address = addressList.get(0).getAddressLine(0);
-                        mPetHome = address + " " + city;
+
                         mAutoComplete.setText(address + " " + city);
 
                     } catch (Exception e) {
@@ -256,7 +250,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                     }
                 }
             };
-
     }
 
     private void instanceAutoCompletePetHome() {
@@ -278,7 +271,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                         .zoom(15f)
                         .build()
                 ));
-
             }
         });
     }
@@ -376,8 +368,6 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         });
         builder.show();
 
-
-
     }
 
     @Override
@@ -425,11 +415,4 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
     }
-
-
-
-
-
-
-
 }

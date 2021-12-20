@@ -9,12 +9,12 @@
             <menu>
                 <item
                     android:id="@+id/nav_write_tag"
-                    android:icon="@drawable/edit"
+                    android:icon="@drawable/ic_edit"
                     android:title="Escribir etiqueta" />
 
                 <item
                     android:id="@+id/nav_read_tag"
-                    android:icon="@drawable/readnfc"
+                    android:icon="@drawable/ic_nfc_reader"
                     android:title="Leer etiqueta"/>
 
             </menu>
@@ -30,7 +30,7 @@
                 <item
                     android:id="@+id/nav_found_pet"
                     android:title="Encontré una mascota"
-                    android:icon="@drawable/found_pet"/>
+                    android:icon="@drawable/ic_found_pet"/>
 
             </menu>
         </item>

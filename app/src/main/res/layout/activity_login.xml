@@ -53,7 +53,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/email"/>
+                android:src="@drawable/ic_email"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/password"/>
+                android:src="@drawable/ic_password"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

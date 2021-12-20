@@ -16,28 +16,27 @@ import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.maps.model.LatLng;
 import com.returnhome.R;
-import com.returnhome.models.Pet;
-import com.returnhome.models.RHResponse;
+
 import com.returnhome.providers.NfcProvider;
-import com.returnhome.providers.PetProvider;
+
 import com.returnhome.ui.activities.client.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class WriteTagActivity extends AppCompatActivity {
 
     private LottieAnimationView mAnimationNfc;
-    private Button mButtonCancelWriting;
+    private CircleImageView mGoToDetailWriting;
     private TextView mTextViewEnableDeviceInfo;
 
     private NfcAdapter mNfcAdapter;
@@ -60,9 +59,8 @@ public class WriteTagActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_tag);
 
-        mAnimationNfc = findViewById(R.id.animationNFC);
-        mButtonCancelWriting = findViewById(R.id.btnCancelWriting);
-        mTextViewEnableDeviceInfo = findViewById(R.id.textViewEnableDeviceInfo);
+        initializeComponents();
+
         mAppConfig = new AppConfig(this);
 
         mExtraIdPet = getIntent().getIntExtra("idPet",0);
@@ -98,13 +96,18 @@ public class WriteTagActivity extends AppCompatActivity {
         mTechLists = new String[][] { new String[] { Ndef.class.getName() },
                 new String[] { NdefFormatable.class.getName() }};
 
-        mButtonCancelWriting.setOnClickListener(new View.OnClickListener() {
+        mGoToDetailWriting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+    }
 
+    private void initializeComponents(){
+        mAnimationNfc = findViewById(R.id.animationNfc);
+        mTextViewEnableDeviceInfo = findViewById(R.id.textViewEnableDeviceInfo);
+        mGoToDetailWriting = findViewById(R.id.btnGoToDetailWriting);
 
     }
 
@@ -179,16 +182,16 @@ public class WriteTagActivity extends AppCompatActivity {
 
     }
 
-    private void showWritingInfo(String message){
+    private void showWritingInfo(Map<String, String> message){
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setTitle("NFC Writer Mode");
-        builder.setIcon(R.drawable.edit);
-        builder.setMessage(message);
+        builder.setIcon(R.drawable.ic_edit);
+        builder.setMessage(message.get("message"));
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(NfcProvider.isWritingSuccess()){
+                if(message.get("isSuccess").contains("OK")){
                     Intent intent = new Intent(WriteTagActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);

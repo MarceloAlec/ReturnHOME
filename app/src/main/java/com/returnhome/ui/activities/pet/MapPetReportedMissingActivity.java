@@ -103,11 +103,8 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
                             .build()
                     ));
 
-
-
-
-                    mFusedLocation.removeLocationUpdates(mLocationCallback);
                     limitSearch();
+                    stopLocation();
 
                 }
             }
@@ -121,12 +118,11 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_pet_reported_missing);
 
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        initializeComponents();
+
         mMapFragment.getMapAsync(this);
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-
-        mButtonSendNotification = findViewById(R.id.btnSendNotification);
 
         Toolbar.show(this, "Vista por ultima vez en", true);
 
@@ -148,6 +144,18 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
         mPlaces = Places.createClient(this);
         instanceAutoCompletePetHome();
         onCameraMove();
+    }
+
+    private void initializeComponents(){
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mButtonSendNotification = findViewById(R.id.btnSendNotification);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //ElIMINA LA ACTUALIZACION DEL GPS
+        stopLocation();
     }
 
     private void sendNotification(){
@@ -400,5 +408,11 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
 
             }
         });
+    }
+
+    private void stopLocation(){
+        if(mLocationCallback !=null && mFusedLocation != null){
+            mFusedLocation.removeLocationUpdates(mLocationCallback);
+        }
     }
 }

@@ -35,8 +35,6 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
     private String mExtraPhoneNumber;
     private Pet mExtraPet;
 
-
-
     private LatLng mPetHomeLatLng;
 
 
@@ -58,13 +56,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_reading);
 
-        mTextViewPetName = findViewById(R.id.textViewNamePetReading);
-        mTextViewBreed = findViewById(R.id.textViewBreedReading);
-        mTextViewGender = findViewById(R.id.textViewGenderReading);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberReading);
-
-
-        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToHomeFromDetailReading);
+        initializeComponents();
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
@@ -91,6 +83,14 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
+    private void initializeComponents(){
+        mTextViewPetName = findViewById(R.id.textViewNamePetReading);
+        mTextViewBreed = findViewById(R.id.textViewBreedReading);
+        mTextViewGender = findViewById(R.id.textViewGenderReading);
+        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberReading);
+        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToHomeFromDetailReading);
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -103,7 +103,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                 .setSmallestDisplacement(5);
 
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_home))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(

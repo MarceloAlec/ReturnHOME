@@ -38,8 +38,6 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
     private String mExtraPetName;
     private int mExtraIdClient;
 
-
-
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
     private LocationRequest mLocationRequest;
@@ -61,15 +59,9 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_pet_found);
 
-        mTextViewClientName = findViewById(R.id.textViewClientName);
-        mTextViewEmail = findViewById(R.id.textViewClientEmail);
-        mTextViewPhoneNumber = findViewById(R.id.textViewClientPhoneNumber);
-        mImageViewCallUser = findViewById(R.id.imageViewCallUser);
+        initializeComponents();
 
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
-
-        mCircleImageGoToHome = findViewById(R.id.btnGoToHomeFromPetFound);
 
         mExtraIdClient = getIntent().getIntExtra("idClient", 0);
         mExtraPetName = getIntent().getStringExtra("pet_name");
@@ -97,6 +89,16 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
         });
     }
 
+    private void initializeComponents(){
+        mTextViewClientName = findViewById(R.id.textViewClientName);
+        mTextViewEmail = findViewById(R.id.textViewClientEmail);
+        mTextViewPhoneNumber = findViewById(R.id.textViewClientPhoneNumber);
+        mImageViewCallUser = findViewById(R.id.imageViewCallUser);
+        mCircleImageGoToHome = findViewById(R.id.btnGoToHomeFromPetFound);
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
@@ -120,6 +122,8 @@ public class MapPetFoundActivity extends AppCompatActivity implements OnMapReady
                         .build()
         ));
     }
+
+
 
     private void getClient(int mExtraIdClient) {
         ClientProvider.getClient(mExtraIdClient).enqueue(new Callback<RHResponse>() {

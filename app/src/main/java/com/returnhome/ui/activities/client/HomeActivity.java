@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -18,9 +17,9 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.returnhome.R;
-import com.returnhome.ui.activities.nfc.DetailWritingActivity;
+
 import com.returnhome.ui.activities.nfc.ReadTagActivity;
-import com.returnhome.ui.activities.nfc.WriteTagActivity;
+
 import com.returnhome.ui.activities.pet.MapPetHomeActivity;
 import com.returnhome.ui.adapters.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
@@ -42,7 +41,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
 
-    private static boolean itemSelected;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,15 +50,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //CONFIGURACION DEL TOOLBAR
         setSupportActionBar(mToolbar);
-        itemSelected = false;
 
         //CONFIGURACION DEL ICONO DE LA HAMBURGUESA EN EL TOOLBAR
         mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open_drawer, R.string.close_drawer);
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mTabLayout = findViewById(R.id.tabLayout);
-        mViewPager2 = findViewById(R.id.viewPager2);
+
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         mViewPager2.setAdapter(mViewPagerAdapter);
 
@@ -83,39 +79,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mHeaderView = mNavigationView.getHeaderView(0);
         mTextViewUserName = mHeaderView.findViewById(R.id.textView_userName);
         mTextViewUserPhoneNumber =mHeaderView.findViewById(R.id.textView_phoneNumber);
-        }
+        mTabLayout = findViewById(R.id.tabLayout);
+        mViewPager2 = findViewById(R.id.viewPager2);
+    }
 
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent;
 
-
         switch  (item.getItemId()){
             case R.id.nav_account:
                 intent = new Intent(HomeActivity.this, SelectOptionProfileActivity.class);
                 startActivity(intent);
-                //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
 
             case R.id.nav_write_tag:
                 intent = new Intent(HomeActivity.this, MapPetHomeActivity.class);
                 startActivity(intent);
-                //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
 
             case R.id.nav_read_tag:
                 intent = new Intent(HomeActivity.this, ReadTagActivity.class);
                 startActivity(intent);
-                //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
-
 
             case R.id.nav_found_pet:
                 intent = new Intent(HomeActivity.this, ReadTagActivity.class);
                 intent.putExtra("foundPet",true);
                 startActivity(intent);
-                //ft.replace(R.id.content, new ProfileFragment()).commit();
                 break;
 
         }

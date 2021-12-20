@@ -32,7 +32,7 @@ public class ClientProvider {
         return RetrofitClient.getClient(BASE_URL).create(IClientApi.class).update(client);
     }
 
-    public static Call<RHResponse> updateClient(Map<String, String> password){
+    public static Call<RHResponse> updatePassword(Map<String, String> password){
         return RetrofitClient.getClient(BASE_URL).create(IClientApi.class).update(password);
     }
 
