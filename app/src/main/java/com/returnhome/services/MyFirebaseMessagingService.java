@@ -145,7 +145,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetMissingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action showPetMissingAction= new NotificationCompat.Action.Builder(
-                R.drawable.ic_app,
+                R.mipmap.ic_launcher,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();
@@ -167,7 +167,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action showPetFoundAction= new Notification.Action.Builder(
-                R.drawable.ic_app,
+                R.mipmap.ic_launcher,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();
@@ -177,7 +177,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent contactPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, contactIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action contactAction = new Notification.Action.Builder(
-                R.drawable.ic_app,
+                R.mipmap.ic_launcher,
                 "Contactar",
                 contactPendingIntent
         ).build();
@@ -199,7 +199,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetMissingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action showPetMissingAction= new Notification.Action.Builder(
-                R.drawable.ic_app,
+                R.mipmap.ic_launcher,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();

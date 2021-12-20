@@ -62,7 +62,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setSound(soundUri)
                 .setShowWhen(true)
                 .addAction(showPetMissingAction)
-                .setSmallIcon(R.drawable.ic_app)
+                .setSmallIcon(R.drawable.ic_app_notification)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
     }
@@ -77,7 +77,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setShowWhen(true)
                 .addAction(showPetMissingAction)
                 .addAction(cancelAction)
-                .setSmallIcon(R.drawable.ic_app)
+                .setSmallIcon(R.drawable.ic_app_notification)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
     }
@@ -92,7 +92,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setAutoCancel(true)
                 .setSound(soundUri)
                 .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_app)
+                .setSmallIcon(R.drawable.ic_app_notification)
                 .addAction(showPetFoundAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
@@ -105,7 +105,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setAutoCancel(true)
                 .setSound(soundUri)
                 .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_app)
+                .setSmallIcon(R.drawable.ic_app_notification)
                 .addAction(showPetFoundAction)
                 .addAction(contactAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
