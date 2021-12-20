@@ -25,7 +25,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark" />
+            android:background="@color/colorPrimaryLight" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -179,15 +179,16 @@
 
     <Button
         android:id="@+id/btnWriteTagNow"
-        android:layout_width="150dp"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
-        android:text="ESCRIBIR AHORA"
+        android:text="ESCRIBIR ETIQUETA"
         android:background="@drawable/rounded_button"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorAccent"
         android:layout_gravity="right|top"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:textColor="@android:color/white" />
+        android:textSize="13sp"
+        android:textColor="@color/colorIcons" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/btnReturnMapPetHome"

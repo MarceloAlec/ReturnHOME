@@ -24,6 +24,7 @@ import com.returnhome.utils.AppConfig;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText mTextInputPassword;
 
     private AppConfig mAppConfig;
+    private CircleImageView mCircleImageGoToMain;
 
 
     @Override
@@ -53,12 +55,20 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+
+        mCircleImageGoToMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initializeComponents() {
         mTextInputEmail = findViewById(R.id.textInputEmailLogin);
         mTextInputPassword = findViewById(R.id.textInputPasswordLogin);
         mButtonSignIn = findViewById(R.id.btnSignIn);
+        mCircleImageGoToMain = findViewById(R.id.btnGoToMain);
     }
 
     private void login(){

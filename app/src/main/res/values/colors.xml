@@ -3,11 +3,11 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorPrimaryLight">#546e7a</color>
-    <color name="colorAccent">#ff5722</color>
+    <color name="colorAccent">#FF5722</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
-    <color name="colorRed900">#b71c1c</color>
+    <color name="colorRed900">#880505</color>
     <color name="colorIndigo900">#1a237e</color>
 </resources>

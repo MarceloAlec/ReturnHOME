@@ -31,7 +31,7 @@ import com.returnhome.models.Pet;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.NfcProvider;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.ui.activities.pet.MapPetActivity;
+import com.returnhome.ui.activities.pet.MapPetReportedFoundActivity;
 import com.returnhome.utils.AppConfig;
 
 import retrofit2.Call;
@@ -201,7 +201,7 @@ public class ReadTagActivity extends AppCompatActivity {
     private void goToDetailReadingOrMapPetActivity(){
         if(mExtraFoundPet){
             if(pet.isMissing()){
-                Intent intent = new Intent(ReadTagActivity.this, MapPetActivity.class);
+                Intent intent = new Intent(ReadTagActivity.this, MapPetReportedFoundActivity.class);
                 intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
                 intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
                 intent.putExtra("phone_number",phoneNumber);

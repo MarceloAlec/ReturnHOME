@@ -18,18 +18,21 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/side_nav_bar.xml" value="0.34774774774774775" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/splash_screen.xml" value="0.2359375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/action_toolbar.xml" value="0.22" />
-        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detail_reading.xml" value="0.3859375" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detail_reading.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detail_writing.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_main2.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet.xml" value="0.25" />
-        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_found.xml" value="0.2921875" />
-        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_home.xml" value="0.22" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_found.xml" value="0.33" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_home.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_house.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_last_location.xml" value="0.2203125" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_missing.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported.xml" value="0.3859375" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported_found.xml" value="0.33" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported_missing.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_navigation.xml" value="0.1891891891891892" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_notification_found_pet.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_read_tag.xml" value="0.25" />

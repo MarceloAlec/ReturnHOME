@@ -14,7 +14,7 @@
 
         <com.github.florent37.shapeofview.shapes.ArcView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="180dp"
             android:elevation="4dp"
             app:shape_arc_cropDirection="outside"
             app:shape_arc_height="20dp"
@@ -24,18 +24,18 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark" />
+                android:background="@color/colorPrimaryLight" />
 
             <TextView
                 android:id="@+id/textViewNameBookingDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RETURN HOME"
+                android:text="@string/name_app"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="26sp"
+                android:textColor="@color/colorIcons"
+                android:textSize="40sp"
                 android:textStyle="bold"
-                android:layout_margin="50dp" />
+                android:layout_gravity="center"/>
 
         </com.github.florent37.shapeofview.shapes.ArcView>
 
@@ -120,20 +120,22 @@
                 android:text="@string/btn_sign_in"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/colorIcons"
-                android:layout_margin="30dp"
-                android:textSize="15sp"/>
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="13sp"
+                android:layout_margin="30dp"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/pets"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="20dp"
-        android:layout_gravity="center|top"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/btnGoToMain"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_arrow_back_black"
+        android:layout_gravity="left|top"
+        app:civ_circle_background_color="@color/colorPrimaryDark"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

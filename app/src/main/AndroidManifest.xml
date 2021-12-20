@@ -15,12 +15,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReturnHOME"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".ui.activities.pet.MapPetReportedActivity"
+            android:name=".ui.activities.pet.MapPetMissingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.pet.MapPetReportedMissingActivity"
             android:exported="false" />
 
         <receiver
-            android:name=".receivers.ViewPetFoundReceiver"
+            android:name=".receivers.PetFoundReceiver"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".receivers.PetMissingReceiver"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".receivers.ContactReceiver"
             android:enabled="true" />
 
         <activity
@@ -36,7 +48,7 @@
         </service>
 
         <activity
-            android:name=".ui.activities.pet.MapPetActivity"
+            android:name=".ui.activities.pet.MapPetReportedFoundActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.nfc.DetailReadingActivity"

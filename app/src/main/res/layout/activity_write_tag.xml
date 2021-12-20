@@ -32,16 +32,20 @@
             app:lottie_imageAssetsFolder="assets"
             app:lottie_loop="true" />
 
-            <Button
-                android:id="@+id/btnCancelWriting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:text="CANCELAR ESCRITURA"
-                android:textColor="@android:color/white"
-                android:layout_alignParentBottom="true"/>
+        <Button
+            android:id="@+id/btnCancelWriting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/colorAccent"
+            android:text="CANCELAR ESCRITURA"
+            android:textSize="13sp"
+            android:textColor="@android:color/white" />
 
     </RelativeLayout>
 

@@ -64,7 +64,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
         mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberReading);
 
 
-        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToSelectOpcionNfc);
+        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToHomeFromDetailReading);
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);

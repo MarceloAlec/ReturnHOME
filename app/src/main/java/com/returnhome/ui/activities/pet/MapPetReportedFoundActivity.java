@@ -16,6 +16,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,17 +51,19 @@ import com.returnhome.models.Pet;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.providers.NotificationProvider;
+import com.returnhome.utils.AppConfig;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapPetReportedFoundActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -77,6 +81,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private Marker mMarker;
 
     private Button mButtonGoToSendNotification;
+    private CircleImageView mCircleImageReturnMapPetHome;
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
@@ -93,6 +98,9 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private TextView mTextViewGender;
     private TextView mTextViewPhoneNumber;
 
+    private AppConfig mAppConfig;
+    private ImageView mImageViewCallUser;
+
 
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -107,9 +115,6 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
                     if(mMarker != null){
                         mMarker.remove();
                     }
-
-                    mMarker = mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_sit)));
-                    mMarker.showInfoWindow();
 
                     //OBTIENE LA UBICACION EN TIEMPO REAL
                     mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
@@ -127,15 +132,21 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_pet);
+        setContentView(R.layout.activity_map_pet_reported_found);
 
         mTextViewPetName = findViewById(R.id.textViewNamePetNotification);
         mTextViewBreed = findViewById(R.id.textViewBreedNotification);
         mTextViewGender = findViewById(R.id.textViewGenderNotification);
         mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberNotification);
+        mCircleImageReturnMapPetHome = findViewById(R.id.btnGoToHomeFromReportedFound);
+        mImageViewCallUser = findViewById(R.id.imageViewCallUserReportedFound);
+        mButtonGoToSendNotification = findViewById(R.id.btnGoToSendNotification);
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
+
+        mAppConfig = new AppConfig(this);
+
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
@@ -159,6 +170,20 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 getClientSendNotification();
+            }
+        });
+
+        mCircleImageReturnMapPetHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mImageViewCallUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialPhoneNumber(mExtraPhoneNumber);
             }
         });
     }
@@ -298,7 +323,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //HABILITA LOS PERMISOS PARA USAR LA UBICACION
-                        ActivityCompat.requestPermissions(MapPetActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                        ActivityCompat.requestPermissions(MapPetReportedFoundActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                     }
                 });
                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -313,7 +338,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
                 builder.show();
             }
             else {
-                ActivityCompat.requestPermissions(MapPetActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                ActivityCompat.requestPermissions(MapPetReportedFoundActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
         }
     }
@@ -330,7 +355,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
 
             @Override
             public void onFailure(Call<RHResponse> call, Throwable t) {
-                Toast.makeText(MapPetActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -338,7 +363,7 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
     private void sendNotification(){
 
         try {
-            Geocoder geocoder = new Geocoder(MapPetActivity.this);
+            Geocoder geocoder = new Geocoder(MapPetReportedFoundActivity.this);
             List<Address> addressList = geocoder.getFromLocation(mPetLatLng.latitude, mPetLatLng.longitude, 1);
             String city = addressList.get(0).getLocality();
             String address = addressList.get(0).getAddressLine(0);
@@ -352,8 +377,9 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
         if(!token.equals("")){
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
-            map.put("body",mExtraPet.getName()+" fue encontrada en :" +mPetLocation);
-            map.put("idPet",String.valueOf(mExtraPet.getId()));
+            map.put("body",mExtraPet.getName()+" fue encontrada en: " +mPetLocation);
+            map.put("idClient",String.valueOf(mAppConfig.getUserId()));
+            map.put("phoneNumber",mAppConfig.getPhoneNumber());
             map.put("pet_name",mExtraPet.getName());
             map.put("pet_lat",String.valueOf(mPetLatLng.latitude));
             map.put("pet_lng",String.valueOf(mPetLatLng.longitude));
@@ -363,34 +389,34 @@ public class MapPetActivity extends AppCompatActivity implements OnMapReadyCallb
                 public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                     if(response.body() != null){
                         if(response.body().getSuccess() == 1){
-                            Toast.makeText(MapPetActivity.this,"Notificacion enviada con exito",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapPetReportedFoundActivity.this,"Notificacion enviada con exito",Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(MapPetActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{
-                        Toast.makeText(MapPetActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
                     }
 
                 }
 
                 @Override
                 public void onFailure(Call<FCMResponse> call, Throwable t) {
-                    Toast.makeText(MapPetActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
                 }
             });
         }
         else{
-            Toast.makeText(MapPetActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
-
-
-
-
-
+    public void dialPhoneNumber(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
 }

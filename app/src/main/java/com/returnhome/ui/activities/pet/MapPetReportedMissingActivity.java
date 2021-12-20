@@ -62,7 +62,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapPetReportedActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapPetReportedMissingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment mMapFragment;
@@ -119,7 +119,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_pet_reported);
+        setContentView(R.layout.activity_map_pet_reported_missing);
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
@@ -153,7 +153,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
     private void sendNotification(){
 
         Map<String, String> map = new HashMap<>();
-        map.put("title","MASCOTA DESAPARECIDA");
+        map.put("title","Mascota desaparecida");
         map.put("body","Vista por ultima vez en: "+mPetLastLocation);
         map.put("idPet", String.valueOf(mExtraIdPet));
         map.put("pet_name", mExtraPetName);
@@ -166,11 +166,11 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
             public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                 if(response.body() != null) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(MapPetReportedActivity.this, "Mascota reportada como desaparecida", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapPetReportedMissingActivity.this, "Mascota reportada como desaparecida", Toast.LENGTH_SHORT).show();
 
 
                     } else {
-                        Toast.makeText(MapPetReportedActivity.this, "No se pudo reportar a la mascota", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapPetReportedMissingActivity.this, "No se pudo reportar a la mascota", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -178,7 +178,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
 
             @Override
             public void onFailure(Call<FCMResponse> call, Throwable t) {
-                Toast.makeText(MapPetReportedActivity.this,"No se pudo reportar a la mascota",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapPetReportedMissingActivity.this,"No se pudo reportar a la mascota",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -195,7 +195,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
                     sendNotification();
                 }
                 else{
-                    Toast.makeText(MapPetReportedActivity.this, "La mascota ya fue reportada como desaparecida", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapPetReportedMissingActivity.this, "La mascota ya fue reportada como desaparecida", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -336,7 +336,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //HABILITA LOS PERMISOS PARA USAR LA UBICACION
-                        ActivityCompat.requestPermissions(MapPetReportedActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                        ActivityCompat.requestPermissions(MapPetReportedMissingActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                     }
                 });
                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -351,7 +351,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
                 builder.show();
             }
             else {
-                ActivityCompat.requestPermissions(MapPetReportedActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                ActivityCompat.requestPermissions(MapPetReportedMissingActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
         }
     }
@@ -363,7 +363,7 @@ public class MapPetReportedActivity extends AppCompatActivity implements OnMapRe
             public void onCameraIdle() {
                 try {
                     //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
-                    Geocoder geocoder = new Geocoder(MapPetReportedActivity.this);
+                    Geocoder geocoder = new Geocoder(MapPetReportedMissingActivity.this);
                     mPetLastLocationLatLng = mMap.getCameraPosition().target;
                     List<Address> addressList = geocoder.getFromLocation(mPetLastLocationLatLng.latitude, mPetLastLocationLatLng.longitude, 1);
                     String city = addressList.get(0).getLocality();

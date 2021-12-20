@@ -23,17 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
-import com.returnhome.models.FCMBody;
-import com.returnhome.models.FCMResponse;
 import com.returnhome.models.Pet;
-import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.models.RHResponse;
-import com.returnhome.ui.activities.pet.MapPetReportedActivity;
+import com.returnhome.ui.activities.pet.MapPetReportedMissingActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -170,7 +165,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
                         int idPet = petArrayList.get(holder.getBindingAdapterPosition()).getId();
                         String petName = petArrayList.get(holder.getBindingAdapterPosition()).getName();
 
-                        Intent intent = new Intent(context, MapPetReportedActivity.class);
+                        Intent intent = new Intent(context, MapPetReportedMissingActivity.class);
                         intent.putExtra("idPet",idPet);
                         intent.putExtra("pet_name",petName);
                         context.startActivity(intent);

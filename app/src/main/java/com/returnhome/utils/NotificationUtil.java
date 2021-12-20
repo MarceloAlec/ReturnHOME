@@ -54,13 +54,29 @@ public class NotificationUtil extends ContextWrapper {
 
     //PARA CREAR NOTIFICACIONES EN VERSIONES 26 O SUPERIOR DE ANDROID
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotification(String title, String body, Uri soundUri, Notification.Action showPetFoundAction) {
+    public Notification.Builder getNotificationPetMissing(String title, String body, Uri soundUri, Notification.Action showPetMissingAction ) {
         return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(soundUri)
-                .addAction(showPetFoundAction)
+                .setShowWhen(true)
+                .addAction(showPetMissingAction)
+                .setSmallIcon(R.drawable.ic_app)
+                .setStyle(new Notification.BigTextStyle()
+                        .bigText(body).setBigContentTitle(title));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Notification.Builder getNotificationPetFound(String title, String body, Uri soundUri, Notification.Action showPetMissingAction, Notification.Action cancelAction) {
+        return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSound(soundUri)
+                .setShowWhen(true)
+                .addAction(showPetMissingAction)
+                .addAction(cancelAction)
                 .setSmallIcon(R.drawable.ic_app)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
@@ -68,15 +84,30 @@ public class NotificationUtil extends ContextWrapper {
 
     //PARA VERSIONES INFERIORES A ANDROID OREO
 
-    public NotificationCompat.Builder getNotificationOldAPI(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction) {
+    public NotificationCompat.Builder getNotificationOldAPIPetMissing(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction) {
 
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(soundUri)
+                .setShowWhen(true)
                 .setSmallIcon(R.drawable.ic_app)
                 .addAction(showPetFoundAction)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
+    }
+
+    public NotificationCompat.Builder getNotificationOldAPIPetFound(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction, NotificationCompat.Action contactAction) {
+
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSound(soundUri)
+                .setShowWhen(true)
+                .setSmallIcon(R.drawable.ic_app)
+                .addAction(showPetFoundAction)
+                .addAction(contactAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 }

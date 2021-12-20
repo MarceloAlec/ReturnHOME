@@ -5,18 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.pet.MapPetFoundActivity">
+    tools:context=".ui.activities.pet.MapPetReportedFoundActivity">
 
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginBottom="155dp"/>
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+
 
     <com.github.florent37.shapeofview.shapes.CutCornerView
         android:layout_width="match_parent"
-        android:layout_height="165dp"
+        android:layout_height="140dp"
         android:elevation="4dp"
         app:shape_cutCorner_topRightSize="10dp"
         app:shape_cutCorner_topLeftSize="10dp"
@@ -27,27 +28,17 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryLight" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="La mascota fue encontrada por"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="7dp"
-            android:textColor="@color/colorAccent"
-            android:textSize="17sp"
-            android:textStyle="bold"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="35dp">
+            android:layout_marginTop="8dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewPet"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/profile"
+                android:src="@drawable/ic_footprint"
                 android:layout_gravity="center"
                 app:civ_border_width="3dp"
                 android:layout_marginLeft="7dp"/>
@@ -76,7 +67,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/textViewClientName"
+                        android:id="@+id/textViewNamePetNotification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
@@ -89,22 +80,49 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="2dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Correo electronico:"
+                        android:text="Raza:"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/textViewClientEmail"
+                        android:id="@+id/textViewBreedNotification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Genero:"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/textViewGenderNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:layout_marginTop="2dp"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
@@ -131,7 +149,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/textViewClientPhoneNumber"
+                            android:id="@+id/textViewPhoneNumberNotification"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
@@ -141,7 +159,7 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/imageViewCallUser"
+                        android:id="@+id/imageViewCallUserReportedFound"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_alignParentEnd="true"
@@ -157,15 +175,28 @@
 
     </com.github.florent37.shapeofview.shapes.CutCornerView>
 
+
+
+    <Button
+        android:id="@+id/btnGoToSendNotification"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@color/colorAccent"
+        android:text="NOTIFICAR"
+        android:textSize="13sp"
+        android:textColor="@color/colorIcons"
+        android:layout_gravity="right|top"
+        android:layout_margin="20dp" />
+
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/btnGoToHomeFromPetFound"
+        android:id="@+id/btnGoToHomeFromReportedFound"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_home"
+        android:src="@drawable/ic_arrow_back"
         android:layout_gravity="left|top"
         app:civ_circle_background_color="@color/colorPrimaryDark"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"/>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
