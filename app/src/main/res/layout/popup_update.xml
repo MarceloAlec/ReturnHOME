@@ -31,14 +31,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp">
+        android:layout_marginStart="5dp"
+        android:hint="Nombre de la mascota">
 
         <com.google.android.material.textfield.TextInputEditText
 
             android:id="@+id/textInputNamePet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre de la mascota"
             android:inputType="text">
 
         </com.google.android.material.textfield.TextInputEditText>
@@ -65,14 +65,15 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp">
+            android:layout_marginStart="5dp"
+            android:hint="Raza">
 
             <com.google.android.material.textfield.TextInputEditText
 
                 android:id="@+id/textInputBreed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Raza"
+
                 android:inputType="textEmailAddress">
 
             </com.google.android.material.textfield.TextInputEditText>
@@ -142,14 +143,15 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp">
+            android:layout_marginStart="5dp"
+            android:hint="Descripción">
 
             <com.google.android.material.textfield.TextInputEditText
 
                 android:id="@+id/textInputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Descripción"
+
                 android:maxLines="5"
                 android:gravity="top"
                 android:lines="3"

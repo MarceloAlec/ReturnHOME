@@ -53,18 +53,19 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/ic_email"/>
+                android:src="@drawable/ic_email" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:hint="@string/txtInputEmail">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEmailLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputEmail"
+
                     android:inputType="textEmailAddress">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -92,13 +93,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="password_toggle"
+                android:hint="@string/txtInputPassword"
                 android:layout_marginLeft="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputPasswordLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputPassword"
+
                     android:inputType="textPassword">
 
                 </com.google.android.material.textfield.TextInputEditText>

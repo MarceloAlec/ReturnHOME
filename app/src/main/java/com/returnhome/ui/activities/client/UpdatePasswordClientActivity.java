@@ -90,7 +90,6 @@ public class UpdatePasswordClientActivity extends AppCompatActivity {
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(UpdatePasswordClientActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
-                    finish();
                 }
                 else{
                     Toast.makeText(UpdatePasswordClientActivity.this, "La contraseña actual es incorrecta", Toast.LENGTH_SHORT).show();
@@ -99,7 +98,7 @@ public class UpdatePasswordClientActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RHResponse> call, Throwable t) {
-                Toast.makeText(UpdatePasswordClientActivity.this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdatePasswordClientActivity.this, "Se ha producido un error: "+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

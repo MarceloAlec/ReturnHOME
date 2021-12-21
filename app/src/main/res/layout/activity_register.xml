@@ -34,13 +34,14 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:hint="@string/txtInputName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputNameRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputName"
+
                     android:inputType="text">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -67,13 +68,14 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:hint="@string/txtInputEmail">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEmailRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputEmail"
+
                     android:inputType="textEmailAddress">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -101,13 +103,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                app:endIconMode="password_toggle">
+                app:endIconMode="password_toggle"
+                android:hint="@string/txtInputPassword">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputPasswordRegister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputPassword"
+
                     android:inputType="textPassword">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -180,13 +183,14 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:hint="@string/txtInputPhoneNumber">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputNumberPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputPhoneNumber"
+
                     android:inputType="phone">
 
                 </com.google.android.material.textfield.TextInputEditText>

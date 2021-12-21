@@ -7,12 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.activities.client.UpdateProfileActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:orientation="vertical">
 
         <com.github.florent37.shapeofview.shapes.DiagonalView
             android:layout_width="match_parent"
@@ -32,188 +30,168 @@
                 android:id="@+id/textViewNameBookingDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Información de la cuenta"
-                android:gravity="right"
-                android:textColor="@color/colorIcons"
-                android:textSize="20sp"
                 android:layout_marginTop="25dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="Información de la cuenta"
+                android:textColor="@color/colorIcons"
+                android:textSize="20sp" />
+
+
 
         </com.github.florent37.shapeofview.shapes.DiagonalView>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="80dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp">
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/ic_user" />
-
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputNameUpdateProfile"
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_user" />
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputName"
-                    android:inputType="text">
+                    android:layout_marginLeft="5dp">
 
-                </com.google.android.material.textfield.TextInputEditText>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInputNameUpdateProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/txtInputName"
+                        android:inputType="text">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputEditText>
 
-        </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp">
+            </LinearLayout>
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/ic_email" />
-
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputEmailUpdateProfile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/txtInputEmail"
-                    android:inputType="text"
-                    >
-
-                </com.google.android.material.textfield.TextInputEditText>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_gender"/>
-
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="10dp">
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radioButtonMaleUpdateProfile"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rbtnMale"
-                    android:checked="true">
-
-                </com.google.android.material.radiobutton.MaterialRadioButton>
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radioButtonFemaleUpdateProfile"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rbtnFemale">
-
-                </com.google.android.material.radiobutton.MaterialRadioButton>
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp">
-
-            <com.hbb20.CountryCodePicker
-                android:id="@+id/countryCodePickerUpdateProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:ccpDialog_showTitle="false"
-                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
-                app:ccp_showFlag="false"
-                app:ccp_defaultNameCode="EC"/>
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_email" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputNumberUpdateProfile"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtInputPhoneNumber"
-                    android:inputType="phone">
+                    android:layout_marginStart="5dp">
 
-                </com.google.android.material.textfield.TextInputEditText>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInputEmailUpdateProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/txtInputEmail"
+                        android:inputType="text">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputEditText>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_gender" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/radioButtonMaleUpdateProfile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/rbtnMale">
+
+                    </com.google.android.material.radiobutton.MaterialRadioButton>
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/radioButtonFemaleUpdateProfile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/rbtnFemale">
+
+                    </com.google.android.material.radiobutton.MaterialRadioButton>
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/countryCodePickerUpdateProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    app:ccpDialog_showTitle="false"
+                    app:ccp_defaultNameCode="EC"
+                    app:ccp_showFlag="false" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/textInputNumberUpdateProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/txtInputPhoneNumber"
+                        android:inputType="phone">
+
+                    </com.google.android.material.textfield.TextInputEditText>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="bottom">
-
-        <Button
-            android:id="@+id/btnUpdateProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_updatePet"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/colorAccent"
-            android:layout_gravity="bottom"
-            android:layout_margin="30dp"
-            android:textSize="13sp"
-            android:textColor="@color/colorIcons" />
-
     </LinearLayout>
-
-    </LinearLayout>
-
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="left"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/ic_user"
-        />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/btnGoToSelectOptionProfile"
@@ -221,12 +199,41 @@
         android:layout_height="40dp"
         android:src="@drawable/ic_arrow_back"
         android:layout_gravity="left|top"
-
         app:civ_circle_background_color="@color/colorPrimaryDark"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        >
 
+        <Button
+            android:id="@+id/btnUpdateProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="30dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/btn_updatePet"
+            android:textColor="@color/colorIcons"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewPet"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_user"
+        android:layout_marginTop="90dp"
+        app:civ_border_width="3dp"
+        app:civ_border_color="@android:color/black"
+
+        android:layout_marginLeft="7dp"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

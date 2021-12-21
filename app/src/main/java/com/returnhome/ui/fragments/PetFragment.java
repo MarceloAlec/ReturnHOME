@@ -37,7 +37,7 @@ public class PetFragment extends Fragment implements View.OnClickListener {
     private AppConfig mAppConfig;
     private FloatingActionButton mFloatingButtonAdd;
     private BottomSheetDialog mBottomSheetDialog;
-    private Button mButtonAdd;
+    private Button mButtonUpdateAddPet;
     private TextInputEditText mTextInputName;
     private TextInputEditText mTextInputBreed;
     private TextInputEditText mTextInputDescription;
@@ -63,7 +63,7 @@ public class PetFragment extends Fragment implements View.OnClickListener {
 
         mFloatingButtonAdd.setOnClickListener(this);
 
-        mButtonAdd.setOnClickListener(this);
+        mButtonUpdateAddPet.setOnClickListener(this);
 
         getPets();
 
@@ -74,12 +74,13 @@ public class PetFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.fab_addPet:
-                clickAdd();
+
+                mButtonUpdateAddPet.setText(R.string.btn_addPet);
+                mBottomSheetDialog.show();
                 break;
 
             case R.id.btnUpdateAddPet:
-                mButtonAdd.setText(R.string.btn_addPet);
-                mBottomSheetDialog.show();
+                clickAdd();
                 break;
         }
     }
@@ -89,7 +90,7 @@ public class PetFragment extends Fragment implements View.OnClickListener {
         mBottomSheetDialog.setContentView(R.layout.popup_update);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
-        mButtonAdd = mBottomSheetDialog.findViewById(R.id.btnUpdateAddPet);
+        mButtonUpdateAddPet = mBottomSheetDialog.findViewById(R.id.btnUpdateAddPet);
         mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
         mTextInputBreed = mBottomSheetDialog.findViewById(R.id.textInputBreed);
         mTextInputDescription = mBottomSheetDialog.findViewById(R.id.textInputDescription);
