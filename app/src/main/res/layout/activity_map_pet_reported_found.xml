@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+        android:layout_marginBottom="130dp"/>
 
 
     <com.github.florent37.shapeofview.shapes.CutCornerView
@@ -97,7 +97,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -123,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 

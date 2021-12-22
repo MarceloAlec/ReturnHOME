@@ -175,10 +175,10 @@
                 android:id="@+id/countryCodePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:ccp_autoDetectCountry="true"
                 app:ccpDialog_showTitle="false"
                 android:layout_gravity="center"
-                app:ccp_showFlag="false"
-                app:ccp_defaultNameCode="EC"/>
+                app:ccp_showFlag="false"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

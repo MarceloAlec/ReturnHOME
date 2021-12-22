@@ -16,6 +16,9 @@ public class Pet implements Serializable {
     private boolean missing;
     private int id_client;
 
+    public Pet(){
+
+    }
 
     public Pet(int id, String name, String breed, char gender, String description) {
         this.id = id;
@@ -32,7 +35,6 @@ public class Pet implements Serializable {
         this.description = description;
         this.id_client = idClient;
     }
-
 
     public Pet(int id, boolean missing) {
         this.id = id;

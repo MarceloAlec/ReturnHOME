@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,6 +23,7 @@ import com.returnhome.models.Pet;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.models.RHResponse;
 import com.returnhome.ui.activities.client.HomeActivity;
+import com.returnhome.ui.activities.pet.MapPetReportedFoundActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -33,9 +35,11 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
     private String mExtraPhoneNumber;
-    private Pet mExtraPet;
+    private int  mExtraIdPet;
 
     private LatLng mPetHomeLatLng;
+
+    private Pet pet;
 
 
     private CircleImageView mCircleImageGoToSelectOptionNfc;
@@ -64,13 +68,10 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
         mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
-        mExtraPet = (Pet)getIntent().getSerializableExtra("pet");
+        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        mTextViewPetName.setText(mExtraPet.getName());
-        mTextViewBreed.setText(mExtraPet.getBreed());
-        mTextViewGender.setText(String.valueOf(mExtraPet.getGender()));
         mTextViewPhoneNumber.setText(mExtraPhoneNumber);
 
         mCircleImageGoToSelectOptionNfc.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,8 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                 startActivity(intent);
             }
         });
+
+        getPet(mExtraIdPet);
     }
 
     private void initializeComponents(){
@@ -103,8 +106,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                 .setSmallestDisplacement(5);
 
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
-
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
@@ -113,6 +115,29 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
                         .build()
         ));
 
+    }
+
+    private void getPet(int idPet) {
+        PetProvider.readPet(idPet, 2).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                if(response.isSuccessful()){
+                    pet = response.body().getPet();
+                    mTextViewPetName.setText(pet.getName());
+                    mTextViewBreed.setText(pet.getBreed());
+                    mTextViewGender.setText(String.valueOf(pet.getGender()));
+                }
+                else{
+                    Toast.makeText(DetailReadingActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+                Toast.makeText(DetailReadingActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
 

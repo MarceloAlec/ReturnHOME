@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/colorAccent"
-        android:text="MOSTRAR INFORMACION"
+        android:text="SELECCIONAR UBICACIÓN"
         android:textSize="13sp"
         android:textColor="@android:color/white"
         android:layout_gravity="bottom"

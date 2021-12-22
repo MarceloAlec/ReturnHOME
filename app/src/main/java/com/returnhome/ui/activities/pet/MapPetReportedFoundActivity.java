@@ -51,6 +51,9 @@ import com.returnhome.models.Pet;
 import com.returnhome.models.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.providers.NotificationProvider;
+import com.returnhome.providers.PetProvider;
+import com.returnhome.ui.activities.nfc.DetailReadingActivity;
+import com.returnhome.ui.activities.nfc.ReadTagActivity;
 import com.returnhome.utils.AppConfig;
 
 import java.io.IOException;
@@ -87,8 +90,9 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
     private double mExtraPetHomeLng;
 
     private String mExtraPhoneNumber;
-    private Pet mExtraPet;
+    private int mExtraIdPet;
     private Client client;
+    private Pet pet;
     private String mPetLocation;
 
 
@@ -116,6 +120,9 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
                         mMarker.remove();
                     }
 
+                    mMarker =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Ubicacion de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pet_location)));
+
+
                     //OBTIENE LA UBICACION EN TIEMPO REAL
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
                             .target(mPetLatLng)
@@ -139,22 +146,21 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         mMapFragment.getMapAsync(this);
 
         mAppConfig = new AppConfig(this);
+        Pet pet = new Pet();
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
         mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
-        mExtraPet = (Pet)getIntent().getSerializableExtra("pet");
+        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
 
         mTextViewPhoneNumber.setText(mExtraPhoneNumber);
-        mTextViewPetName.setText(mExtraPet.getName());
-        mTextViewBreed.setText(mExtraPet.getBreed());
-        mTextViewGender.setText(String.valueOf(mExtraPet.getGender()));
+
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        Toolbar.show(this, "Ubicación de la mascota", true);
+        getPet(mExtraIdPet);
 
         mButtonGoToSendNotification.setOnClickListener(this);
 
@@ -179,7 +185,7 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnGoToSendNotification:
-                getClientSendNotification();
+                getClientToSendNotification();
                 break;
 
             case R.id.btnGoToHomeFromReportedFound:
@@ -211,7 +217,7 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mExtraPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
 
         startLocation();
     }
@@ -345,21 +351,28 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         }
     }
 
-    private void getClientSendNotification() {
-        ClientProvider.getClient(mExtraPet.getId_client()).enqueue(new Callback<RHResponse>() {
-            @Override
-            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
-                if(response.isSuccessful()){
-                    client = response.body().getClient();
-                    sendNotification();
-                }
-            }
+    private void getClientToSendNotification() {
 
-            @Override
-            public void onFailure(Call<RHResponse> call, Throwable t) {
-                Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
-            }
-        });
+        try{
+            ClientProvider.getClient(pet.getId_client()).enqueue(new Callback<RHResponse>() {
+                @Override
+                public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                    if(response.isSuccessful()){
+                        client = response.body().getClient();
+                        sendNotification();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RHResponse> call, Throwable t) {
+                    Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        catch(Exception e){
+            Toast.makeText(MapPetReportedFoundActivity.this,"No se pudo enviar la notificación",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void sendNotification(){
@@ -372,17 +385,17 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
             mPetLocation = address + " " + city;
 
         } catch (IOException e) {
-            Log.d("Error: ", "Mensaje error: " + e.getMessage());
+            Log.d("Error: ", "Se ha producido un error: " + e.getMessage());
         }
 
         String token = client.getToken();
         if(!token.equals("")){
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
-            map.put("body",mExtraPet.getName()+" fue encontrada en: " +mPetLocation);
+            map.put("body",pet.getName()+" fue encontrada en: " +mPetLocation);
             map.put("idClient",String.valueOf(mAppConfig.getUserId()));
             map.put("phoneNumber",mAppConfig.getPhoneNumber());
-            map.put("pet_name",mExtraPet.getName());
+            map.put("pet_name",pet.getName());
             map.put("pet_lat",String.valueOf(mPetLatLng.latitude));
             map.put("pet_lng",String.valueOf(mPetLatLng.longitude));
             FCMBody fcmBody = new FCMBody(token, "high", map);
@@ -428,5 +441,27 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         }
     }
 
+    private void getPet(int idPet) {
+        PetProvider.readPet(idPet, 2).enqueue(new Callback<RHResponse>() {
+            @Override
+            public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
+                if(response.isSuccessful()){
+                    pet = response.body().getPet();
+                    mTextViewPetName.setText(pet.getName());
+                    mTextViewBreed.setText(pet.getBreed());
+                    mTextViewGender.setText(String.valueOf(pet.getGender()));
+                }
+                else{
+                    Toast.makeText(MapPetReportedFoundActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<RHResponse> call, Throwable t) {
+
+                Toast.makeText(MapPetReportedFoundActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
 }

@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/colorAccent"
-        android:text="REPORTAR COMO DESAPARECIDA"
+        android:text="SELECCIONAR UBICACIÓN"
         android:textColor="@color/colorIcons"
         android:textSize="13sp"
         android:layout_gravity="bottom"
