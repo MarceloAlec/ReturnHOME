@@ -28,11 +28,12 @@ public class Pet implements Serializable {
         this.description = description;
     }
 
-    public Pet(String name, String breed, char gender, String description, int idClient) {
+    public Pet(String name, String breed, char gender, String description, boolean missing, int idClient) {
         this.name = name;
         this.breed = breed;
         this.gender = gender;
         this.description = description;
+        this.missing = missing;
         this.id_client = idClient;
     }
 

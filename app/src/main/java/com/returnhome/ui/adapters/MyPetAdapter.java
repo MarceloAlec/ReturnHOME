@@ -193,13 +193,13 @@ public class MyPetAdapter extends RecyclerView.Adapter<MyPetAdapter.PetViewHolde
                     Toast.makeText(context, "Mascota reportada como encontrada", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(context, "La mascota ya fue reportada como encontrada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "La mascota no se encuentra desaparecida", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHResponse> call, Throwable t) {
-                Toast.makeText(context, "El reporte ha fallado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
             }
         });
     }

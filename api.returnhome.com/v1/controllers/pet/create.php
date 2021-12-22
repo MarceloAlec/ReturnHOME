@@ -14,7 +14,7 @@ $parameters = file_get_contents('php://input');
 $data = json_decode($parameters, true);
 
 $pet = new Pet();
-$stmt=$pet->createPet($pdo, $data["name"], $data["breed"], $data["gender"], $data["description"], $data["id_client"]);
+$stmt=$pet->createPet($pdo, $data["name"], $data["breed"], $data["gender"], $data["description"], filter_var($data["missing"], FILTER_VALIDATE_BOOLEAN), $data["id_client"]);
 
 if($stmt){
     //CLIENTE CREADO

@@ -10,16 +10,17 @@ class Pet{
     }
 
 
-    public function createPet($connection, $name, $breed, $gender, $description, $idClient){
+    public function createPet($connection, $name, $breed, $gender, $description, $missing, $idClient){
 
-        $query = "INSERT INTO ".$this->tblPet . "(name, breed, gender, description, id_client) values(?, ?, ?, ?, ?)";
+        $query = "INSERT INTO ".$this->tblPet . "(name, breed, gender, description, isMissing, id_client) values(?, ?, ?, ?, ?, ?)";
 
         $stmt = $connection->prepare($query);
         $stmt->bindValue(1,$name);
         $stmt->bindValue(2,$breed);
         $stmt->bindValue(3,$gender);
         $stmt->bindValue(4,$description);
-        $stmt->bindValue(5,$idClient);
+        $stmt->bindValue(5,$missing);
+        $stmt->bindValue(6,$idClient);
         
         if($stmt->execute()){
             $id=$connection->lastInsertId();

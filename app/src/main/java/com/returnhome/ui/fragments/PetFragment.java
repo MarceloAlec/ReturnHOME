@@ -107,7 +107,7 @@ public class PetFragment extends Fragment implements View.OnClickListener {
 
         if(!name.isEmpty() && !breed.isEmpty()){
             //DATOS INGRESADOS CORRECTAMENTE
-            createPet(new Pet(name,breed,gender,description, mAppConfig.getUserId()));
+            createPet(new Pet(name,breed,gender,description, false, mAppConfig.getUserId()));
         }
         else{
             Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_SHORT).show();

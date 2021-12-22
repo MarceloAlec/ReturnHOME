@@ -33,6 +33,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
@@ -81,7 +83,8 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
 
     private LatLng mPetLatLng;
     private LatLng mPetHomeLatLng;
-    private Marker mMarker;
+    private Marker mMarkerPet;
+    private Marker mMarkerHomePet;
 
     private Button mButtonGoToSendNotification;
     private CircleImageView mGoToHome;
@@ -116,19 +119,18 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
 
                     mPetLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    if(mMarker != null){
-                        mMarker.remove();
-                    }
+                    mMarkerPet =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pet_location)));
+                    mMarkerHomePet= mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
 
-                    mMarker =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Ubicacion de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pet_location)));
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(mMarkerPet.getPosition());
+                    builder.include(mMarkerHomePet.getPosition());
 
+                    LatLngBounds bounds = builder.build();
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 180);
+                    mMap.animateCamera(cu);
 
-                    //OBTIENE LA UBICACION EN TIEMPO REAL
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                            .target(mPetLatLng)
-                            .zoom(15f)
-                            .build()
-                    ));
+                    stopLocation();
 
                     }
 
@@ -146,7 +148,6 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         mMapFragment.getMapAsync(this);
 
         mAppConfig = new AppConfig(this);
-        Pet pet = new Pet();
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
@@ -217,7 +218,6 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
 
         startLocation();
     }
