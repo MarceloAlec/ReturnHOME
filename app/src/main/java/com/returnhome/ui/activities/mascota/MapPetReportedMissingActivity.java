@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.pet;
+package com.returnhome.ui.activities.mascota;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,10 +46,10 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
-import com.returnhome.models.FCMBody;
-import com.returnhome.models.FCMResponse;
-import com.returnhome.models.Pet;
-import com.returnhome.models.RHResponse;
+import com.returnhome.services.FCMBody;
+import com.returnhome.services.FCMResponse;
+import com.returnhome.modelos.Mascota;
+import com.returnhome.utils.retrofit.RHResponse;
 import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.PetProvider;
 
@@ -124,7 +124,7 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
-        Toolbar.show(this, "Vista por ultima vez en", true);
+        Toolbar.show(this, "Vista por ultima vez en:", true);
 
         mExtraIdPet = getIntent().getIntExtra("idPet", 0);
         mExtraPetName = getIntent().getStringExtra("pet_name");
@@ -132,8 +132,8 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
         mButtonSendNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Pet pet = new Pet(mExtraIdPet, true);
-                updateStatusMissingPet(pet);
+                Mascota mascota = new Mascota(mExtraIdPet, true);
+                updateStatusMissingPet(mascota);
             }
         });
 
@@ -193,9 +193,9 @@ public class MapPetReportedMissingActivity extends AppCompatActivity implements 
 
     }
 
-    private void updateStatusMissingPet(Pet pet){
+    private void updateStatusMissingPet(Mascota mascota){
 
-        PetProvider.updateStatusMissingPet(pet).enqueue(new Callback<RHResponse>() {
+        PetProvider.updateStatusMissingPet(mascota).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 

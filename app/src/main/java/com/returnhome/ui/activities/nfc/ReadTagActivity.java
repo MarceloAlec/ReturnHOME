@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,18 +25,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.returnhome.R;
-import com.returnhome.models.Client;
-import com.returnhome.models.Pet;
-import com.returnhome.models.RHResponse;
 import com.returnhome.providers.NfcProvider;
-import com.returnhome.providers.PetProvider;
-import com.returnhome.ui.activities.pet.MapPetReportedFoundActivity;
+import com.returnhome.ui.activities.mascota.MapPetReportedFoundActivity;
 import com.returnhome.utils.AppConfig;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ReadTagActivity extends AppCompatActivity {
 

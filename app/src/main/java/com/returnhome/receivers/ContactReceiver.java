@@ -5,9 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.widget.Toast;
-
-import com.returnhome.ui.activities.pet.MapPetFoundActivity;
 
 public class ContactReceiver extends BroadcastReceiver {
 

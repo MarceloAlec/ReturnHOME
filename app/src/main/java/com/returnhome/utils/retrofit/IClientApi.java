@@ -1,7 +1,6 @@
 package com.returnhome.utils.retrofit;
 
-import com.returnhome.models.Client;
-import com.returnhome.models.RHResponse;
+import com.returnhome.modelos.Cliente;
 
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public interface IClientApi {
     })
 
     @POST("create.php")
-    Call<RHResponse> create(@Body Client client);
+    Call<RHResponse> create(@Body Cliente cliente);
 
     @GET("read.php")
     Call<RHResponse> read(@Query("id") int idClient);
@@ -30,7 +29,7 @@ public interface IClientApi {
     Call<RHResponse> authClient(@Body Map<String,String> auth);
 
     @PUT("update-profile.php")
-    Call<RHResponse> update(@Body Client client);
+    Call<RHResponse> update(@Body Cliente cliente);
 
     @PUT("update-token.php")
     Call<RHResponse> updateToken(@Body Map<String,String> tokenInfo);

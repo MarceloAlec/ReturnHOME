@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.client;
+package com.returnhome.ui.activities.cliente;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,7 +20,7 @@ import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.TokenProvider;
 import com.returnhome.ui.activities.MainActivity;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 
 import java.util.HashMap;
 import java.util.Map;

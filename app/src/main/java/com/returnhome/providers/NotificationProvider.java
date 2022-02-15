@@ -7,9 +7,8 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.returnhome.R;
-import com.returnhome.models.FCMBody;
-import com.returnhome.models.FCMResponse;
+import com.returnhome.services.FCMBody;
+import com.returnhome.services.FCMResponse;
 import com.returnhome.utils.retrofit.IFCMApi;
 import com.returnhome.utils.retrofit.RetrofitClient;
 

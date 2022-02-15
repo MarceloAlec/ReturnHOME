@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.pet;
+package com.returnhome.ui.activities.mascota;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,11 +49,11 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
-import com.returnhome.models.Pet;
+import com.returnhome.modelos.Mascota;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.activities.nfc.DetailWritingActivity;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,7 +82,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap.OnCameraIdleListener mCameraListener;
 
     private AppConfig mAppConfig;
-    private ArrayList<Pet> petArrayList;
+    private ArrayList<Mascota> mascotaArrayList;
 
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
@@ -161,7 +161,7 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
                     Intent intent = new Intent(MapPetHomeActivity.this, DetailWritingActivity.class);
                     intent.putExtra("petHome_lat", mPetHomeLatLng.latitude);
                     intent.putExtra("petHome_lng", mPetHomeLatLng.longitude);
-                    intent.putExtra("pet",(Pet)mSpinner.getSelectedItem());
+                    intent.putExtra("pet",(Mascota)mSpinner.getSelectedItem());
                     startActivity(intent);
                 }
                 else{
@@ -213,8 +213,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if (response.isSuccessful()) {
-                    petArrayList = response.body().getPets();
-                    showList(petArrayList);
+                    mascotaArrayList = response.body().getPets();
+                    showList(mascotaArrayList);
 
                 }
             }
@@ -226,8 +226,8 @@ public class MapPetHomeActivity extends AppCompatActivity implements OnMapReadyC
         });
     }
 
-    private void showList(ArrayList<Pet> pets) {
-        mArrayAdapterPets = new ArrayAdapter(MapPetHomeActivity.this, R.layout.list_item, petArrayList);
+    private void showList(ArrayList<Mascota> mascotas) {
+        mArrayAdapterPets = new ArrayAdapter(MapPetHomeActivity.this, R.layout.list_item, mascotaArrayList);
         mSpinner.setAdapter(mArrayAdapterPets);
     }
 

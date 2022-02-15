@@ -5,8 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.returnhome.ui.activities.pet.MapPetFoundActivity;
-import com.returnhome.ui.activities.pet.MapPetMissingActivity;
+import com.returnhome.ui.activities.mascota.MapPetMissingActivity;
 
 public class PetMissingReceiver extends BroadcastReceiver {
 

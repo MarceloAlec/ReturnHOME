@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -16,12 +15,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
+import com.returnhome.modelos.Cliente;
 import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.TokenProvider;
-import com.returnhome.ui.activities.client.HomeActivity;
+import com.returnhome.ui.activities.cliente.HomeActivity;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.models.RHResponse;
-import com.returnhome.models.Client;
+import com.returnhome.utils.retrofit.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
@@ -85,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
         String name = mTextInputName.getText().toString();
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
-        char gender = ((mRadioButtonMale.isChecked() ? 'M' : 'F'));
+
         String codeNumber = mCountryCodePicker.getSelectedCountryCodeWithPlus();
         String phoneNumber = mTextInputPhoneNumber.getText().toString();
 
@@ -101,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         if(task.isSuccessful()){
 
-                            registerClient(new Client(name,email,password,gender,codeNumber+" "+phoneNumber, task.getResult()));
+                            registerClient(new Cliente(name,email,password,codeNumber+" "+phoneNumber, task.getResult()));
                         }
                         else{
                             Toast.makeText(RegisterActivity.this, "No se pudo obtener el token del usuario", Toast.LENGTH_SHORT).show();
@@ -120,9 +119,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void registerClient(Client client){
+    private void registerClient(Cliente cliente){
 
-        ClientProvider.registerClient(client).enqueue(new Callback<RHResponse>() {
+        ClientProvider.registerClient(cliente).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 //RECIBE LA RESPUESTA DEL SERVIDOR
@@ -132,9 +131,9 @@ public class RegisterActivity extends AppCompatActivity {
                     NotificationProvider.suscribeMissingPet();
 
                     mAppConfig.updateLoginStatus(true);
-                    mAppConfig.saveUserName(client.getName());
+                    mAppConfig.saveUserName(cliente.getNombre());
                     mAppConfig.saveUserId(response.body().getClient().getId());
-                    mAppConfig.saveUserPhoneNumber(client.getPhoneNumber());
+                    mAppConfig.saveUserPhoneNumber(cliente.getNumeroCelular());
 
                     Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                     //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY

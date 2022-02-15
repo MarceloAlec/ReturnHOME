@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.client;
+package com.returnhome.ui.activities.cliente;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +12,7 @@ import com.returnhome.R;
 import com.returnhome.includes.Toolbar;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 
 import java.util.HashMap;
 import java.util.Map;

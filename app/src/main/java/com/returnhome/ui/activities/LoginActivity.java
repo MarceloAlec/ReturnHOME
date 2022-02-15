@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,18 +12,17 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.TokenProvider;
-import com.returnhome.ui.activities.client.HomeActivity;
+import com.returnhome.ui.activities.cliente.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextInputEditText mTextInputPassword;
 
     private AppConfig mAppConfig;
-    private CircleImageView mCircleImageGoToMain;
+
 
 
     @Override
@@ -49,7 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAppConfig = new AppConfig(this);
 
         mButtonSignIn.setOnClickListener(this);
-        mCircleImageGoToMain.setOnClickListener(this);
 
     }
 
@@ -57,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mTextInputEmail = findViewById(R.id.textInputEmailLogin);
         mTextInputPassword = findViewById(R.id.textInputPasswordLogin);
         mButtonSignIn = findViewById(R.id.btnSignIn);
-        mCircleImageGoToMain = findViewById(R.id.btnGoToMain);
+
     }
 
     @Override
@@ -65,10 +62,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.btnSignIn:
                 login();
-                break;
-
-            case R.id.btnGoToMain:
-                finish();
                 break;
 
         }
@@ -119,9 +112,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Map<String, String> tokenInfo = new HashMap<>();
                     tokenInfo.put("idClient", String.valueOf(response.body().getClient().getId()));
                     tokenInfo.put("token", token);
-                    String name = response.body().getClient().getName();
+                    String name = response.body().getClient().getNombre();
                     int id = response.body().getClient().getId();
-                    String phoneNumber = response.body().getClient().getPhoneNumber();
+                    String phoneNumber = response.body().getClient().getNumeroCelular();
 
                     updateToken(tokenInfo, name, id, phoneNumber);
 

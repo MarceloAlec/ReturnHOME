@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.client;
+package com.returnhome.ui.activities.cliente;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,10 +11,10 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 import com.returnhome.R;
-import com.returnhome.models.Client;
+import com.returnhome.modelos.Cliente;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -38,7 +38,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private String code_phoneNumber;
 
     private AppConfig mAppConfig;
-    private Client mClient;
+    private Cliente mCliente;
 
     private CircleImageView mCircleImageGoToSelectionOptionProfile;
 
@@ -74,7 +74,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    mClient = response.body().getClient();
+                    mCliente = response.body().getClient();
                     showClientInformation();
                 }
             }
@@ -87,17 +87,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
 
     private void showClientInformation() {
-        if(mClient != null){
-            mTextInputName.setText(mClient.getName());
-            mTextInputEmail.setText(mClient.getEmail());
-            if(mClient.getGender() == 'M'){
-                mRadioButtonMale.setChecked(true);
-            }
-            else{
-                mRadioButtonFemale.setChecked(true);
-            }
+        if(mCliente != null){
+            mTextInputName.setText(mCliente.getNombre());
+            mTextInputEmail.setText(mCliente.getEmail());
 
-            String[] code_phoneNumber = mClient.getPhoneNumber().split(" ");
+            String[] code_phoneNumber = mCliente.getNumeroCelular().split(" ");
 
             mTextInputPhoneNumber.setText(code_phoneNumber[1]);
             //mCountryCodePicker.setCountryForPhoneCode(code_phoneNumber[0]);
@@ -113,19 +107,18 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private void clickUpdate() {
         name = mTextInputName.getText().toString();
         email = mTextInputEmail.getText().toString();
-        gender = ((mRadioButtonMale.isChecked() ? 'M' : 'F'));
         code_phoneNumber = mCountryCodePicker.getSelectedCountryCodeWithPlus()+" "+mTextInputPhoneNumber.getText().toString();
 
         if(!name.isEmpty() && !email.isEmpty() && !code_phoneNumber.isEmpty()){
-            updateClient(new Client(mAppConfig.getUserId(),name, email, gender, code_phoneNumber));
+            updateClient(new Cliente(mAppConfig.getUserId(),name, email, code_phoneNumber));
         }
         else{
             Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void updateClient(Client client) {
-        ClientProvider.updateClient(client).enqueue(new Callback<RHResponse>() {
+    private void updateClient(Cliente cliente) {
+        ClientProvider.updateClient(cliente).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
 

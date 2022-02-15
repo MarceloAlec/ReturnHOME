@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.client;
+package com.returnhome.ui.activities.cliente;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +20,7 @@ import com.returnhome.R;
 
 import com.returnhome.ui.activities.nfc.ReadTagActivity;
 
-import com.returnhome.ui.activities.pet.MapPetHomeActivity;
+import com.returnhome.ui.activities.mascota.MapPetHomeActivity;
 import com.returnhome.ui.adapters.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.returnhome.utils.AppConfig;

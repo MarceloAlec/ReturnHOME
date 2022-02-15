@@ -1,7 +1,7 @@
 package com.returnhome.utils.retrofit;
 
-import com.returnhome.models.FCMBody;
-import com.returnhome.models.FCMResponse;
+import com.returnhome.services.FCMBody;
+import com.returnhome.services.FCMResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

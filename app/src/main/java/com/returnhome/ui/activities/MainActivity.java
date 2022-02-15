@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.returnhome.R;
-import com.returnhome.ui.activities.client.HomeActivity;
+import com.returnhome.ui.activities.cliente.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{

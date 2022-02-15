@@ -25,7 +25,7 @@ import com.returnhome.R;
 
 import com.returnhome.providers.NfcProvider;
 
-import com.returnhome.ui.activities.client.HomeActivity;
+import com.returnhome.ui.activities.cliente.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
 import java.util.Map;
@@ -81,6 +81,7 @@ public class WriteTagActivity extends AppCompatActivity {
             }
         }
         else{
+
             mTextViewEnableDeviceInfo.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
         }
 
@@ -185,8 +186,7 @@ public class WriteTagActivity extends AppCompatActivity {
     private void showWritingInfo(Map<String, String> message){
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
-        builder.setTitle("NFC Writer Mode");
-        builder.setIcon(R.drawable.ic_edit);
+        builder.setTitle("ReturnHOME");
         builder.setMessage(message.get("message"));
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override

@@ -17,11 +17,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
-import com.returnhome.models.Pet;
+import com.returnhome.modelos.Mascota;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.adapters.MyPetAdapter;
 import com.returnhome.utils.AppConfig;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 
 import java.util.ArrayList;
 
@@ -42,7 +42,7 @@ public class PetFragment extends Fragment implements View.OnClickListener {
     private TextInputEditText mTextInputBreed;
     private TextInputEditText mTextInputDescription;
     private RadioButton mRadioButtonMalePet;
-    private ArrayList<Pet> petArrayList;
+    private ArrayList<Mascota> mascotaArrayList;
 
     public PetFragment() {
 
@@ -54,7 +54,7 @@ public class PetFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.fragment_pets, container, false);
 
-        petArrayList = new ArrayList<>();
+        mascotaArrayList = new ArrayList<>();
         mRecyclerViewPets = view.findViewById(R.id.recyclerViewMyPets);
         mAppConfig = new AppConfig(getContext());
         mFloatingButtonAdd = view.findViewById(R.id.fab_addPet);
@@ -107,21 +107,21 @@ public class PetFragment extends Fragment implements View.OnClickListener {
 
         if(!name.isEmpty() && !breed.isEmpty()){
             //DATOS INGRESADOS CORRECTAMENTE
-            createPet(new Pet(name,breed,gender,description, false, mAppConfig.getUserId()));
+            createPet(new Mascota(name,breed,gender,description, false, mAppConfig.getUserId()));
         }
         else{
             Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void createPet(Pet pet) {
-        PetProvider.createPet(pet).enqueue(new Callback<RHResponse>() {
+    private void createPet(Mascota mascota) {
+        PetProvider.createPet(mascota).enqueue(new Callback<RHResponse>() {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    pet.setId(response.body().getPet().getId());
-                    petArrayList.add(pet);
-                    showList(petArrayList);
+                    mascota.setIdMascota(response.body().getPet().getIdMascota());
+                    mascotaArrayList.add(mascota);
+                    showList(mascotaArrayList);
                     mBottomSheetDialog.dismiss();
                     mTextInputName.getText().clear();
                     mTextInputName.clearFocus();
@@ -151,8 +151,8 @@ public class PetFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    petArrayList = response.body().getPets();
-                    showList(petArrayList);
+                    mascotaArrayList = response.body().getPets();
+                    showList(mascotaArrayList);
                 }
 
             }
@@ -164,12 +164,12 @@ public class PetFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void showList(ArrayList<Pet> pets) {
+    private void showList(ArrayList<Mascota> mascotas) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
         mRecyclerViewPets.setLayoutManager(linearLayoutManager);
         //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
-        mMyPetAdapter = new MyPetAdapter(getContext(), pets);
+        mMyPetAdapter = new MyPetAdapter(getContext(), mascotas);
         mRecyclerViewPets.setAdapter(mMyPetAdapter);
     }
 

@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities.pet;
+package com.returnhome.ui.activities.mascota;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,23 +39,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
-import com.returnhome.includes.Toolbar;
-import com.returnhome.models.Client;
-import com.returnhome.models.FCMBody;
-import com.returnhome.models.FCMResponse;
-import com.returnhome.models.Pet;
-import com.returnhome.models.RHResponse;
+import com.returnhome.modelos.Cliente;
+import com.returnhome.services.FCMBody;
+import com.returnhome.services.FCMResponse;
+import com.returnhome.modelos.Mascota;
+import com.returnhome.utils.retrofit.RHResponse;
 import com.returnhome.providers.ClientProvider;
 import com.returnhome.providers.NotificationProvider;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.ui.activities.nfc.DetailReadingActivity;
-import com.returnhome.ui.activities.nfc.ReadTagActivity;
 import com.returnhome.utils.AppConfig;
 
 import java.io.IOException;
@@ -94,8 +90,8 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
 
     private String mExtraPhoneNumber;
     private int mExtraIdPet;
-    private Client client;
-    private Pet pet;
+    private Cliente cliente;
+    private Mascota mascota;
     private String mPetLocation;
 
 
@@ -121,6 +117,8 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
 
                     mMarkerPet =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pet_location)));
                     mMarkerHomePet= mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
+
+                    mMarkerHomePet.showInfoWindow();
 
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
                     builder.include(mMarkerPet.getPosition());
@@ -354,7 +352,7 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
     private void getClientToSendNotification() {
 
         try{
-            ClientProvider.getClient(pet.getId_client()).enqueue(new Callback<RHResponse>() {
+            ClientProvider.getClient(mascota.getIdCliente()).enqueue(new Callback<RHResponse>() {
                 @Override
                 public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                     if(response.isSuccessful()){
@@ -392,10 +390,10 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
         if(!token.equals("")){
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
-            map.put("body",pet.getName()+" fue encontrada en: " +mPetLocation);
+            map.put("body", mascota.getNombre()+" fue encontrada en: " +mPetLocation);
             map.put("idClient",String.valueOf(mAppConfig.getUserId()));
             map.put("phoneNumber",mAppConfig.getPhoneNumber());
-            map.put("pet_name",pet.getName());
+            map.put("pet_name", mascota.getNombre());
             map.put("pet_lat",String.valueOf(mPetLatLng.latitude));
             map.put("pet_lng",String.valueOf(mPetLatLng.longitude));
             FCMBody fcmBody = new FCMBody(token, "high", map);
@@ -446,10 +444,10 @@ public class MapPetReportedFoundActivity extends AppCompatActivity implements On
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    pet = response.body().getPet();
-                    mTextViewPetName.setText(pet.getName());
-                    mTextViewBreed.setText(pet.getBreed());
-                    mTextViewGender.setText(String.valueOf(pet.getGender()));
+                    mascota = response.body().getPet();
+                    mTextViewPetName.setText(mascota.getNombre());
+                    mTextViewBreed.setText(mascota.getRaza());
+                    mTextViewGender.setText(String.valueOf(mascota.getGenero()));
                 }
                 else{
                     Toast.makeText(MapPetReportedFoundActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();

@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
-import com.returnhome.models.Pet;
+import com.returnhome.modelos.Mascota;
 import com.returnhome.utils.AppConfig;
 
 
@@ -43,7 +43,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
 
-    private Pet mPet;
+    private Mascota mMascota;
 
     private LatLng mPetHomeLatLng;
 
@@ -62,11 +62,11 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
 
         mExtraPetHomeLat = getIntent().getDoubleExtra("petHome_lat", 0);
         mExtraPetHomeLng = getIntent().getDoubleExtra("petHome_lng", 0);
-        mPet = (Pet)getIntent().getSerializableExtra("pet");
+        mMascota = (Mascota)getIntent().getSerializableExtra("pet");
 
-        mTextViewNamePet.setText(mPet.getName());
-        mTextViewBreed.setText(mPet.getBreed());
-        mTextViewGender.setText(String.valueOf(mPet.getGender()));
+        mTextViewNamePet.setText(mMascota.getNombre());
+        mTextViewBreed.setText(mMascota.getRaza());
+        mTextViewGender.setText(String.valueOf(mMascota.getGenero()));
         mTextViewPhoneNumber.setText(mAppConfig.getPhoneNumber());
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
@@ -99,7 +99,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+mPet.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
+        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+ mMascota.getNombre()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
@@ -114,7 +114,7 @@ public class DetailWritingActivity extends AppCompatActivity implements OnMapRea
         switch (v.getId()){
             case R.id.btnWriteTagNow:
                 Intent intent = new Intent(DetailWritingActivity.this, WriteTagActivity.class);
-                intent.putExtra("idPet", mPet.getId());
+                intent.putExtra("idPet", mMascota.getIdMascota());
                 intent.putExtra("pet_home_lat",mExtraPetHomeLat);
                 intent.putExtra("pet_home_lng",mExtraPetHomeLng);
                 startActivity(intent);

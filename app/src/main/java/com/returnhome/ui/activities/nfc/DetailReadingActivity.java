@@ -19,11 +19,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
-import com.returnhome.models.Pet;
+import com.returnhome.modelos.Mascota;
 import com.returnhome.providers.PetProvider;
-import com.returnhome.models.RHResponse;
-import com.returnhome.ui.activities.client.HomeActivity;
-import com.returnhome.ui.activities.pet.MapPetReportedFoundActivity;
+import com.returnhome.utils.retrofit.RHResponse;
+import com.returnhome.ui.activities.cliente.HomeActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -39,7 +38,7 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
 
     private LatLng mPetHomeLatLng;
 
-    private Pet pet;
+    private Mascota mascota;
 
 
     private CircleImageView mCircleImageGoToSelectOptionNfc;
@@ -122,10 +121,10 @@ public class DetailReadingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    pet = response.body().getPet();
-                    mTextViewPetName.setText(pet.getName());
-                    mTextViewBreed.setText(pet.getBreed());
-                    mTextViewGender.setText(String.valueOf(pet.getGender()));
+                    mascota = response.body().getPet();
+                    mTextViewPetName.setText(mascota.getNombre());
+                    mTextViewBreed.setText(mascota.getRaza());
+                    mTextViewGender.setText(String.valueOf(mascota.getGenero()));
                 }
                 else{
                     Toast.makeText(DetailReadingActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();

@@ -11,21 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.returnhome.R;
-import com.returnhome.models.Pet;
+import com.returnhome.modelos.Mascota;
 
 import java.util.ArrayList;
 
 public class MissingPetAdapter extends RecyclerView.Adapter<MissingPetAdapter.MissingPetViewHolder>{
 
-    private ArrayList<Pet> petArrayList;
+    private ArrayList<Mascota> mascotaArrayList;
 
     LayoutInflater inflater;
     Context context;
 
-    public MissingPetAdapter(Context context, ArrayList<Pet> petArrayList){
+    public MissingPetAdapter(Context context, ArrayList<Mascota> mascotaArrayList){
         this.context=context;
         this.inflater = LayoutInflater.from(context);
-        this.petArrayList = petArrayList;
+        this.mascotaArrayList = mascotaArrayList;
     }
 
     @NonNull
@@ -38,13 +38,13 @@ public class MissingPetAdapter extends RecyclerView.Adapter<MissingPetAdapter.Mi
 
     @Override
     public void onBindViewHolder(@NonNull MissingPetViewHolder holder, int position) {
-        holder.mTextViewNamePet.setText(petArrayList.get(position).getName());
-        holder.mTextViewBreedPet.setText(petArrayList.get(position).getBreed());
+        holder.mTextViewNamePet.setText(mascotaArrayList.get(position).getNombre());
+        holder.mTextViewBreedPet.setText(mascotaArrayList.get(position).getRaza());
     }
 
     @Override
     public int getItemCount() {
-        return petArrayList.size();
+        return mascotaArrayList.size();
     }
 
 

@@ -1,13 +1,10 @@
 package com.returnhome.includes;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.returnhome.R;
-import com.returnhome.ui.activities.client.HomeActivity;
-import com.returnhome.ui.activities.pet.MapPetFoundActivity;
 
 public class Toolbar {
 

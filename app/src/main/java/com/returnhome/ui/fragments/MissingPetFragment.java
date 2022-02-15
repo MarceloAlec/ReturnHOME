@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.returnhome.R;
-import com.returnhome.models.Pet;
-import com.returnhome.models.RHResponse;
+import com.returnhome.modelos.Mascota;
+import com.returnhome.utils.retrofit.RHResponse;
 import com.returnhome.providers.PetProvider;
 import com.returnhome.ui.adapters.MissingPetAdapter;
 
@@ -28,7 +28,7 @@ public class MissingPetFragment extends Fragment {
 
     private MissingPetAdapter mPetAdapter;
     private RecyclerView mRecyclerViewMissingPets;
-    private ArrayList<Pet> petArrayList;
+    private ArrayList<Mascota> mascotaArrayList;
 
     public MissingPetFragment() {
 
@@ -39,7 +39,7 @@ public class MissingPetFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_missing_pet, container, false);
 
-        petArrayList = new ArrayList<>();
+        mascotaArrayList = new ArrayList<>();
         mRecyclerViewMissingPets = view.findViewById(R.id.recyclerViewMissingPets);
 
         return view;
@@ -51,8 +51,8 @@ public class MissingPetFragment extends Fragment {
             @Override
             public void onResponse(Call<RHResponse> call, Response<RHResponse> response) {
                 if(response.isSuccessful()){
-                    petArrayList = response.body().getPets();
-                    showList(petArrayList);
+                    mascotaArrayList = response.body().getPets();
+                    showList(mascotaArrayList);
                 }
                 else{
                     mRecyclerViewMissingPets.setAdapter(null);
@@ -66,11 +66,11 @@ public class MissingPetFragment extends Fragment {
         });
     }
 
-    private void showList(ArrayList<Pet> pets) {
+    private void showList(ArrayList<Mascota> mascotas) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         mRecyclerViewMissingPets.setLayoutManager(linearLayoutManager);
-        mPetAdapter = new MissingPetAdapter(getContext(), pets);
+        mPetAdapter = new MissingPetAdapter(getContext(), mascotas);
         mRecyclerViewMissingPets.setAdapter(mPetAdapter);
 
 

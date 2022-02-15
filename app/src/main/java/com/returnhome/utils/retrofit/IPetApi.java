@@ -1,8 +1,7 @@
 package com.returnhome.utils.retrofit;
 
 
-import com.returnhome.models.Pet;
-import com.returnhome.models.RHResponse;
+import com.returnhome.modelos.Mascota;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,16 +19,16 @@ public interface IPetApi {
     })
 
     @POST("create.php")
-    Call<RHResponse> create(@Body Pet pet);
+    Call<RHResponse> create(@Body Mascota mascota);
 
     @GET("read.php")
     Call<RHResponse> read(@Query("id") int id, @Query("action") int action);
 
     @PUT("update.php")
-    Call<RHResponse> update(@Body Pet pet);
+    Call<RHResponse> update(@Body Mascota mascota);
 
     @PUT("update-status-missing.php")
-    Call<RHResponse> updateStatusMissing(@Body Pet pet);
+    Call<RHResponse> updateStatusMissing(@Body Mascota mascota);
 
     @DELETE("delete.php")
     Call<RHResponse> delete(@Query("id") int idPet);

@@ -1,8 +1,8 @@
 package com.returnhome.providers;
 
-import com.returnhome.models.Pet;
+import com.returnhome.modelos.Mascota;
 import com.returnhome.utils.retrofit.IPetApi;
-import com.returnhome.models.RHResponse;
+import com.returnhome.utils.retrofit.RHResponse;
 import com.returnhome.utils.retrofit.RetrofitClient;
 
 
@@ -23,19 +23,19 @@ public class PetProvider  {
         return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).delete(idPet);
     }
 
-    public static Call<RHResponse> updatePet(Pet pet){
+    public static Call<RHResponse> updatePet(Mascota mascota){
 
-        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).update(pet);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).update(mascota);
     }
 
-    public static Call<RHResponse> updateStatusMissingPet(Pet pet){
+    public static Call<RHResponse> updateStatusMissingPet(Mascota mascota){
 
-        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).updateStatusMissing(pet);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).updateStatusMissing(mascota);
     }
 
-    public static Call<RHResponse> createPet(Pet pet){
+    public static Call<RHResponse> createPet(Mascota mascota){
 
-        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).create(pet);
+        return RetrofitClient.getClient(BASE_URL).create(IPetApi.class).create(mascota);
     }
 
 
