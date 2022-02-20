@@ -5,49 +5,157 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    android:background="@drawable/background_color"
-    tools:context=".ui.activities.MainActivity">
+    tools:context=".ui.activities.PrincipalActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <TextView
+        <com.github.florent37.shapeofview.shapes.ArcView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:elevation="4dp"
+            app:shape_arc_cropDirection="outside"
+            app:shape_arc_height="20dp"
+            app:shape_arc_position="bottom"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ReturnHOME"
+                android:textAlignment="center"
+                android:textColor="@color/colorIcons"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hola, bienvenido a ReturnHome"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"/>
+
+        </com.github.florent37.shapeofview.shapes.ArcView>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/name_app"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryText"
-            android:layout_margin="30dp"
-            android:textSize="50sp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="10dp">
 
-        <Button
-            android:id="@+id/btnGoToLogin"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_email" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:hint="Correo electronico">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEmailLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:inputType="textEmailAddress">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/rounded_button"
-            android:text="Iniciar sesión"
-            android:textSize="13sp"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@color/colorIcons" />
-
-        <Button
-            android:id="@+id/btnGoToRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/colorIcons"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:text="Registrarse"
-            android:textSize="13sp"/>
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_password"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconMode="password_toggle"
+                android:hint="Contraseña"
+                android:layout_marginLeft="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputPasswordLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:inputType="textPassword">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:paddingBottom="20dp">
+
+            <Button
+                android:id="@+id/btnSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Iniciar Sesión"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="13sp"
+                android:layout_margin="10dp"/>
+
+            <Button
+                android:id="@+id/btnGoToRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:text="Registrarse"
+                android:textColor="@color/colorIcons"
+                android:textSize="13sp"
+                android:layout_margin="10dp"
+                />
+
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

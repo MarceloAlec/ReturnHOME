@@ -4,10 +4,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
             android:id="@+id/cardview_edit"
-            android:title="@string/cardview_edit"/>
+            android:title="Editar"/>
         <item
             android:id="@+id/cardview_delete"
-            android:title="@string/cardview_delete"/>
+            android:title="Eliminar"/>
 
 
         <item android:title="Reportar como">

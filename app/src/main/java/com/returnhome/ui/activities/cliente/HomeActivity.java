@@ -18,10 +18,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.returnhome.R;
 
-import com.returnhome.ui.activities.nfc.ReadTagActivity;
+import com.returnhome.ui.activities.nfc.LecturaEtiquetaActivity;
 
-import com.returnhome.ui.activities.mascota.MapPetHomeActivity;
-import com.returnhome.ui.adapters.ViewPagerAdapter;
+import com.returnhome.ui.activities.mascota.MapaSeleccionHogarMascotaActivity;
+import com.returnhome.ui.adapters.PaginacionFragmentoAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.returnhome.utils.AppConfig;
 
@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mToggle;
     private AppConfig mAppConfig;
 
-    private ViewPagerAdapter mViewPagerAdapter;
+    private PaginacionFragmentoAdapter mPaginacionFragmentoAdapter;
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
 
@@ -52,13 +52,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
 
         //CONFIGURACION DEL ICONO DE LA HAMBURGUESA EN EL TOOLBAR
-        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open_drawer, R.string.close_drawer);
+        mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.abrir_drawer, R.string.cerrar_drawer);
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
 
-        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
-        mViewPager2.setAdapter(mViewPagerAdapter);
+        mPaginacionFragmentoAdapter = new PaginacionFragmentoAdapter(getSupportFragmentManager(), getLifecycle());
+        mViewPager2.setAdapter(mPaginacionFragmentoAdapter);
 
         setTitle(R.string.app_name);
 
@@ -67,8 +67,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         mAppConfig = new AppConfig(this);
 
-        mTextViewUserName.setText(mAppConfig.getUserName());
-        mTextViewUserPhoneNumber.setText(mAppConfig.getPhoneNumber());
+        mTextViewUserName.setText(mAppConfig.obtenerNombreCliente());
+        mTextViewUserPhoneNumber.setText(mAppConfig.obtenerNumeroCelular());
 
     }
 
@@ -90,22 +90,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         switch  (item.getItemId()){
             case R.id.nav_account:
-                intent = new Intent(HomeActivity.this, SelectOptionProfileActivity.class);
+                intent = new Intent(HomeActivity.this, SeleccionOpcionAjustesActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.nav_write_tag:
-                intent = new Intent(HomeActivity.this, MapPetHomeActivity.class);
+                intent = new Intent(HomeActivity.this, MapaSeleccionHogarMascotaActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.nav_read_tag:
-                intent = new Intent(HomeActivity.this, ReadTagActivity.class);
+                intent = new Intent(HomeActivity.this, LecturaEtiquetaActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.nav_found_pet:
-                intent = new Intent(HomeActivity.this, ReadTagActivity.class);
+                intent = new Intent(HomeActivity.this, LecturaEtiquetaActivity.class);
                 intent.putExtra("foundPet",true);
                 startActivity(intent);
                 break;
@@ -135,8 +135,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        mTextViewUserName.setText(mAppConfig.getUserName());
-        mTextViewUserPhoneNumber.setText(mAppConfig.getPhoneNumber());
+        mTextViewUserName.setText(mAppConfig.obtenerNombreCliente());
+        mTextViewUserPhoneNumber.setText(mAppConfig.obtenerNumeroCelular());
     }
 
 

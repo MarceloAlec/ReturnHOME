@@ -71,7 +71,7 @@
                         android:id="@+id/textInputNameUpdateProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/txtInputName"
+                        android:hint="Nombre completo"
                         android:inputType="text">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -103,54 +103,12 @@
                         android:id="@+id/textInputEmailUpdateProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/txtInputEmail"
+                        android:hint="Correo electrónico"
                         android:inputType="text">
 
                     </com.google.android.material.textfield.TextInputEditText>
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_gender" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/radioButtonMaleUpdateProfile"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:text="@string/rbtnMale">
-
-                    </com.google.android.material.radiobutton.MaterialRadioButton>
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/radioButtonFemaleUpdateProfile"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/rbtnFemale">
-
-                    </com.google.android.material.radiobutton.MaterialRadioButton>
-                </RadioGroup>
 
             </LinearLayout>
 
@@ -180,7 +138,7 @@
                         android:id="@+id/textInputNumberUpdateProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/txtInputPhoneNumber"
+                        android:hint="Número de celular"
                         android:inputType="phone">
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -218,7 +176,7 @@
             android:layout_margin="30dp"
             android:background="@drawable/rounded_button"
             android:backgroundTint="@color/colorAccent"
-            android:text="@string/btn_updatePet"
+            android:text="Actualizar"
             android:textColor="@color/colorIcons"
             android:textSize="13sp" />
 

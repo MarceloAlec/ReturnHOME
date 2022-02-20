@@ -12,47 +12,57 @@ public class AppConfig {
 
     public AppConfig(Context context) {
         this.context = context;
-        sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file_key),Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("pref_archivo",Context.MODE_PRIVATE);
     }
 
-    public boolean isUserLogin(){
-        return sharedPreferences.getBoolean(context.getString(R.string.pref_is_user_login), false);
+    public boolean comprobarClienteAuth(){
+        return sharedPreferences.getBoolean("usuarioAuth", false);
     }
 
-    public void updateLoginStatus(boolean status){
+    public void actualizarEstadoAuth(boolean status){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getString(R.string.pref_is_user_login),status);
+        editor.putBoolean("clienteAuth",status);
         editor.apply();
     }
 
-    public void saveUserName(String name){
+    public void guardarNombreCliente(String name){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.pref_username),name);
+        editor.putString("nombreCliente",name);
         editor.apply();
     }
 
-    public String getUserName(){
-        return sharedPreferences.getString(context.getString(R.string.pref_username), "Unknown");
+    public String obtenerNombreCliente(){
+        return sharedPreferences.getString("nombreCliente", "Desconocido");
     }
 
-    public void saveUserId(int id) {
+    public void guardarIdCliente(int id) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(context.getString(R.string.pref_user_id),id);
+        editor.putInt("idCliente",id);
         editor.apply();
     }
 
-    public int getUserId(){
-        return sharedPreferences.getInt(context.getString(R.string.pref_user_id), 0);
+    public int obtenerIdCliente(){
+        return sharedPreferences.getInt("idCliente", 0);
     }
 
-    public void saveUserPhoneNumber(String phoneNumber) {
+    public void guardarNumeroCelular(String phoneNumber) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.pref_user_phonenumber),phoneNumber);
+        editor.putString("numeroCelular",phoneNumber);
         editor.apply();
     }
 
-    public String getPhoneNumber(){
-        return sharedPreferences.getString(context.getString(R.string.pref_user_phonenumber), "Unknown");
+    public String obtenerNumeroCelular(){
+        return sharedPreferences.getString("numeroCelular", "Desconocido");
+    }
+
+    public void guardarToken(String phoneNumber) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("token",phoneNumber);
+        editor.apply();
+    }
+
+    public String obtenerToken(){
+        return sharedPreferences.getString("token", "Desconocido");
     }
 
 

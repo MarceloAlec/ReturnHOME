@@ -1,41 +1,6 @@
 <resources>
     <string name="app_name">ReturnHOME</string>
-    <string name="txtInputName">Full name</string>
-    <string name="txtInputEmail">Email</string>
-    <string name="txtInputPassword">Password</string>
-    <string name="rbtnMale">Male</string>
-    <string name="rbtnFemale">Female</string>
-    <string name="txtInputPhoneNumber">Phone number</string>
-    <string name="btnRegister">REGISTER</string>
-    <string name="dialogRegister">Just a moment</string>
-    <string name="nav_pet">Pets</string>
-    <string name="nav_profile">Account</string>
-    <string name="open_drawer">Open Drawer</string>
-    <string name="close_drawer">Close Drawer</string>
-    <string name="lbl_breedPet">Breed:</string>
-    <string name="lbl_genderPet">Gender:</string>
-    <string name="lbl_descriptionPet">Description:</string>
-    <string name="btn_edit">EDIT</string>
-    <string name="btn_delete">DELETE</string>
-    <string name="btn_sign_in">SIGN IN</string>
-    <string name="name_app">ReturnHOME</string>
-    <string name="slogan_app">Encuentra a tu mascota</string>
-    <string name="btn_have_an_account">ALREADY HAVE AN ACCOUNT? LOG IN</string>
-    <string name="btn_register_now">REGISTER NOW</string>
-    <string name="pref_file_key" translatable="false">pref_file_key</string>
-    <string name="pref_is_user_login" translatable="false">isuserlogin</string>
-    <string name="pref_username" translatable="false">user_name</string>
-    <string name="pref_user_id" translatable="false">user_id</string>
-    <string name="pref_user_phonenumber" translatable="false">user_phonenumber</string>
-    <string name="cardview_edit">Edit</string>
-    <string name="cardview_delete">Delete</string>
-    <string name="btn_addPet">ADD</string>
-    <string name="btn_updatePet">UPDATE</string>
-    <string name="btn_updateProfile">UPDATE</string>
-    <string name="pref_user_token" translatable="false">user_token</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- TODO: Remove or change this placeholder text -->
-
+    <string name="abrir_drawer">Abrir Drawer</string>
+    <string name="cerrar_drawer">Cerrar Drawer</string>
 
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.RegisterActivity">
+    tools:context=".ui.activities.RegistroActivity">
 
     <include layout="@layout/action_toolbar"></include>
 
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:hint="@string/txtInputName">
+                android:hint="Nombre completo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputNameRegister"
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:hint="@string/txtInputEmail">
+                android:hint="Correo electrónico">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEmailRegister"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 app:endIconMode="password_toggle"
-                android:hint="@string/txtInputPassword">
+                android:hint="Contraseña">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputPasswordRegister"
@@ -116,49 +116,6 @@
                 </com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_gender"/>
-
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="10dp">
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radioButtonMale"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rbtnMale"
-                    android:checked="true">
-
-                </com.google.android.material.radiobutton.MaterialRadioButton>
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radioButtonFemale"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rbtnFemale">
-
-                </com.google.android.material.radiobutton.MaterialRadioButton>
-            </RadioGroup>
 
         </LinearLayout>
 
@@ -184,13 +141,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:hint="@string/txtInputPhoneNumber">
+                android:hint="Número de celular">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputNumberPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:inputType="phone">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -209,7 +165,7 @@
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btnRegister"
+                android:text="Registrar"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorIcons"

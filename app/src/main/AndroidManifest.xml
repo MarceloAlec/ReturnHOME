@@ -17,30 +17,30 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.activities.pet.MapPetMissingActivity"
+            android:name=".ui.activities.mascota.MapaMascotaDesaparecidaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.pet.MapPetReportedMissingActivity"
+            android:name=".ui.activities.mascota.MapaNotificacionMascotaDesaparecidaActivity"
             android:exported="false" />
 
         <receiver
-            android:name=".receivers.PetFoundReceiver"
+            android:name=".receivers.MascotaEncontradaReceiver"
             android:enabled="true" />
 
         <receiver
-            android:name=".receivers.PetMissingReceiver"
+            android:name=".receivers.MascotaDesaparecidaReceiver"
             android:enabled="true" />
 
         <receiver
-            android:name=".receivers.ContactReceiver"
+            android:name=".receivers.ContactoReceiver"
             android:enabled="true" />
 
         <activity
-            android:name=".ui.activities.pet.MapPetFoundActivity"
+            android:name=".ui.activities.mascota.MapaMascotaEncontradaActivity"
             android:exported="false" />
 
         <service
-            android:name=".services.MyFirebaseMessagingService"
+            android:name=".services.NotificacionService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -48,48 +48,43 @@
         </service>
 
         <activity
-            android:name=".ui.activities.pet.MapPetReportedFoundActivity"
+            android:name=".ui.activities.mascota.MapaNotificacionMascotaEncontradaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.DetailReadingActivity"
+            android:name=".ui.activities.nfc.DetalleInfoLecturaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.ReadTagActivity"
+            android:name=".ui.activities.nfc.LecturaEtiquetaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.WriteTagActivity"
+            android:name=".ui.activities.nfc.EscrituraEtiquetaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.pet.MapPetHomeActivity"
+            android:name=".ui.activities.mascota.MapaSeleccionHogarMascotaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.nfc.DetailWritingActivity"
+            android:name=".ui.activities.nfc.DetalleInfoEscrituraActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.client.UpdatePasswordClientActivity"
+            android:name=".ui.activities.cliente.ActualizarPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.client.SelectOptionProfileActivity"
+            android:name=".ui.activities.cliente.SeleccionOpcionAjustesActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.client.UpdateProfileActivity"
+            android:name=".ui.activities.cliente.ActualizarInfoActivity"
             android:exported="false" />
-        <activity android:name=".ui.activities.client.HomeActivity" />
+        <activity android:name=".ui.activities.cliente.HomeActivity" />
         <activity
-            android:name=".ui.activities.LoginActivity"
-            android:parentActivityName=".ui.activities.MainActivity" />
-        <activity
-            android:name=".ui.activities.RegisterActivity"
-            android:parentActivityName=".ui.activities.MainActivity" />
-        <activity
-            android:name=".ui.activities.MainActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".ui.activities.PrincipalActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activities.RegistroActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
