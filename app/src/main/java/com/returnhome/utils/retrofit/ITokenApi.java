@@ -24,6 +24,6 @@ public interface ITokenApi {
     Call<Void> registrar(@Body Map<String,String> tokenInfo);
 
     @DELETE("ws_eliminarToken.php")
-    Call<RHRespuesta> eliminar(@Query("idCliente") int idCliente);
+    Call<Void> eliminar(@Body Map<String,String> tokenInfo);
 
 }

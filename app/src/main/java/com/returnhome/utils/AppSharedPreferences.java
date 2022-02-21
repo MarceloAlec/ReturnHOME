@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 
 import com.returnhome.R;
 
-public class AppConfig {
+public class AppSharedPreferences {
 
     private Context context;
     private SharedPreferences sharedPreferences;
 
-    public AppConfig(Context context) {
+    public AppSharedPreferences(Context context) {
         this.context = context;
         sharedPreferences = context.getSharedPreferences("pref_archivo",Context.MODE_PRIVATE);
     }

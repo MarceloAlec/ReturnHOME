@@ -17,7 +17,7 @@ import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.TokenController;
 import com.returnhome.controllers.NotificacionController;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 import com.returnhome.models.RHRespuesta;
 
 import java.util.HashMap;
@@ -30,22 +30,22 @@ import retrofit2.Response;
 public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private LinearLayout mDeleteAccount;
-    private LinearLayout mUpdatePassword;
-    private LinearLayout mGoToUpdateProfile;
-    private LinearLayout mLogOut;
+    private LinearLayout mEliminarCuenta;
+    private LinearLayout mActualizarPassword;
+    private LinearLayout mIrAActualizarInfo;
+    private LinearLayout mCerrarSesion;
     private androidx.appcompat.widget.Toolbar mToolbar;
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_option_profile);
+        setContentView(R.layout.activity_seleccion_opcion_ajustes);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
 
         setSupportActionBar(mToolbar);
@@ -62,25 +62,21 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
     }
 
 
-    private void initializeComponents(){
-        mGoToUpdateProfile = findViewById(R.id.btnUpdateProfile);
-        mDeleteAccount = findViewById(R.id.btnDeleteAccount);
-        mUpdatePassword = findViewById(R.id.btnUpdatePassword);
-        mLogOut = findViewById(R.id.btnLogOut);
+    private void inicializarComponentes(){
+        mIrAActualizarInfo = findViewById(R.id.btnActualizarInfoCliente);
+        mEliminarCuenta = findViewById(R.id.btnEliminarCuenta);
+        mActualizarPassword = findViewById(R.id.btnActualizarPassword);
+        mCerrarSesion = findViewById(R.id.btnCerrarSesion);
         mToolbar = findViewById(R.id.toolbar);
 
-        mGoToUpdateProfile.setOnClickListener(this);
-        mDeleteAccount.setOnClickListener(this);
-        mUpdatePassword.setOnClickListener(this);
-        mLogOut.setOnClickListener(this);
+        mIrAActualizarInfo.setOnClickListener(this);
+        mEliminarCuenta.setOnClickListener(this);
+        mActualizarPassword.setOnClickListener(this);
+        mCerrarSesion.setOnClickListener(this);
 
     }
 
-    private void clickDelete() {
-        showAlertDialogDeleteAccount();
-    }
-
-    private void showAlertDialogDeleteAccount() {
+    private void mostrarDialogoEliminarCuenta() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setTitle("ReturnHOME");
         builder.setMessage("Esta seguro que desea eliminar su cuenta?");
@@ -91,10 +87,10 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            deleteAccount();
+                            eliminarCuenta();
                         }
                         else{
-                            Toast.makeText(SeleccionOpcionAjustesActivity.this,"No se pudo eliminar su cuenta", Toast.LENGTH_SHORT);
+                            Toast.makeText(SeleccionOpcionAjustesActivity.this,"No se pudo eliminar su cuenta", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -110,7 +106,7 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
         builder.show();
     }
 
-    private void showAlertDialogLogOut() {
+    private void mostrarDialogoCerrarSesion() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setTitle("ReturnHOME");
         builder.setMessage("Esta seguro que desea cerrar sesion?");
@@ -123,9 +119,9 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Map<String, String> tokenInfo = new HashMap<>();
-                            tokenInfo.put("idClient",String.valueOf(mAppConfig.obtenerIdCliente()));
-                            tokenInfo.put("token", "");
-                            updateToken(tokenInfo);
+                            tokenInfo.put("idCliente",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
+                            tokenInfo.put("token", String.valueOf(mAppSharedPreferences.obtenerToken()));
+                            eliminarTokenDB(tokenInfo);
                         }
                         else{
                             Toast.makeText(SeleccionOpcionAjustesActivity.this,"No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
@@ -145,13 +141,22 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
     }
 
 
-    private void updateToken(Map<String, String> tokenInfo){
+    private void eliminarTokenDB(Map<String, String> tokenInfo){
 
-        TokenController.registrar(tokenInfo).enqueue(new Callback<Void>() {
+        TokenController.eliminarTokenDB(tokenInfo).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
-                   logout();
+                    NotificacionController.desuscribirMascotaDesaparecida();
+                    mAppSharedPreferences.guardarToken(null);
+                    mAppSharedPreferences.actualizarEstadoAuth(false);
+                    mAppSharedPreferences.guardarNumeroCelular(null);
+                    mAppSharedPreferences.guardarNombreCliente(null);
+                    mAppSharedPreferences.guardarIdCliente(0);
+
+                    Intent intent = new Intent(SeleccionOpcionAjustesActivity.this, PrincipalActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(SeleccionOpcionAjustesActivity.this, "No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
@@ -165,27 +170,30 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
         });
     }
 
-    private void logout(){
-        NotificacionController.desuscribirMascotaDesaparecida();
-        mAppConfig.actualizarEstadoAuth(false);
-        mAppConfig.guardarNumeroCelular(null);
-        mAppConfig.guardarNombreCliente(null);
-        mAppConfig.guardarIdCliente(0);
-
-        Intent intent = new Intent(SeleccionOpcionAjustesActivity.this, PrincipalActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
 
 
-    private void deleteAccount(){
+    private void eliminarCuenta(){
 
-        ClienteController.eliminarCuenta(mAppConfig.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
+        ClienteController.eliminarCuenta(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+
                 if(response.isSuccessful()){
                     Toast.makeText(SeleccionOpcionAjustesActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
-                    logout();
+                    NotificacionController.desuscribirMascotaDesaparecida();
+                    mAppSharedPreferences.guardarToken(null);
+                    mAppSharedPreferences.actualizarEstadoAuth(false);
+                    mAppSharedPreferences.guardarNumeroCelular(null);
+                    mAppSharedPreferences.guardarNombreCliente(null);
+                    mAppSharedPreferences.guardarIdCliente(0);
+
+                    Intent intent = new Intent(SeleccionOpcionAjustesActivity.this, PrincipalActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                }
+                else{
+                    Toast.makeText(SeleccionOpcionAjustesActivity.this, "No se pudo eliminar su cuenta", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -202,25 +210,23 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
         Intent intent;
 
         switch (v.getId()){
-            case R.id.btnUpdateProfile:
+            case R.id.btnActualizarInfoCliente:
                 intent = new Intent(SeleccionOpcionAjustesActivity.this, ActualizarInfoActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.btnDeleteAccount:
-                clickDelete();
+            case R.id.btnEliminarCuenta:
+                mostrarDialogoEliminarCuenta();
                 break;
 
-            case R.id.btnUpdatePassword:
+            case R.id.btnActualizarPassword:
                 intent = new Intent(SeleccionOpcionAjustesActivity.this, ActualizarPasswordActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.btnLogOut:
-                showAlertDialogLogOut();
+            case R.id.btnCerrarSesion:
+                mostrarDialogoCerrarSesion();
                 break;
-
-
         }
     }
 }

@@ -6,7 +6,7 @@
     tools:context=".ui.fragments.MascotaDesaparecidaFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMissingPets"
+        android:id="@+id/recyclerViewMascotasDesaparecidas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

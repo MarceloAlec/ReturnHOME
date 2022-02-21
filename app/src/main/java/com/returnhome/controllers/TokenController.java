@@ -15,8 +15,12 @@ public class TokenController {
 
     private static final String BASE_URL = "http://192.168.0.2:82/api.returnhome.com/v1/";
 
-    public static Call<Void> registrar(Map<String,String> tokenInfo){
+    public static Call<Void> registrarTokenDB(Map<String,String> tokenInfo){
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(ITokenApi.class).registrar(tokenInfo);
+    }
+
+    public static Call<Void> eliminarTokenDB(Map<String,String> tokenInfo){
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(ITokenApi.class).eliminar(tokenInfo);
     }
 
     public static Task<Void> eliminar(){

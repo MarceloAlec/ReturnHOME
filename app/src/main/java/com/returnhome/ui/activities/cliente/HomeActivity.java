@@ -23,19 +23,19 @@ import com.returnhome.ui.activities.nfc.LecturaEtiquetaActivity;
 import com.returnhome.ui.activities.mascota.MapaSeleccionHogarMascotaActivity;
 import com.returnhome.ui.adapters.PaginacionFragmentoAdapter;
 import com.google.android.material.navigation.NavigationView;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private Toolbar mToolbar;
-    private TextView mTextViewUserName;
-    private TextView mTextViewUserPhoneNumber;
+    private TextView mTextViewNombreCliente;
+    private TextView mTextViewNumeroCelular;
     private View mHeaderView;
 
     private ActionBarDrawerToggle mToggle;
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
 
     private PaginacionFragmentoAdapter mPaginacionFragmentoAdapter;
     private ViewPager2 mViewPager2;
@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initializeComponents();
+        inicializarComponentes();
 
         //CONFIGURACION DEL TOOLBAR
         setSupportActionBar(mToolbar);
@@ -56,69 +56,64 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-
         mPaginacionFragmentoAdapter = new PaginacionFragmentoAdapter(getSupportFragmentManager(), getLifecycle());
         mViewPager2.setAdapter(mPaginacionFragmentoAdapter);
 
         setTitle(R.string.app_name);
 
-        String[] headerTab = new String[]{"Mis Mascotas", "Mascotas desaparecidas"};
-        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> tab.setText(headerTab[position])).attach();
+        String[] tituloTab = new String[]{"Mis Mascotas", "Mascotas desaparecidas"};
+        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> tab.setText(tituloTab[position])).attach();
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
-        mTextViewUserName.setText(mAppConfig.obtenerNombreCliente());
-        mTextViewUserPhoneNumber.setText(mAppConfig.obtenerNumeroCelular());
+        mTextViewNombreCliente.setText(mAppSharedPreferences.obtenerNombreCliente());
+        mTextViewNumeroCelular.setText(mAppSharedPreferences.obtenerNumeroCelular());
 
     }
 
-    private void initializeComponents() {
+    private void inicializarComponentes() {
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavigationView = findViewById(R.id.nav_view);
         mToolbar = findViewById(R.id.toolbar);
         mHeaderView = mNavigationView.getHeaderView(0);
-        mTextViewUserName = mHeaderView.findViewById(R.id.textView_userName);
-        mTextViewUserPhoneNumber =mHeaderView.findViewById(R.id.textView_phoneNumber);
+        mTextViewNombreCliente = mHeaderView.findViewById(R.id.textViewNombreCliente);
+        mTextViewNumeroCelular =mHeaderView.findViewById(R.id.textViewNumeroCelular);
         mTabLayout = findViewById(R.id.tabLayout);
         mViewPager2 = findViewById(R.id.viewPager2);
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent;
 
         switch  (item.getItemId()){
-            case R.id.nav_account:
+            case R.id.nav_ajustes:
                 intent = new Intent(HomeActivity.this, SeleccionOpcionAjustesActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.nav_write_tag:
+            case R.id.nav_escribir_etiqueta:
                 intent = new Intent(HomeActivity.this, MapaSeleccionHogarMascotaActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.nav_read_tag:
+            case R.id.nav_leer_etiqueta:
                 intent = new Intent(HomeActivity.this, LecturaEtiquetaActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.nav_found_pet:
+            case R.id.nav_mascota_encontrada:
                 intent = new Intent(HomeActivity.this, LecturaEtiquetaActivity.class);
-                intent.putExtra("foundPet",true);
+                intent.putExtra("mascotaEncontrada",true);
                 startActivity(intent);
                 break;
 
         }
-        //OCULTA EL NAVIGATION DRAWER
+
         mDrawerLayout.closeDrawers();
 
         //EL ITEM SELECCIONADO SE ENCUENTRA SELECCIONADO
         return false;
-
-
-
 
     }
 
@@ -127,7 +122,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
 
         super.onPostCreate(savedInstanceState);
-        //PERMITE SINCRONIZAR EL ESTADO DEL ICONO HAMBURGUESA CON EL NAVIGATION VIEW
+        // SINCRONIZA EL ESTADO DEL ICONO HAMBURGUESA CON EL NAVIGATION VIEW
         //EN FUNCION DE SI EL MENU LATERAL ESTA ABIERTO O CERRADO
         mToggle.syncState();
     }
@@ -135,8 +130,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        mTextViewUserName.setText(mAppConfig.obtenerNombreCliente());
-        mTextViewUserPhoneNumber.setText(mAppConfig.obtenerNumeroCelular());
+        mTextViewNombreCliente.setText(mAppSharedPreferences.obtenerNombreCliente());
+        mTextViewNumeroCelular.setText(mAppSharedPreferences.obtenerNumeroCelular());
     }
 
 

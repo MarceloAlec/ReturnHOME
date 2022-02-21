@@ -31,25 +31,24 @@ import retrofit2.Response;
 
 public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private double mExtraPetHomeLat;
-    private double mExtraPetHomeLng;
-    private String mExtraPhoneNumber;
-    private int  mExtraIdPet;
+    private double mExtraHogarMascotaLat;
+    private double mExtraHogarMascotaLng;
+    private String mExtraNumeroCelular;
+    private int mExtraIdMascota;
 
-    private LatLng mPetHomeLatLng;
+    private LatLng mHogarMascotaLatLng;
 
     private Mascota mascota;
 
+    private CircleImageView mCircleImageIrASeleccionOpcionNFC;
 
-    private CircleImageView mCircleImageGoToSelectOptionNfc;
+    private TextView mTextViewNombreMascota;
+    private TextView mTextViewRaza;
+    private TextView mTextViewGenero;
+    private TextView mTextViewNumeroCelular;
 
-    private TextView mTextViewPetName;
-    private TextView mTextViewBreed;
-    private TextView mTextViewGender;
-    private TextView mTextViewPhoneNumber;
-
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
+    private GoogleMap mMapa;
+    private SupportMapFragment mMapaFragment;
     private LocationRequest mLocationRequest;
 
 
@@ -57,23 +56,23 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_reading);
+        setContentView(R.layout.activity_detalle_info_lectura);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mMapFragment.getMapAsync(this);
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mMapaFragment.getMapAsync(this);
 
-        mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
-        mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
-        mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
-        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
+        mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
+        mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
+        mExtraNumeroCelular = getIntent().getStringExtra("numeroCelular");
+        mExtraIdMascota = getIntent().getIntExtra("idMascota", 0);
 
-        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
+        mHogarMascotaLatLng = new LatLng(mExtraHogarMascotaLat, mExtraHogarMascotaLng);
 
-        mTextViewPhoneNumber.setText(mExtraPhoneNumber);
+        mTextViewNumeroCelular.setText(mExtraNumeroCelular);
 
-        mCircleImageGoToSelectOptionNfc.setOnClickListener(new View.OnClickListener() {
+        mCircleImageIrASeleccionOpcionNFC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetalleInfoLecturaActivity.this, HomeActivity.class);
@@ -82,21 +81,21 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
             }
         });
 
-        getPet(mExtraIdPet);
+        obtenerMascota(mExtraIdMascota);
     }
 
-    private void initializeComponents(){
-        mTextViewPetName = findViewById(R.id.textViewNamePetReading);
-        mTextViewBreed = findViewById(R.id.textViewBreedReading);
-        mTextViewGender = findViewById(R.id.textViewGenderReading);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberReading);
-        mCircleImageGoToSelectOptionNfc = findViewById(R.id.btnGoToHomeFromDetailReading);
+    private void inicializarComponentes(){
+        mTextViewNombreMascota = findViewById(R.id.textViewNombreMascotaLectura);
+        mTextViewRaza = findViewById(R.id.textViewRazaMascotaLectura);
+        mTextViewGenero = findViewById(R.id.textViewGeneroMascotaLectura);
+        mTextViewNumeroCelular = findViewById(R.id.textViewNumeroCelularLectura);
+        mCircleImageIrASeleccionOpcionNFC = findViewById(R.id.btnIrAHomeDesdeDetalleLectura);
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMapa = googleMap;
+        mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mLocationRequest = LocationRequest.create()
                 .setInterval(1000)
@@ -105,26 +104,26 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
                 .setSmallestDisplacement(5);
 
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
+        mMapa.addMarker(new MarkerOptions().position(mHogarMascotaLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+        mMapa.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
-                        .target(mPetHomeLatLng)
+                        .target(mHogarMascotaLatLng)
                         .zoom(15f)
                         .build()
         ));
 
     }
 
-    private void getPet(int idPet) {
+    private void obtenerMascota(int idPet) {
         MascotaController.obtener(idPet, 2).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
                     mascota = response.body().getMascota();
-                    mTextViewPetName.setText(mascota.getNombre());
-                    mTextViewBreed.setText(mascota.getRaza());
-                    mTextViewGender.setText(String.valueOf(mascota.getGenero()));
+                    mTextViewNombreMascota.setText(mascota.getNombre());
+                    mTextViewRaza.setText(mascota.getRaza());
+                    mTextViewGenero.setText(String.valueOf(mascota.getGenero()));
                 }
                 else{
                     Toast.makeText(DetalleInfoLecturaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();

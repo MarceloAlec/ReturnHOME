@@ -10,7 +10,7 @@
     <include layout="@layout/action_toolbar"></include>
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/mapa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -40,7 +40,7 @@
                 />
 
             <Spinner
-                android:id="@+id/spinner_pets"
+                android:id="@+id/spinnerMisMascotas"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="63dp"
@@ -59,7 +59,7 @@
             app:cardCornerRadius="20dp"
             >
             <fragment
-                android:id="@+id/placeAutocompletePetHome"
+                android:id="@+id/lugarAutocompletarHogarMascota"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
@@ -77,17 +77,16 @@
 
 
     <Button
-        android:id="@+id/btnWriteTag"
+        android:id="@+id/btnSeleccionarHogarMascota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
-        android:text="SELECCIONAR UBICACIÓN"
+        android:text="Seleccionar Ubicación"
         android:textSize="13sp"
         android:textColor="@android:color/white"
+        android:textAllCaps="true"
         android:layout_gravity="bottom"
         android:layout_margin="20dp" />
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

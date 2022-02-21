@@ -8,7 +8,7 @@
     tools:context=".ui.activities.nfc.DetalleInfoLecturaActivity">
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/mapa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -61,7 +61,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewNamePetReading"
+                        android:id="@+id/textViewNombreMascotaLectura"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -90,7 +90,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewBreedReading"
+                        android:id="@+id/textViewRazaMascotaLectura"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -132,7 +132,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewGenderReading"
+                        android:id="@+id/textViewGeneroMascotaLectura"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -161,7 +161,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textViewPhoneNumberReading"
+                        android:id="@+id/textViewNumeroCelularLectura"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -178,7 +178,7 @@
     </com.github.florent37.shapeofview.shapes.CutCornerView>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/btnGoToHomeFromDetailReading"
+        android:id="@+id/btnIrAHomeDesdeDetalleLectura"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_flecha_atras"

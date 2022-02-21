@@ -51,7 +51,7 @@ import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
 import com.returnhome.ui.activities.nfc.DetalleInfoEscrituraActivity;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 import com.returnhome.models.RHRespuesta;
 
 import java.util.ArrayList;
@@ -64,8 +64,8 @@ import retrofit2.Response;
 
 public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
+    private GoogleMap mMapa;
+    private SupportMapFragment mMapaFragment;
 
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocation;
@@ -73,45 +73,44 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     private Spinner mSpinner;
 
     private PlacesClient mPlaces;
-    private AutocompleteSupportFragment mAutoComplete;
+    private AutocompleteSupportFragment mAutoCompletar;
 
-    private LatLng mPetHomeLatLng;
-    private boolean isPetSelected = false;
+    private LatLng mHogarMascotaLatLng;
+    private boolean mascotaSeleccionada = false;
 
     private GoogleMap.OnCameraIdleListener mCameraListener;
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
     private ArrayList<Mascota> mascotaArrayList;
 
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
     //ALMACENA LA LATITUD Y LONGITUD ACTUAL
-    private LatLng mCurrentLatLng;
+    private LatLng mActualLatLng;
 
-    private ArrayAdapter mArrayAdapterPets;
-    private Button mButtonWriteTag;
+    private ArrayAdapter mArrayAdapterMascotas;
+    private Button mButtonSeleccionHogarMascota;
     private androidx.appcompat.widget.Toolbar mToolbar;
-
 
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            for (Location location : locationResult.getLocations()) {
+            for (Location ubicacion : locationResult.getLocations()) {
                 if (getApplicationContext() != null) {
 
-                    mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mActualLatLng = new LatLng(ubicacion.getLatitude(), ubicacion.getLongitude());
 
                     //OBTIENE LA UBICACION EN TIEMPO REAL
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                    mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                            .target(new LatLng(ubicacion.getLatitude(), ubicacion.getLongitude()))
                             .zoom(15f)
                             .build()
                     ));
                     limitSearch();
-                    stopLocation();
+                    detenerLocalizacion();
                 }
             }
         }
@@ -120,20 +119,20 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     //LIMITAR LAS BUSQUEDAS POR REGION
     private void limitSearch() {
         //DISTANCIA PARA LIMITAR LAS BUSQUEDAS EN M
-        LatLng northSide = SphericalUtil.computeOffset(mCurrentLatLng, 5000, 0);
-        LatLng southSide = SphericalUtil.computeOffset(mCurrentLatLng, 5000, 180);
-        mAutoComplete.setLocationBias(RectangularBounds.newInstance(southSide, northSide));
+        LatLng norte = SphericalUtil.computeOffset(mActualLatLng, 5000, 0);
+        LatLng sur = SphericalUtil.computeOffset(mActualLatLng, 5000, 180);
+        mAutoCompletar.setLocationBias(RectangularBounds.newInstance(sur, norte));
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_pet_home);
+        setContentView(R.layout.activity_mapa_seleccion_hogar_mascota);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mMapFragment.getMapAsync(this);
+        mMapaFragment.getMapAsync(this);
 
         //INICIA O DETIENE LA UBICACION DEL USUARIO
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
@@ -149,12 +148,12 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             }
         });
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                isPetSelected = true;
+                mascotaSeleccionada = true;
             }
 
             @Override
@@ -163,14 +162,14 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             }
         });
 
-        mButtonWriteTag.setOnClickListener(new View.OnClickListener() {
+        mButtonSeleccionHogarMascota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPetSelected){
+                if(mascotaSeleccionada){
                     Intent intent = new Intent(MapaSeleccionHogarMascotaActivity.this, DetalleInfoEscrituraActivity.class);
-                    intent.putExtra("petHome_lat", mPetHomeLatLng.latitude);
-                    intent.putExtra("petHome_lng", mPetHomeLatLng.longitude);
-                    intent.putExtra("pet",(Mascota)mSpinner.getSelectedItem());
+                    intent.putExtra("hogarMascotaLat", mHogarMascotaLatLng.latitude);
+                    intent.putExtra("hogarMascotaLng", mHogarMascotaLatLng.longitude);
+                    intent.putExtra("mascota",(Mascota)mSpinner.getSelectedItem());
                     startActivity(intent);
                 }
                 else{
@@ -185,14 +184,14 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         }
 
         mPlaces = Places.createClient(this);
-        instanceAutoCompletePetHome();
-        onCameraMove();
+        instanciarAutoCompletarHogarMascota();
+        movimientoCamara();
     }
 
-    private void initializeComponents() {
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mSpinner = findViewById(R.id.spinner_pets);
-        mButtonWriteTag = findViewById(R.id.btnWriteTag);
+    private void inicializarComponentes() {
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mSpinner = findViewById(R.id.spinnerMisMascotas);
+        mButtonSeleccionHogarMascota = findViewById(R.id.btnSeleccionarHogarMascota);
         mToolbar = findViewById(R.id.toolbar);
     }
 
@@ -200,60 +199,62 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     protected void onStart() {
         super.onStart();
 
-        getPets();
+        obtenerMascotas();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        stopLocation();
+        detenerLocalizacion();
     }
 
-    private void stopLocation(){
+    private void detenerLocalizacion(){
         if(mLocationCallback !=null && mFusedLocation != null){
             mFusedLocation.removeLocationUpdates(mLocationCallback);
         }
     }
 
-    private void getPets() {
-        int idClient = mAppConfig.obtenerIdCliente();
+    private void obtenerMascotas() {
+        int idCliente = mAppSharedPreferences.obtenerIdCliente();
 
-        MascotaController.obtener(idClient, 1).enqueue(new Callback<RHRespuesta>() {
+        MascotaController.obtener(idCliente, 1).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if (response.isSuccessful()) {
                     mascotaArrayList = response.body().getMascotas();
                     showList(mascotaArrayList);
-
+                }
+                else{
+                    Toast.makeText(MapaSeleccionHogarMascotaActivity.this, "No se pudo cargar sus mascotas", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-
+                Toast.makeText(MapaSeleccionHogarMascotaActivity.this, "No se pudo cargar sus mascotas", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void showList(ArrayList<Mascota> mascotas) {
-        mArrayAdapterPets = new ArrayAdapter(MapaSeleccionHogarMascotaActivity.this, R.layout.list_item, mascotaArrayList);
-        mSpinner.setAdapter(mArrayAdapterPets);
+        mArrayAdapterMascotas = new ArrayAdapter(MapaSeleccionHogarMascotaActivity.this, R.layout.lista_mis_mascotas, mascotaArrayList);
+        mSpinner.setAdapter(mArrayAdapterMascotas);
     }
 
-    private void onCameraMove() {
+    private void movimientoCamara() {
             mCameraListener = new GoogleMap.OnCameraIdleListener() {
                 @Override
                 public void onCameraIdle() {
                     try {
                         //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
                         Geocoder geocoder = new Geocoder(MapaSeleccionHogarMascotaActivity.this);
-                        mPetHomeLatLng = mMap.getCameraPosition().target;
-                        List<Address> addressList = geocoder.getFromLocation(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude, 1);
+                        mHogarMascotaLatLng = mMapa.getCameraPosition().target;
+                        List<Address> addressList = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
                         String city = addressList.get(0).getLocality();
                         String address = addressList.get(0).getAddressLine(0);
 
-                        mAutoComplete.setText(address + " " + city);
+                        mAutoCompletar.setText(address + " " + city);
 
                     } catch (Exception e) {
                         Log.d("Error: ", "Mensaje error: " + e.getMessage());
@@ -262,11 +263,11 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             };
     }
 
-    private void instanceAutoCompletePetHome() {
-        mAutoComplete = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.placeAutocompletePetHome);
-        mAutoComplete.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
-        mAutoComplete.setHint("Hogar de su mascota");
-        mAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    private void instanciarAutoCompletarHogarMascota() {
+        mAutoCompletar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.lugarAutocompletarHogarMascota);
+        mAutoCompletar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
+        mAutoCompletar.setHint("Hogar de su mascota");
+        mAutoCompletar.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onError(@NonNull Status status) {
 
@@ -275,9 +276,9 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             @Override
             public void onPlaceSelected(@NonNull Place place) {
 
-                mPetHomeLatLng = place.getLatLng();
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                        .target(new LatLng(mPetHomeLatLng.latitude, mPetHomeLatLng.longitude))
+                mHogarMascotaLatLng = place.getLatLng();
+                mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                        .target(new LatLng(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude))
                         .zoom(15f)
                         .build()
                 ));
@@ -287,9 +288,9 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setOnCameraIdleListener(mCameraListener);
+        mMapa = googleMap;
+        mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMapa.setOnCameraIdleListener(mCameraListener);
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(1000);
@@ -297,7 +298,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        startLocation();
+        iniciarLocalizacion();
     }
 
 
@@ -308,58 +309,58 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (gpsActived()) {
+                    if (gpsActivado()) {
                         mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
                     }
                     else {
-                        showAlertDialogNOGPS();
+                        mostrarCuadroDialogoActivarGPS();
                     }
                 }
                 else{
                     //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                    checkLocationPermissions();
+                    verificarPermisoUbicacion();
                 }
             }
             else{
                 //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                checkLocationPermissions();
+                verificarPermisoUbicacion();
             }
         }
     }
 
-    private void startLocation() {
+    private void iniciarLocalizacion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 //AL EJECTUTARSE EL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
-                if (gpsActived()) {
+                if (gpsActivado()) {
                     mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                 } else {
-                    showAlertDialogNOGPS();
+                    mostrarCuadroDialogoActivarGPS();
                 }
             } else {
-                checkLocationPermissions();
+                verificarPermisoUbicacion();
             }
         } else {
-            if (gpsActived()) {
+            if (gpsActivado()) {
                 mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             } else {
-                showAlertDialogNOGPS();
+                mostrarCuadroDialogoActivarGPS();
             }
         }
     }
 
-    private boolean gpsActived() {
-        boolean isActive = false;
+    private boolean gpsActivado() {
+        boolean activo = false;
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //SI EL GPS ESTA ACTIVADO
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            isActive = true;
+            activo = true;
         }
-        return isActive;
+        return activo;
     }
 
-    private void showAlertDialogNOGPS() {
+    private void mostrarCuadroDialogoActivarGPS() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setMessage("Por favor activa tu ubicacion para continuar");
@@ -383,18 +384,18 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTINGS_REQUEST_CODE && gpsActived()) {
+        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
-        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActived()){
-            showAlertDialogNOGPS();
+        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActivado()){
+            mostrarCuadroDialogoActivarGPS();
         }
     }
 
-    private void checkLocationPermissions() {
+    private void verificarPermisoUbicacion() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 

@@ -116,7 +116,7 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_pet_reported_missing);
+        setContentView(R.layout.activity_mapa_notificacion_mascota_desaparecida);
 
         initializeComponents();
 

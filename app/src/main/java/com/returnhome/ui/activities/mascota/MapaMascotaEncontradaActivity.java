@@ -32,9 +32,9 @@ import retrofit2.Response;
 
 public class MapaMascotaEncontradaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private double mExtraPetLat;
-    private double mExtraPetLng;
-    private String mExtraPetName;
+    private double mExtraMascotaEncontradaLat;
+    private double mExtraMascotaEncontradLng;
+    private String mExtraNombreMascotaEncontrada;
     private int mExtraIdClient;
 
     private GoogleMap mMap;
@@ -56,18 +56,18 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_pet_found);
+        setContentView(R.layout.activity_mapa_mascota_encontrada);
 
         initializeComponents();
 
         mMapFragment.getMapAsync(this);
 
         mExtraIdClient = getIntent().getIntExtra("idClient", 0);
-        mExtraPetName = getIntent().getStringExtra("pet_name");
-        mExtraPetLat = getIntent().getDoubleExtra("pet_lat", 0);
-        mExtraPetLng = getIntent().getDoubleExtra("pet_lng", 0);
+        mExtraNombreMascotaEncontrada = getIntent().getStringExtra("pet_name");
+        mExtraMascotaEncontradaLat = getIntent().getDoubleExtra("pet_lat", 0);
+        mExtraMascotaEncontradLng = getIntent().getDoubleExtra("pet_lng", 0);
 
-        mPetFoundLatLng = new LatLng(mExtraPetLat, mExtraPetLng);
+        mPetFoundLatLng = new LatLng(mExtraMascotaEncontradaLat, mExtraMascotaEncontradLng);
 
         getClient(mExtraIdClient);
 
@@ -89,12 +89,12 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
     }
 
     private void initializeComponents(){
-        mTextViewClientName = findViewById(R.id.textViewClientName);
-        mTextViewEmail = findViewById(R.id.textViewClientEmail);
-        mTextViewPhoneNumber = findViewById(R.id.textViewClientPhoneNumber);
-        mImageViewCallUser = findViewById(R.id.imageViewCallUser);
-        mCircleImageGoToHome = findViewById(R.id.btnGoToHomeFromPetFound);
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mTextViewClientName = findViewById(R.id.textViewNombreClienteEncontroMascota);
+        mTextViewEmail = findViewById(R.id.textViewEmailClienteEncontroMascota);
+        mTextViewPhoneNumber = findViewById(R.id.textViewNumeroCelularClienteEncontroMascota);
+        mImageViewCallUser = findViewById(R.id.btnContactarClienteEncontroMascota);
+        mCircleImageGoToHome = findViewById(R.id.btnIrAHomeDesdeMapaMascotaEncontrada);
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
 
     }
 
@@ -110,7 +110,7 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
                 .setSmallestDisplacement(5);
 
         mMap.addMarker(new MarkerOptions().position(mPetFoundLatLng)
-                .title(mExtraPetName+" se encuentra aquí")
+                .title(mExtraNombreMascotaEncontrada +" se encuentra aquí")
                 .icon(BitmapDescriptorFactory
                 .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
 

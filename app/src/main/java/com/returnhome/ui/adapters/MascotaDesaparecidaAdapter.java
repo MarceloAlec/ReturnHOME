@@ -31,7 +31,7 @@ public class MascotaDesaparecidaAdapter extends RecyclerView.Adapter<MascotaDesa
     @NonNull
     @Override
     public MascotaDesaparecidaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.cardview_missing_pets, parent, false);
+        View view = inflater.inflate(R.layout.cardview_mascota_desaparecida, parent, false);
         MascotaDesaparecidaViewHolder petsViewHolder = new MascotaDesaparecidaViewHolder(view);
         return petsViewHolder;
     }

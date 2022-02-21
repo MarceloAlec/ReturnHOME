@@ -64,7 +64,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
         //EL ATTACHTOROOT SERA FALSE PARA NO CARGAR  LOS ITEMS EN EL RECYCLER MUY RAPIDO
         //CON EL INFLATER SE PROCEDE A DIBUJAR LA VISTA
         //COMO PARAMETRO TAMBIEN SE INDICA EL DISEÑO QUE TENDRA CADA ITEM DE LA LISTA
-        View view = inflater.inflate(R.layout.cardview_my_pets, parent, false);
+        View view = inflater.inflate(R.layout.cardview_mis_mascotas, parent, false);
         //SE ENVIA LA VISTA AL CONSTRUCTOR DE LA CLASE PETSVIEWHOLDER
         MiMascotaViewHolder petsViewHolder = new MiMascotaViewHolder(view);
         return petsViewHolder;
@@ -106,7 +106,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
                     case R.id.cardview_edit:
 
                         mBottomSheetDialog = new BottomSheetDialog(context);
-                        mBottomSheetDialog.setContentView(R.layout.popup_update);
+                        mBottomSheetDialog.setContentView(R.layout.popup_agregar_actualizar);
                         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
                         initializeComponents();

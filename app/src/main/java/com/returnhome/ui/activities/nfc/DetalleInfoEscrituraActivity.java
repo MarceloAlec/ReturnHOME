@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.models.Mascota;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -28,70 +28,70 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DetalleInfoEscrituraActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
 
-    private TextView mTextViewNamePet;
-    private TextView mTextViewBreed;
-    private TextView mTextViewGender;
-    private TextView mTextViewPhoneNumber;
+    private TextView mTextViewNombreMascota;
+    private TextView mTextViewRaza;
+    private TextView mTextViewGenero;
+    private TextView mTextViewNumeroCelular;
 
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
+    private GoogleMap mMapa;
+    private SupportMapFragment mMapaFragment;
 
     private LocationRequest mLocationRequest;
 
-    private double mExtraPetHomeLat;
-    private double mExtraPetHomeLng;
+    private double mExtraHogarMascotaLat;
+    private double mExtraHogarMascotaLng;
 
     private Mascota mMascota;
 
-    private LatLng mPetHomeLatLng;
+    private LatLng mHogarMascotaLatLng;
 
-    private Button mButtonWriteTagNow;
-    private CircleImageView mGoToMapPetHome;
+    private Button mButtonEscribirEtiqueta;
+    private CircleImageView mIrASeleccionarHogarMascota;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_writing);
+        setContentView(R.layout.activity_detalle_info_escritura);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mMapFragment.getMapAsync(this);
-        mAppConfig = new AppConfig(this);
+        mMapaFragment.getMapAsync(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
-        mExtraPetHomeLat = getIntent().getDoubleExtra("petHome_lat", 0);
-        mExtraPetHomeLng = getIntent().getDoubleExtra("petHome_lng", 0);
+        mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
+        mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
         mMascota = (Mascota)getIntent().getSerializableExtra("pet");
 
-        mTextViewNamePet.setText(mMascota.getNombre());
-        mTextViewBreed.setText(mMascota.getRaza());
-        mTextViewGender.setText(String.valueOf(mMascota.getGenero()));
-        mTextViewPhoneNumber.setText(mAppConfig.obtenerNumeroCelular());
+        mTextViewNombreMascota.setText(mMascota.getNombre());
+        mTextViewRaza.setText(mMascota.getRaza());
+        mTextViewGenero.setText(String.valueOf(mMascota.getGenero()));
+        mTextViewNumeroCelular.setText(mAppSharedPreferences.obtenerNumeroCelular());
 
-        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
+        mHogarMascotaLatLng = new LatLng(mExtraHogarMascotaLat, mExtraHogarMascotaLng);
 
-        mGoToMapPetHome.setOnClickListener(this);
+        mIrASeleccionarHogarMascota.setOnClickListener(this);
 
-        mButtonWriteTagNow.setOnClickListener(this);
+        mButtonEscribirEtiqueta.setOnClickListener(this);
     }
 
 
 
-    private void initializeComponents() {
-        mTextViewNamePet = findViewById(R.id.textViewNamePet);
-        mTextViewBreed = findViewById(R.id.textViewBreed);
-        mTextViewGender = findViewById(R.id.textViewGender);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumber);
-        mButtonWriteTagNow = findViewById(R.id.btnWriteTagNow);
-        mGoToMapPetHome = findViewById(R.id.btnGoToMapPetHome);
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    private void inicializarComponentes() {
+        mTextViewNombreMascota = findViewById(R.id.textViewNombreMascotaEscritura);
+        mTextViewRaza = findViewById(R.id.textViewRazaMascotaEscritura);
+        mTextViewGenero = findViewById(R.id.textViewGeneroMascotaEscritura);
+        mTextViewNumeroCelular = findViewById(R.id.textViewNumeroCelularEscritura);
+        mButtonEscribirEtiqueta = findViewById(R.id.btnEscribirEtiquetaAhora);
+        mIrASeleccionarHogarMascota = findViewById(R.id.btnIrASeleccionHogarMascota);
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMapa = googleMap;
+        mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mLocationRequest = LocationRequest.create()
                 .setInterval(1000)
@@ -99,11 +99,11 @@ public class DetalleInfoEscrituraActivity extends AppCompatActivity implements O
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de "+ mMascota.getNombre()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
+        mMapa.addMarker(new MarkerOptions().position(mHogarMascotaLatLng).title("Hogar de "+ mMascota.getNombre()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+        mMapa.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
-                        .target(mPetHomeLatLng)
+                        .target(mHogarMascotaLatLng)
                         .zoom(15f)
                         .build()
         ));
@@ -112,15 +112,15 @@ public class DetalleInfoEscrituraActivity extends AppCompatActivity implements O
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btnWriteTagNow:
+            case R.id.btnEscribirEtiquetaAhora:
                 Intent intent = new Intent(DetalleInfoEscrituraActivity.this, EscrituraEtiquetaActivity.class);
-                intent.putExtra("idPet", mMascota.getIdMascota());
-                intent.putExtra("pet_home_lat",mExtraPetHomeLat);
-                intent.putExtra("pet_home_lng",mExtraPetHomeLng);
+                intent.putExtra("idMascota", mMascota.getIdMascota());
+                intent.putExtra("hogarMascotaLat", mExtraHogarMascotaLat);
+                intent.putExtra("hogarMascotaLng", mExtraHogarMascotaLng);
                 startActivity(intent);
                 break;
 
-            case R.id.btnGoToMapPetHome:
+            case R.id.btnIrASeleccionHogarMascota:
                 finish();
                 break;
         }

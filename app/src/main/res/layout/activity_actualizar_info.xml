@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.client.UpdateProfileActivity">
+    tools:context=".ui.activities.cliente.ActualizarInfoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                     android:layout_marginLeft="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textInputNameUpdateProfile"
+                        android:id="@+id/textInputNombreClienteActualizar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Nombre completo"
@@ -100,7 +100,7 @@
                     android:layout_marginStart="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textInputEmailUpdateProfile"
+                        android:id="@+id/textInputEmailClienteActualizar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Correo electrónico"
@@ -121,7 +121,7 @@
                 android:orientation="horizontal">
 
                 <com.hbb20.CountryCodePicker
-                    android:id="@+id/countryCodePickerUpdateProfile"
+                    android:id="@+id/countryCodePickerActualizarPerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/textInputNumberUpdateProfile"
+                        android:id="@+id/textInputNumeroCelularActualizar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Número de celular"
@@ -152,7 +152,7 @@
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/btnGoToSelectOptionProfile"
+        android:id="@+id/btnIrASeleccionOpcionAjustes"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_flecha_atras"
@@ -169,7 +169,7 @@
         >
 
         <Button
-            android:id="@+id/btnUpdateProfile"
+            android:id="@+id/btnActualizarCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -183,14 +183,12 @@
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewPet"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/ic_cliente"
         android:layout_marginTop="90dp"
         app:civ_border_width="3dp"
         app:civ_border_color="@android:color/black"
-
         android:layout_marginLeft="7dp"/>
 
 

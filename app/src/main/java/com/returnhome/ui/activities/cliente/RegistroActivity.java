@@ -58,7 +58,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
         mButtonRegistrar = findViewById(R.id.btnRegistrar);
-        mTextInputNombre = findViewById(R.id.textInputNombrerRegistro);
+        mTextInputNombre = findViewById(R.id.textInputNombreRegistro);
         mTextInputEmail = findViewById(R.id.textInputEmailRegistro);
         mTextInputPassword = findViewById(R.id.textInputPasswordRegistro);
         mCountryCodePicker = findViewById(R.id.countryCodePicker);

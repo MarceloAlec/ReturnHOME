@@ -26,7 +26,7 @@ import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 
 import com.returnhome.ui.activities.cliente.HomeActivity;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 
 import java.util.Map;
 
@@ -35,15 +35,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EscrituraEtiquetaActivity extends AppCompatActivity {
 
-    private LottieAnimationView mAnimationNfc;
-    private CircleImageView mGoToDetailWriting;
-    private TextView mTextViewEnableDeviceInfo;
+    private LottieAnimationView mAnimacionNfc;
+    private CircleImageView mIrADetalleEscritura;
+    private TextView mTextViewTelefonoHabilitadoNFCInfo;
 
     private NfcAdapter mNfcAdapter;
-    private String[][] mTechLists;
+    private String[][] mListaTech;
     IntentFilter[] mFilters;
     PendingIntent mPendingIntent;
-    AppConfig mAppConfig;
+    AppSharedPreferences mAppSharedPreferences;
 
 
     private double mExtraPetHomeLat;
@@ -57,32 +57,32 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_tag);
+        setContentView(R.layout.activity_escritura_etiqueta);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
-        mExtraIdPet = getIntent().getIntExtra("idPet",0);
-        mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
-        mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
+        mExtraIdPet = getIntent().getIntExtra("idMascota",0);
+        mExtraPetHomeLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
+        mExtraPetHomeLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
-            mTextViewEnableDeviceInfo.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
+            mTextViewTelefonoHabilitadoNFCInfo.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
             if(!mNfcAdapter.isEnabled()){
-                showAlertDialogNONFC();
+                mostrarDialogoActivarNFC();
             }
             else{
-                mAnimationNfc.playAnimation();
+                mAnimacionNfc.playAnimation();
             }
         }
         else{
 
-            mTextViewEnableDeviceInfo.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
+            mTextViewTelefonoHabilitadoNFCInfo.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
         }
 
         //IMPLEMENTACION DEL SISTEMA DE ENVIO EN PRIMER PLANO
@@ -92,12 +92,12 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
 
         //SE AÑADE LOS FILTROS DE INTENTS QUE MANEJARAN LA ETIQUETA, SI ESTE FILTRO COINCIDE CON LA ETIQUETA ENTONCES LA APLICACION MANEJARÁ LA INTENCION
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        mFilters = new IntentFilter[]{ndef,};
+        mFilters = new IntentFilter[]{ndef};
         //SE AÑADE LAS TECNOLOGIAS DE ETIQUETAS QUE LA APLICACION PUEDE MANEJAR
-        mTechLists = new String[][] { new String[] { Ndef.class.getName() },
+        mListaTech = new String[][] { new String[] { Ndef.class.getName() },
                 new String[] { NdefFormatable.class.getName() }};
 
-        mGoToDetailWriting.setOnClickListener(new View.OnClickListener() {
+        mIrADetalleEscritura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -105,21 +105,21 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeComponents(){
-        mAnimationNfc = findViewById(R.id.animationNfc);
-        mTextViewEnableDeviceInfo = findViewById(R.id.textViewEnableDeviceInfo);
-        mGoToDetailWriting = findViewById(R.id.btnGoToDetailWriting);
+    private void inicializarComponentes(){
+        mAnimacionNfc = findViewById(R.id.animacionNfc);
+        mTextViewTelefonoHabilitadoNFCInfo = findViewById(R.id.textViewTelefonoHabilitadoEscrituraNFC);
+        mIrADetalleEscritura = findViewById(R.id.btnIrADetalleEscritura);
 
     }
 
-    private void showAlertDialogNONFC() {
+    private void mostrarDialogoActivarNFC() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setMessage("Por favor activa NFC para continuar");
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "Configuraciones", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //ESPERA Y ESCUCHA HASTA QUE EL USUARIO ACTIVE EL GPS
+                //ESPERA Y ESCUCHA HASTA QUE EL USUARIO ACTIVE NFC
                 startActivityForResult(new Intent(Settings.ACTION_NFC_SETTINGS), NFC_REQUEST_CODE);
             }
         });
@@ -137,15 +137,13 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mNfcAdapter.isEnabled()) {
-            mAnimationNfc.playAnimation();
+            mAnimacionNfc.playAnimation();
         }
         else{
-            showAlertDialogNONFC();
+            mostrarDialogoActivarNFC();
         }
 
     }
-
-
 
     @Override
     protected void onPause() {
@@ -160,7 +158,7 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         super.onResume();
 
         if (mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
+            mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mListaTech);
         }
     }
 
@@ -173,25 +171,24 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
             //CON NfcAdapter.EXTRA_TAG es usado para obtener la informacion de la etiqueta
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-            NdefMessage newMessage = ClienteController.crearMensajeNdef(mExtraIdPet, mAppConfig.obtenerNumeroCelular(), mPetHomeLatLng);
-            showWritingInfo(ClienteController.escribirMensajeNdef(newMessage, tag));
+            NdefMessage newMessage = ClienteController.crearMensajeNdef(mExtraIdPet, mAppSharedPreferences.obtenerNumeroCelular(), mPetHomeLatLng);
+            mostrarResultadoEscritura(ClienteController.escribirMensajeNdef(newMessage, tag));
         }
-        catch(Exception e){
-            Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show();
+        catch(Exception e) {
+            Toast.makeText(this, "Ocurrio un error", Toast.LENGTH_LONG).show();
         }
-
 
     }
 
-    private void showWritingInfo(Map<String, String> message){
+    private void mostrarResultadoEscritura(Map<String, String> resultado){
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setTitle("ReturnHOME");
-        builder.setMessage(message.get("message"));
+        builder.setMessage(resultado.get("mensaje"));
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(message.get("isSuccess").contains("OK")){
+                if(resultado.get("estado").contains("OK")){
                     Intent intent = new Intent(EscrituraEtiquetaActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -200,8 +197,4 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         });
         builder.show();
     }
-
-
-
-
 }

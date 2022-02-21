@@ -12,7 +12,7 @@ import com.hbb20.CountryCodePicker;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.models.Cliente;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 import com.returnhome.models.RHRespuesta;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -22,42 +22,42 @@ import retrofit2.Response;
 
 public class ActualizarInfoActivity extends AppCompatActivity {
 
-    private Button mButtonUpdateProfile;
+    private Button mButtonActualizar;
     private TextInputEditText mTextInputEmail;
-    private TextInputEditText mTextInputName;
+    private TextInputEditText mTextInputNombre;
 
     private CountryCodePicker mCountryCodePicker;
-    private TextInputEditText mTextInputPhoneNumber;
+    private TextInputEditText mTextInputNumeroCelular;
 
-    private String name;
+    private String nombre;
     private String email;
-    private String code_phoneNumber;
+    private String numeroCelular;
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
     private Cliente mCliente;
 
-    private CircleImageView mCircleImageGoToSelectionOptionProfile;
+    private CircleImageView mCircleImageIrASeleccioOpcionAjustes;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_profile);
+        setContentView(R.layout.activity_actualizar_info);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mAppConfig = new AppConfig(ActualizarInfoActivity.this);
+        mAppSharedPreferences = new AppSharedPreferences(ActualizarInfoActivity.this);
 
-        getClient();
+        obtenerCliente();
 
-        mButtonUpdateProfile.setOnClickListener(new View.OnClickListener() {
+        mButtonActualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickUpdate();
+                actualizar();
             }
         });
 
-        mCircleImageGoToSelectionOptionProfile.setOnClickListener(new View.OnClickListener() {
+        mCircleImageIrASeleccioOpcionAjustes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -65,78 +65,72 @@ public class ActualizarInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void getClient() {
-        ClienteController.obtener(mAppConfig.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
+    private void obtenerCliente() {
+
+        ClienteController.obtener(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+
                 if(response.isSuccessful()){
                     mCliente = response.body().getCliente();
-                    showClientInformation();
+                    mTextInputNombre.setText(mCliente.getNombre());
+                    mTextInputEmail.setText(mCliente.getEmail());
+                    String[] codigonumeroCelular = mCliente.getNumeroCelular().split(" ");
+                    mTextInputNumeroCelular.setText(codigonumeroCelular[1]);
+                    mCountryCodePicker.setCountryForPhoneCode(Integer.valueOf(codigonumeroCelular[0]));
+                }
+                else{
+                    mButtonActualizar.setEnabled(false);
+                    Toast.makeText(ActualizarInfoActivity.this, "No se pudo cargar su información", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-
+                Toast.makeText(ActualizarInfoActivity.this, "No se pudo cargar su información", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void showClientInformation() {
-        if(mCliente != null){
-            mTextInputName.setText(mCliente.getNombre());
-            mTextInputEmail.setText(mCliente.getEmail());
-
-            String[] code_phoneNumber = mCliente.getNumeroCelular().split(" ");
-
-            mTextInputPhoneNumber.setText(code_phoneNumber[1]);
-            //mCountryCodePicker.setCountryForPhoneCode(code_phoneNumber[0]);
-
-
-        }
-        else{
-            mButtonUpdateProfile.setEnabled(false);
-            Toast.makeText(this, "No se pudo cargar su información", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void clickUpdate() {
-        name = mTextInputName.getText().toString();
+    private void actualizar() {
+        nombre = mTextInputNombre.getText().toString();
         email = mTextInputEmail.getText().toString();
-        code_phoneNumber = mCountryCodePicker.getSelectedCountryCodeWithPlus()+" "+mTextInputPhoneNumber.getText().toString();
+        numeroCelular = mCountryCodePicker.getSelectedCountryCodeWithPlus()+" "+ mTextInputNumeroCelular.getText().toString();
 
-        if(!name.isEmpty() && !email.isEmpty() && !code_phoneNumber.isEmpty()){
-            updateClient(new Cliente(mAppConfig.obtenerIdCliente(),name, email, code_phoneNumber));
+        if(!nombre.isEmpty() && !email.isEmpty() && !numeroCelular.isEmpty()){
+
+            ClienteController.actualizarInfo(new Cliente(mAppSharedPreferences.obtenerIdCliente(), nombre, email, numeroCelular)).enqueue(new Callback<RHRespuesta>() {
+                @Override
+                public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+
+                    if(response.isSuccessful()){
+                        Toast.makeText(ActualizarInfoActivity.this, "Información actualizada con exito", Toast.LENGTH_SHORT).show();
+                        mAppSharedPreferences.guardarNombreCliente(nombre);
+                        mAppSharedPreferences.guardarNumeroCelular(numeroCelular);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(ActualizarInfoActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RHRespuesta> call, Throwable t) {
+                    Toast.makeText(ActualizarInfoActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else{
             Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void updateClient(Cliente cliente) {
-        ClienteController.actualizarInfo(cliente).enqueue(new Callback<RHRespuesta>() {
-            @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
-
-                Toast.makeText(ActualizarInfoActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
-                mAppConfig.guardarNombreCliente(name);
-                mAppConfig.guardarNumeroCelular(code_phoneNumber);
-                finish();
-            }
-
-            @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
-                Toast.makeText(ActualizarInfoActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void initializeComponents() {
-        mButtonUpdateProfile = findViewById(R.id.btnUpdateProfile);
-        mTextInputName = findViewById(R.id.textInputNameUpdateProfile);
-        mTextInputEmail = findViewById(R.id.textInputEmailUpdateProfile);
-        mCountryCodePicker = findViewById(R.id.countryCodePickerUpdateProfile);
-        mTextInputPhoneNumber = findViewById(R.id.textInputNumberUpdateProfile);
-        mCircleImageGoToSelectionOptionProfile = findViewById(R.id.btnGoToSelectOptionProfile);
+    private void inicializarComponentes() {
+        mButtonActualizar = findViewById(R.id.btnActualizarCliente);
+        mTextInputNombre = findViewById(R.id.textInputNombreClienteActualizar);
+        mTextInputEmail = findViewById(R.id.textInputEmailClienteActualizar);
+        mCountryCodePicker = findViewById(R.id.countryCodePickerActualizarPerfil);
+        mTextInputNumeroCelular = findViewById(R.id.textInputNumeroCelularActualizar);
+        mCircleImageIrASeleccioOpcionAjustes = findViewById(R.id.btnIrASeleccionOpcionAjustes);
     }
 }

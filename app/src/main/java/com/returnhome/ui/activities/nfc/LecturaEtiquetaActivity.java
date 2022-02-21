@@ -27,54 +27,54 @@ import com.google.gson.JsonParser;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.ui.activities.mascota.MapaNotificacionMascotaEncontradaActivity;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LecturaEtiquetaActivity extends AppCompatActivity {
 
-    private LottieAnimationView mAnimationNfc;
-    private CircleImageView mGoToHome;
-    private TextView mTextViewEnableDeviceReader;
+    private LottieAnimationView mAnimacionNfc;
+    private CircleImageView mIrAHome;
+    private TextView mTextViewTelefonoHabilitadoNFC;
 
     private NfcAdapter mNfcAdapter;
-    private String[][] mTechLists;
+    private String[][] mListaTech;
     IntentFilter[] mFilters;
     PendingIntent mPendingIntent;
-    AppConfig mAppConfig;
+    AppSharedPreferences mAppSharedPreferences;
 
-    private String phoneNumber;
-    private LatLng petHomeLatLng;
-    int idPet;
+    private String numeroContacto;
+    private LatLng hogarMascotaLatLng;
+    int idMascota;
 
     private final static int NFC_REQUEST_CODE = 1;
 
-    private boolean mExtraFoundPet;
+    private boolean mExtraMascotaEncontrada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_read_tag);
+        setContentView(R.layout.activity_lectura_etiqueta);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
-        mExtraFoundPet = getIntent().getBooleanExtra("foundPet", false);
+        mExtraMascotaEncontrada = getIntent().getBooleanExtra("mascotaEncontrada", false);
 
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
-            mTextViewEnableDeviceReader.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA LEERLA");
+            mTextViewTelefonoHabilitadoNFC.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA LEERLA");
             if(!mNfcAdapter.isEnabled()){
-                showAlertDialogNONFC();
+                mostrarCuadroDialogoActivarNFC();
             }
             else{
-                mAnimationNfc.playAnimation();
+                mAnimacionNfc.playAnimation();
             }
         }
         else{
-            mTextViewEnableDeviceReader.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
+            mTextViewTelefonoHabilitadoNFC.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
         }
 
         //IMPLEMENTACION DEL SISTEMA DE ENVIO EN PRIMER PLANO
@@ -84,12 +84,12 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
 
         //SE AÑADE LOS FILTROS DE INTENTS QUE MANEJARAN LA ETIQUETA, SI ESTE FILTRO COINCIDE CON LA ETIQUETA ENTONCES LA APLICACION MANEJARÁ LA INTENCION
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        mFilters = new IntentFilter[]{ndef,};
+        mFilters = new IntentFilter[]{ndef};
         //SE AÑADE LAS TECNOLOGIAS DE ETIQUETAS QUE LA APLICACION PUEDE MANEJAR
-        mTechLists = new String[][] { new String[] { Ndef.class.getName() },
+        mListaTech = new String[][] { new String[] { Ndef.class.getName() },
                 new String[] { NdefFormatable.class.getName() }};
 
-        mGoToHome.setOnClickListener(new View.OnClickListener() {
+        mIrAHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -97,13 +97,13 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeComponents() {
-        mAnimationNfc = findViewById(R.id.animationNfc);
-        mGoToHome = findViewById(R.id.btnGoToHomeFromReadTag);
-        mTextViewEnableDeviceReader = findViewById(R.id.textViewEnableDeviceReader);
+    private void inicializarComponentes() {
+        mAnimacionNfc = findViewById(R.id.animacionNfc);
+        mIrAHome = findViewById(R.id.btnIrAHomeDesdeLecturaEtiqueta);
+        mTextViewTelefonoHabilitadoNFC = findViewById(R.id.textViewGeneroMascotaLectura);
     }
 
-    private void showAlertDialogNONFC() {
+    private void mostrarCuadroDialogoActivarNFC() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setMessage("Por favor activa NFC para continuar");
@@ -128,10 +128,10 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mNfcAdapter.isEnabled()) {
-            mAnimationNfc.playAnimation();
+            mAnimacionNfc.playAnimation();
         }
         else{
-            showAlertDialogNONFC();
+            mostrarCuadroDialogoActivarNFC();
         }
 
     }
@@ -149,7 +149,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         super.onResume();
 
         if (mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mTechLists);
+            mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mListaTech);
         }
     }
 
@@ -158,30 +158,28 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())
-            || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())
-            || NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 
             //OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
             try{
-                Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-                NdefMessage message = ClienteController.leerMensajeNdef(rawMessages);
+                Parcelable[] rawMensajes= intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+                NdefMessage message = ClienteController.leerMensajeNdef(rawMensajes);
                 NdefRecord record = message.getRecords()[0];
-                String type = new String(record.getType());
+                String tipo = new String(record.getType());
 
-                if(type.equals("application/json")){
+                if(tipo.equals("application/json")){
                     String s = new String(record.getPayload());
                     JsonParser parser = new JsonParser();
-                    JsonObject petInfo = (JsonObject) parser.parse(s);
+                    JsonObject mascotaInfoJSON = (JsonObject) parser.parse(s);
 
-                    idPet = Integer.valueOf(petInfo.get("id").toString().replace('"',' ').trim());
-                    phoneNumber = petInfo.get("tel").toString().replace('"',' ').trim();
-                    String[] coordinates = petInfo.get("geo").toString().split(",");
-                    double latitude = Double.parseDouble(coordinates[0].replace('"',' ').trim());
-                    double longitude = Double.parseDouble(coordinates[1].replace('"',' ').trim());
-                    petHomeLatLng = new LatLng(latitude,longitude);
+                    idMascota = Integer.valueOf(mascotaInfoJSON.get("id").toString().replace('"',' ').trim());
+                    numeroContacto = mascotaInfoJSON.get("tel").toString().replace('"',' ').trim();
+                    String[] coordenadas = mascotaInfoJSON.get("geo").toString().split(",");
+                    double latitud = Double.parseDouble(coordenadas[0].replace('"',' ').trim());
+                    double longitud = Double.parseDouble(coordenadas[1].replace('"',' ').trim());
+                    hogarMascotaLatLng = new LatLng(latitud,longitud);
 
-                    goToDetailReadingOrMapPetActivity();
+                    irADetalleLecturaONotificacionMascotaEncontradaActivity();
                 }
                 else{
                     Toast.makeText(this, "Los datos en la etiqueta no se encuentra en formato Json", Toast.LENGTH_LONG).show();
@@ -193,22 +191,22 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         }
     }
 
-    private void goToDetailReadingOrMapPetActivity(){
-        if(mExtraFoundPet){
+    private void irADetalleLecturaONotificacionMascotaEncontradaActivity(){
+        if(mExtraMascotaEncontrada){
             Intent intent = new Intent(LecturaEtiquetaActivity.this, MapaNotificacionMascotaEncontradaActivity.class);
-            intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
-            intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
-            intent.putExtra("phone_number",phoneNumber);
-            intent.putExtra("idPet",idPet);
+            intent.putExtra("hogarMascotaLat", hogarMascotaLatLng.latitude);
+            intent.putExtra("hogarMascotaLng", hogarMascotaLatLng.longitude);
+            intent.putExtra("numeroContacto", numeroContacto);
+            intent.putExtra("idMascota", idMascota);
             startActivity(intent);
             finish();
         }
         else{
             Intent intent = new Intent(LecturaEtiquetaActivity.this, DetalleInfoLecturaActivity.class);
-            intent.putExtra("pet_home_lat",petHomeLatLng.latitude);
-            intent.putExtra("pet_home_lng",petHomeLatLng.longitude);
-            intent.putExtra("phone_number",phoneNumber);
-            intent.putExtra("idPet",idPet);
+            intent.putExtra("hogarMascotaLat", hogarMascotaLatLng.latitude);
+            intent.putExtra("hogarMascotaLng", hogarMascotaLatLng.longitude);
+            intent.putExtra("numeroContacto", numeroContacto);
+            intent.putExtra("idMascota", idMascota);
             startActivity(intent);
         }
     }

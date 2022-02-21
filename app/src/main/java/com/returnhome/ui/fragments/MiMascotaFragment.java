@@ -20,7 +20,7 @@ import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
 import com.returnhome.ui.adapters.MiMascotaAdapter;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 import com.returnhome.models.RHRespuesta;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
 
     private MiMascotaAdapter mMiMascotaAdapter;
     private RecyclerView mRecyclerViewPets;
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
     private FloatingActionButton mFloatingButtonAdd;
     private BottomSheetDialog mBottomSheetDialog;
     private Button mButtonUpdateAddPet;
@@ -52,14 +52,14 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_pets, container, false);
+        View view = inflater.inflate(R.layout.fragment_mi_mascota, container, false);
 
         mascotaArrayList = new ArrayList<>();
-        mRecyclerViewPets = view.findViewById(R.id.recyclerViewMyPets);
-        mAppConfig = new AppConfig(getContext());
-        mFloatingButtonAdd = view.findViewById(R.id.fab_addPet);
+        mRecyclerViewPets = view.findViewById(R.id.recyclerViewMisMascotas);
+        mAppSharedPreferences = new AppSharedPreferences(getContext());
+        mFloatingButtonAdd = view.findViewById(R.id.fab_agregarMascota);
 
-        initializeComponents();
+        inicializarComponentes();
 
         mFloatingButtonAdd.setOnClickListener(this);
 
@@ -73,7 +73,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.fab_addPet:
+            case R.id.fab_agregarMascota:
 
                 mButtonUpdateAddPet.setText("Actualizar");
                 mBottomSheetDialog.show();
@@ -85,9 +85,9 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private void initializeComponents(){
+    private void inicializarComponentes(){
         mBottomSheetDialog = new BottomSheetDialog(getContext());
-        mBottomSheetDialog.setContentView(R.layout.popup_update);
+        mBottomSheetDialog.setContentView(R.layout.popup_agregar_actualizar);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
         mButtonUpdateAddPet = mBottomSheetDialog.findViewById(R.id.btnUpdateAddPet);
@@ -107,7 +107,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
 
         if(!name.isEmpty() && !breed.isEmpty()){
             //DATOS INGRESADOS CORRECTAMENTE
-            createPet(new Mascota(name,breed,gender,description, false, mAppConfig.obtenerIdCliente()));
+            createPet(new Mascota(name,breed,gender,description, false, mAppSharedPreferences.obtenerIdCliente()));
         }
         else{
             Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
@@ -145,7 +145,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
     }
 
     private void getPets() {
-        int idClient = mAppConfig.obtenerIdCliente();
+        int idClient = mAppSharedPreferences.obtenerIdCliente();
 
         MascotaController.obtener(idClient, 1).enqueue(new Callback<RHRespuesta>() {
             @Override

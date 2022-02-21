@@ -17,7 +17,7 @@ import com.returnhome.controllers.TokenController;
 import com.returnhome.models.RHRespuesta;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.controllers.NotificacionController;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private TextInputEditText mTextInputEmail;
     private TextInputEditText mTextInputPassword;
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
 
 
     @Override
@@ -43,7 +43,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         inicializarComponentes();
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
         mButtonIniciarSesion.setOnClickListener(this);
 
@@ -56,7 +56,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     protected void onStart() {
         super.onStart();
 
-        if(mAppConfig.comprobarClienteAuth()){
+        if(mAppSharedPreferences.comprobarClienteAuth()){
             Intent intent = new Intent(PrincipalActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
@@ -127,11 +127,11 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     int idCliente = response.body().getCliente().getId();
                     String numeroCelular = response.body().getCliente().getNumeroCelular();
 
-                    mAppConfig.actualizarEstadoAuth(true);
-                    mAppConfig.guardarNombreCliente(nombreCliente);
-                    mAppConfig.guardarIdCliente(idCliente);
-                    mAppConfig.guardarNumeroCelular(numeroCelular);
-                    mAppConfig.guardarToken(token);
+                    mAppSharedPreferences.actualizarEstadoAuth(true);
+                    mAppSharedPreferences.guardarNombreCliente(nombreCliente);
+                    mAppSharedPreferences.guardarIdCliente(idCliente);
+                    mAppSharedPreferences.guardarNumeroCelular(numeroCelular);
+                    mAppSharedPreferences.guardarToken(token);
                     registrarToken(tokenInfo);
                 }
                 else{
@@ -148,7 +148,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 //////////////////////
     private void registrarToken(Map<String, String> tokenInfo){
 
-        TokenController.registrar(tokenInfo).enqueue(new Callback<Void>() {
+        TokenController.registrarTokenDB(tokenInfo).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 

@@ -70,19 +70,19 @@ public class ClienteController {
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                    writingInfo.put("isSuccess","NOK");
-                    writingInfo.put("message","La etiqueta es de solo lectura");
+                    writingInfo.put("estado","NOK");
+                    writingInfo.put("mensaje","La etiqueta es de solo lectura");
                     return writingInfo;
                 }
                 if (ndef.getMaxSize() < size) {
-                    writingInfo.put("isSuccess","NOK");
-                    writingInfo.put("message","Los datos a ser escritos ("+ size +" bytes) superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
+                    writingInfo.put("estado","NOK");
+                    writingInfo.put("mensaje","Los datos a ser escritos ("+ size +" bytes) superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
                     return writingInfo;
                 }
                 ndef.writeNdefMessage(message);
                 ndef.close();
-                writingInfo.put("isSuccess","OK");
-                writingInfo.put("message", "Los datos se han escrito exitosamente");
+                writingInfo.put("estado","OK");
+                writingInfo.put("mensaje", "Los datos se han escrito exitosamente");
                 return writingInfo;
             } else {
                 NdefFormatable ndefFormat = NdefFormatable.get(tag);
@@ -91,23 +91,23 @@ public class ClienteController {
                         ndefFormat.connect();
                         ndefFormat.format(message);
                         ndefFormat.close();
-                        writingInfo.put("isSuccess","OK");
-                        writingInfo.put("message", "Los datos se han escrito exitosamente");
+                        writingInfo.put("estado","OK");
+                        writingInfo.put("mensaje", "Los datos se han escrito exitosamente");
                         return writingInfo;
                     } catch (IOException e) {
-                        writingInfo.put("isSuccess","NOK");
-                        writingInfo.put("message", "El formato de la etiqueta no es soportado");
+                        writingInfo.put("estado","NOK");
+                        writingInfo.put("mensaje", "El formato de la etiqueta no es soportado");
                         return writingInfo;
                     }
                 } else {
-                    writingInfo.put("isSuccess","NOK");
-                    writingInfo.put("message", "La etiqueta no soporta datos NDEF");
+                    writingInfo.put("estado","NOK");
+                    writingInfo.put("mensaje", "La etiqueta no soporta datos NDEF");
                     return writingInfo;
                 }
             }
         } catch (Exception e) {
-            writingInfo.put("isSuccess","NOK");
-            writingInfo.put("message", "No se pudo escribir los datos a la etiqueta");
+            writingInfo.put("estado","NOK");
+            writingInfo.put("mensaje", "No se pudo escribir los datos a la etiqueta");
             return writingInfo;
         }
     }

@@ -24,9 +24,15 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/side_nav_bar.xml" value="0.34774774774774775" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/drawable/splash_screen.xml" value="0.2359375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/action_toolbar.xml" value="0.22" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_actualizar_info.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_actualizar_password.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detail_reading.xml" value="0.5" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detail_writing.xml" value="0.25" />
-        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_home.xml" value="0.25" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detalle_info_escritura.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_detalle_info_lectura.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_escritura_etiqueta.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_home.xml" value="0.1" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_lectura_etiqueta.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_main2.xml" value="0.33" />
@@ -39,12 +45,18 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported_found.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_map_pet_reported_missing.xml" value="0.33" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_mapa_mascota_desaparecida.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_mapa_mascota_encontrada.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_mapa_notificacion_mascota_desaparecida.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_mapa_notificacion_mascota_encontrada.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_mapa_seleccion_hogar_mascota.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_navigation.xml" value="0.1891891891891892" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_notification_found_pet.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_principal.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_read_tag.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_register.xml" value="0.31979166666666664" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_registro.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_seleccion_opcion_ajustes.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_select_option_nfc.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_select_option_profile.xml" value="0.25" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_send_notification.xml" value="0.25" />
@@ -52,11 +64,16 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_update_profile.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/activity_write_tag.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/app_bar_main.xml" value="0.2" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/cardview_mascota_desaparecida.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/cardview_mis_mascotas.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/cardview_missing_pets.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/cardview_my_pets.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/content_main.xml" value="0.12027027027027028" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_gallery.xml" value="0.12027027027027028" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_home.xml" value="0.12027027027027028" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_mascota_desaparecida.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_mi_mascota.xml" value="0.2921875" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_mis_mascotas.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_missing_pet.xml" value="0.20625" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_pets.xml" value="0.22" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/fragment_profile.xml" value="0.33378378378378376" />
@@ -66,6 +83,7 @@
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/list_pets.xml" value="0.33" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/nav_header_main.xml" value="0.12027027027027028" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/navigation_header.xml" value="0.25" />
+        <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/popup_agregar_actualizar.xml" value="0.2921875" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/popup_update.xml" value="0.3859375" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/spinner.xml" value="0.30416666666666664" />
         <entry key="..\:/Users/MarceloA/AndroidStudioProjects/ReturnHOME/app/src/main/res/layout/toolbar.xml" value="0.1891891891891892" />

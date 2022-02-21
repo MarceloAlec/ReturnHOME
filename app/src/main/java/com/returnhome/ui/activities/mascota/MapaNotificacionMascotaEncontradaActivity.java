@@ -52,7 +52,7 @@ import com.returnhome.models.FCMRespuesta;
 import com.returnhome.models.Mascota;
 import com.returnhome.models.RHRespuesta;
 import com.returnhome.controllers.NotificacionController;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private TextView mTextViewGender;
     private TextView mTextViewPhoneNumber;
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
     private ImageView mImageViewCallUser;
 
 
@@ -139,13 +139,13 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_pet_reported_found);
+        setContentView(R.layout.activity_mapa_notificacion_mascota_encontrada);
 
         initializeComponents();
 
         mMapFragment.getMapAsync(this);
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
@@ -391,8 +391,8 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
             map.put("body", mascota.getNombre()+" fue encontrada en: " +mPetLocation);
-            map.put("idClient",String.valueOf(mAppConfig.obtenerIdCliente()));
-            map.put("phoneNumber",mAppConfig.obtenerNumeroCelular());
+            map.put("idClient",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
+            map.put("phoneNumber", mAppSharedPreferences.obtenerNumeroCelular());
             map.put("pet_name", mascota.getNombre());
             map.put("pet_lat",String.valueOf(mPetLatLng.latitude));
             map.put("pet_lng",String.valueOf(mPetLatLng.longitude));

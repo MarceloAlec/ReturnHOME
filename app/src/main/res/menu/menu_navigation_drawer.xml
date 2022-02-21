@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <group
         android:checkableBehavior="single">
         <item
             android:title="NFC">
             <menu>
                 <item
-                    android:id="@+id/nav_write_tag"
+                    android:id="@+id/nav_escribir_etiqueta"
                     android:icon="@drawable/ic_editar"
                     android:title="Escribir etiqueta" />
 
                 <item
-                    android:id="@+id/nav_read_tag"
+                    android:id="@+id/nav_leer_etiqueta"
                     android:icon="@drawable/ic_nfc_lector"
                     android:title="Leer etiqueta"/>
 
@@ -28,7 +27,7 @@
             android:title="Notificación">
             <menu>
                 <item
-                    android:id="@+id/nav_found_pet"
+                    android:id="@+id/nav_mascota_encontrada"
                     android:title="Encontré una mascota"
                     android:icon="@drawable/ic_mascota_encontrada"/>
 
@@ -39,7 +38,7 @@
 
 
     <item
-        android:id="@+id/nav_account"
+        android:id="@+id/nav_ajustes"
         android:title="Ajustes"
         android:icon="@drawable/ic_ajustes"/>
 

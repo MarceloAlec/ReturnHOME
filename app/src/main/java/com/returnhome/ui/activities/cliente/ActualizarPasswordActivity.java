@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
-import com.returnhome.utils.AppConfig;
+import com.returnhome.utils.AppSharedPreferences;
 import com.returnhome.models.RHRespuesta;
 
 import java.util.HashMap;
@@ -22,22 +22,22 @@ import retrofit2.Response;
 
 public class ActualizarPasswordActivity extends AppCompatActivity {
 
-    private TextInputEditText mTextCurrentInputPassword;
-    private TextInputEditText mTextNewInputPassword;
-    private TextInputEditText mTextConfirmNewInputPassword;
-    private Button mButtonUpdatePasswordProfile;
+    private TextInputEditText mTextPasswordActual;
+    private TextInputEditText mTextPasswordNueva;
+    private TextInputEditText mTextConfirmarPasswordNueva;
+    private Button mButtonActualizarPassword;
     private androidx.appcompat.widget.Toolbar mToolbar;
 
-    private AppConfig mAppConfig;
+    private AppSharedPreferences mAppSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_password_profile);
+        setContentView(R.layout.activity_actualizar_password);
 
         initializeComponents();
 
-        mAppConfig = new AppConfig(this);
+        mAppSharedPreferences = new AppSharedPreferences(this);
 
 
         setSupportActionBar(mToolbar);
@@ -51,71 +51,59 @@ public class ActualizarPasswordActivity extends AppCompatActivity {
             }
         });
 
-        mButtonUpdatePasswordProfile.setOnClickListener(new View.OnClickListener() {
+        mButtonActualizarPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickUpdate();
+                actualizar();
             }
         });
     }
 
     private void initializeComponents(){
-        mTextCurrentInputPassword = findViewById(R.id.textInputCurrentPasswordUpdateProfile);
-        mTextNewInputPassword = findViewById(R.id.textInputNewPasswordUpdateProfile);
-        mTextConfirmNewInputPassword = findViewById(R.id.textInputConfirmNewPasswordUpdateProfile);
-        mButtonUpdatePasswordProfile = findViewById(R.id.btnUpdatePasswordProfile);
+        mTextPasswordActual = findViewById(R.id.textInputPasswordActual);
+        mTextPasswordNueva = findViewById(R.id.textInputPasswordNueva);
+        mTextConfirmarPasswordNueva = findViewById(R.id.textInputConfirmarPasswordNueva);
+        mButtonActualizarPassword = findViewById(R.id.btnActualizarPassword);
         mToolbar = findViewById(R.id.toolbar);
-
-
     }
 
-    private void clickUpdate() {
-        String currentPassword = mTextCurrentInputPassword.getText().toString();
-        String newPassword = mTextNewInputPassword.getText().toString();
-        String confirmNewPassword = mTextConfirmNewInputPassword.getText().toString();
+    private void actualizar() {
+        String passwordActual = mTextPasswordActual.getText().toString();
+        String nuevaPassword = mTextPasswordNueva.getText().toString();
+        String confirmacionNuevaPassword = mTextConfirmarPasswordNueva.getText().toString();
 
-        if(!currentPassword.isEmpty() && !newPassword.isEmpty() && !confirmNewPassword.isEmpty()){
+        if(!passwordActual.isEmpty() && !nuevaPassword.isEmpty() && !confirmacionNuevaPassword.isEmpty()){
 
-            if(newPassword.length() >= 6 ){
-                if(newPassword.equals(confirmNewPassword)){
-                    Map<String, String> password = new HashMap<>();
-                    password.put("currentPassword", currentPassword);
-                    password.put("newPassword", newPassword);
-                    password.put("id", String.valueOf(mAppConfig.obtenerIdCliente()));
-                    updatePassword(password);
-                }
-                else{
-                    Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
-                }
+            if(nuevaPassword.equals(confirmacionNuevaPassword)){
+                Map<String, String> password = new HashMap<>();
+                password.put("actualPassword", passwordActual);
+                password.put("password", nuevaPassword);
+                password.put("idCliente", String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
+
+                ClienteController.actualizarPassword(password).enqueue(new Callback<RHRespuesta>() {
+                    @Override
+                    public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+
+                        if(response.isSuccessful()){
+                            Toast.makeText(ActualizarPasswordActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(ActualizarPasswordActivity.this, "La contraseña actual es incorrecta", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RHRespuesta> call, Throwable t) {
+                        Toast.makeText(ActualizarPasswordActivity.this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             else{
-                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
             }
         }
         else{
             Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private void updatePassword(Map<String, String> password) {
-        ClienteController.actualizarPassword(password).enqueue(new Callback<RHRespuesta>() {
-            @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(ActualizarPasswordActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(ActualizarPasswordActivity.this, "La contraseña actual es incorrecta", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
-                Toast.makeText(ActualizarPasswordActivity.this, "Se ha producido un error: "+t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-
 }
