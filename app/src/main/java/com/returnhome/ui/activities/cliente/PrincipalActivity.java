@@ -36,7 +36,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private AppConfig mAppConfig;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +52,23 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAppConfig.comprobarClienteAuth()){
+            Intent intent = new Intent(PrincipalActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+    }
+
     private void inicializarComponentes() {
         mTextInputEmail = findViewById(R.id.textInputEmailLogin);
         mTextInputPassword = findViewById(R.id.textInputPasswordLogin);
         mButtonIniciarSesion = findViewById(R.id.btnIniciarSesion);
         mButtonRegistrar = findViewById(R.id.btnIrARegistrar);
-
 
     }
 
@@ -163,6 +173,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         });
 
     }
-
+//////////////////////
 
 }
