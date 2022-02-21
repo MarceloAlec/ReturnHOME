@@ -1,4 +1,4 @@
-package com.returnhome.ui.activities;
+package com.returnhome.ui.activities.cliente;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +17,6 @@ import com.returnhome.controllers.TokenController;
 import com.returnhome.models.RHRespuesta;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.controllers.NotificacionController;
-import com.returnhome.ui.activities.cliente.HomeActivity;
 import com.returnhome.utils.AppConfig;
 
 import java.util.HashMap;
@@ -73,8 +72,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnIrARegistrar:
                 mostrarRegistroActivity();
                 break;
-
-
         }
     }
 
@@ -106,7 +103,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(this, "La contraseña y el email son obligatorios", Toast.LENGTH_SHORT).show();
         }
     }
-
+///////////////////
     private void autenticarCliente(Map<String,String> credenciales, String token){
         ClienteController.autenticar(credenciales).enqueue(new Callback<RHRespuesta>() {
             @Override
@@ -138,7 +135,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             }
         });
     }
-
+//////////////////////
     private void registrarToken(Map<String, String> tokenInfo){
 
         TokenController.registrar(tokenInfo).enqueue(new Callback<Void>() {

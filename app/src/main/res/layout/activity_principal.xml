@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.PrincipalActivity">
+    tools:context=".ui.activities.cliente.PrincipalActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

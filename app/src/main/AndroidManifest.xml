@@ -74,8 +74,9 @@
             android:name=".ui.activities.cliente.ActualizarInfoActivity"
             android:exported="false" />
         <activity android:name=".ui.activities.cliente.HomeActivity" />
+
         <activity
-            android:name=".ui.activities.PrincipalActivity">
+            android:name=".ui.activities.cliente.PrincipalActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,7 +84,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.RegistroActivity" />
+            android:name=".ui.activities.cliente.RegistroActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

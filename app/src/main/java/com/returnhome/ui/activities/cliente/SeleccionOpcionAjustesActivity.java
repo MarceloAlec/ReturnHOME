@@ -16,9 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.TokenController;
-import com.returnhome.models.Token;
 import com.returnhome.controllers.NotificacionController;
-import com.returnhome.ui.activities.PrincipalActivity;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.models.RHRespuesta;
 

@@ -8,7 +8,7 @@ public class Cliente {
     private String password;
     private String numeroCelular;
 
-    public Cliente(String nombre, String email, String password, String phoneNumber, String token) {
+    public Cliente(String nombre, String email, String password, String phoneNumber) {
         this.nombre = nombre;
         this.email = email;
         this.password = password;
