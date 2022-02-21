@@ -3,7 +3,6 @@ package com.returnhome.utils;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
@@ -62,7 +61,7 @@ public class CanalNotificacion extends ContextWrapper {
                 .setSound(soundUri)
                 .setShowWhen(true)
                 .addAction(showPetMissingAction)
-                .setSmallIcon(R.drawable.ic_app_notification)
+                .setSmallIcon(R.drawable.ic_app_notificacion)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
     }
@@ -77,7 +76,7 @@ public class CanalNotificacion extends ContextWrapper {
                 .setShowWhen(true)
                 .addAction(showPetMissingAction)
                 .addAction(cancelAction)
-                .setSmallIcon(R.drawable.ic_app_notification)
+                .setSmallIcon(R.drawable.ic_app_notificacion)
                 .setStyle(new Notification.BigTextStyle()
                         .bigText(body).setBigContentTitle(title));
     }
@@ -91,7 +90,7 @@ public class CanalNotificacion extends ContextWrapper {
                 .setAutoCancel(true)
                 .setSound(soundUri)
                 .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_app_notification)
+                .setSmallIcon(R.drawable.ic_app_notificacion)
                 .addAction(showPetFoundAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
@@ -104,7 +103,7 @@ public class CanalNotificacion extends ContextWrapper {
                 .setAutoCancel(true)
                 .setSound(soundUri)
                 .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_app_notification)
+                .setSmallIcon(R.drawable.ic_app_notificacion)
                 .addAction(showPetFoundAction)
                 .addAction(contactAction)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));

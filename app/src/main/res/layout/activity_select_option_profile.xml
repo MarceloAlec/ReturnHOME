@@ -51,7 +51,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_edit"/>
+                android:src="@drawable/ic_editar"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_delete"/>
+                android:src="@drawable/ic_eliminar"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="10dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_logout"/>
+                    android:src="@drawable/ic_cerrar_sesion"/>
 
                 <TextView
                     android:layout_width="match_parent"

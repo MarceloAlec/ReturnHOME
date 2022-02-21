@@ -115,7 +115,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
 
                     mPetLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    mMarkerPet =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pet_location)));
+                    mMarkerPet =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ubicacion_mascota)));
                     mMarkerHomePet= mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
 
                     mMarkerHomePet.showInfoWindow();
@@ -356,7 +356,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                 @Override
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                     if(response.isSuccessful()){
-                        cliente = response.body().getClient();
+                        cliente = response.body().getCliente();
                         sendNotification();
                     }
                 }
@@ -444,7 +444,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    mascota = response.body().getPet();
+                    mascota = response.body().getMascota();
                     mTextViewPetName.setText(mascota.getNombre());
                     mTextViewBreed.setText(mascota.getRaza());
                     mTextViewGender.setText(String.valueOf(mascota.getGenero()));

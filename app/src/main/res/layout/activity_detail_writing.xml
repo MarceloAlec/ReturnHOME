@@ -50,7 +50,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_pet_name" />
+                        android:src="@drawable/ic_nombre_mascota" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_breed" />
+                        android:src="@drawable/ic_raza" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_gender" />
+                        android:src="@drawable/ic_genero" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_phone_desc" />
+                        android:src="@drawable/ic_telefono" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -182,7 +182,7 @@
         android:layout_width="155dp"
         android:layout_height="wrap_content"
         android:text="ESCRIBIR ETIQUETA"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
         android:layout_gravity="right|top"
         android:layout_marginTop="20dp"
@@ -194,7 +194,7 @@
         android:id="@+id/btnGoToMapPetHome"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_arrow_back"
+        android:src="@drawable/ic_flecha_atras"
         android:layout_gravity="left|top"
         app:civ_circle_background_color="@color/colorPrimaryDark"
         android:layout_marginTop="20dp"

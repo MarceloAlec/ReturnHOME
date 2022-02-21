@@ -1,4 +1,6 @@
 <?php
+header("Content-Type: application/json");
+
 //CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";

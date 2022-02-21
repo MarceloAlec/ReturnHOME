@@ -2,12 +2,21 @@ package com.returnhome.models;
 
 public class Token {
 
+    private int idToken;
     private String token;
     private int idCliente;
 
     public Token(String token, int idCliente) {
         this.token = token;
         this.idCliente = idCliente;
+    }
+
+    public int getIdToken() {
+        return idToken;
+    }
+
+    public void setIdToken(int idToken) {
+        this.idToken = idToken;
     }
 
     public String getToken() {

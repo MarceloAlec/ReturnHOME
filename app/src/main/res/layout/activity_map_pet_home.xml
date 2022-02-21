@@ -34,7 +34,7 @@
             <ImageView
                 android:layout_width="23dp"
                 android:layout_height="23dp"
-                android:src="@drawable/ic_breed"
+                android:src="@drawable/ic_raza"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 />
@@ -80,7 +80,7 @@
         android:id="@+id/btnWriteTag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
         android:text="SELECCIONAR UBICACIÓN"
         android:textSize="13sp"

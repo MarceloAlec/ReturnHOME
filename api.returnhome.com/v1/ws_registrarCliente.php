@@ -1,5 +1,5 @@
 <?php
-
+header("Content-Type: application/json");
 /*CREDENCIALES PARA ACCEDER A LA BASE DE DATOS */
 $hostname = "localhost";
 $username = "root";
@@ -45,7 +45,7 @@ if(isset($contenido)){
             $stmt = null;
             $idCliente=$conexion->lastInsertId();
             http_response_code(201);
-            echo json_encode(array("cliente" => array("idCliente"=>$idCliente)));
+            echo json_encode(array("cliente" => array("id"=>$idCliente)));
         }
         else{
             http_response_code(401);

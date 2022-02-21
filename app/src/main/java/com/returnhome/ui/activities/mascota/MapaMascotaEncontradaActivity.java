@@ -112,7 +112,7 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
         mMap.addMarker(new MarkerOptions().position(mPetFoundLatLng)
                 .title(mExtraPetName+" se encuentra aquí")
                 .icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.ic_pet_location))).showInfoWindow();
+                .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
@@ -129,11 +129,11 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    Cliente cliente = response.body().getClient();
+                    Cliente cliente = response.body().getCliente();
                     mTextViewClientName.setText(cliente.getNombre());
                     mTextViewEmail.setText(cliente.getEmail());
                     mTextViewPhoneNumber.setText(cliente.getNumeroCelular());
-                    phoneNumber = response.body().getClient().getNumeroCelular();
+                    phoneNumber = response.body().getCliente().getNumeroCelular();
                 }
             }
 

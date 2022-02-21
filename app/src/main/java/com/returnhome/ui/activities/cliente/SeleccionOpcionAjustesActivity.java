@@ -149,9 +149,9 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
 
     private void updateToken(Map<String, String> tokenInfo){
 
-        TokenController.actualizar(tokenInfo).enqueue(new Callback<RHRespuesta>() {
+        TokenController.registrar(tokenInfo).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){
                    logout();
                 }
@@ -161,7 +161,7 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(SeleccionOpcionAjustesActivity.this, "No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
             }
         });

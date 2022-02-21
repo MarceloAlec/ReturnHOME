@@ -51,7 +51,7 @@ public class MascotaDesaparecidaFragment extends Fragment {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    mascotaArrayList = response.body().getPets();
+                    mascotaArrayList = response.body().getMascotas();
                     showList(mascotaArrayList);
                 }
                 else{

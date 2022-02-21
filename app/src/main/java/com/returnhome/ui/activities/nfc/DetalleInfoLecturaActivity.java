@@ -121,7 +121,7 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    mascota = response.body().getPet();
+                    mascota = response.body().getMascota();
                     mTextViewPetName.setText(mascota.getNombre());
                     mTextViewBreed.setText(mascota.getRaza());
                     mTextViewGender.setText(String.valueOf(mascota.getGenero()));

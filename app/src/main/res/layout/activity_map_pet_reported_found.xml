@@ -38,7 +38,7 @@
                 android:id="@+id/imageViewPet"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/ic_footprint"
+                android:src="@drawable/ic_huella_mascota"
                 android:layout_gravity="center"
                 app:civ_border_width="3dp"
                 android:layout_marginLeft="7dp"/>
@@ -165,7 +165,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
                         android:layout_marginRight="15dp"
-                        android:src="@drawable/ic_phone" />
+                        android:src="@drawable/ic_telefono_boton" />
 
                 </RelativeLayout>
 
@@ -181,7 +181,7 @@
         android:id="@+id/btnGoToSendNotification"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
         android:text="NOTIFICAR"
         android:textSize="13sp"
@@ -193,7 +193,7 @@
         android:id="@+id/btnGoToHomeFromReportedFound"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_arrow_back"
+        android:src="@drawable/ic_flecha_atras"
         android:layout_gravity="left|top"
         app:civ_circle_background_color="@color/colorPrimaryDark"
         android:layout_marginTop="20dp"

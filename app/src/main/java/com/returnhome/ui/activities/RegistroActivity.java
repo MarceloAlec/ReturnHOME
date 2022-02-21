@@ -15,7 +15,6 @@ import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.NotificacionController;
 import com.returnhome.controllers.TokenController;
-import com.returnhome.models.Token;
 import com.returnhome.ui.activities.cliente.HomeActivity;
 import com.returnhome.utils.AppConfig;
 import com.returnhome.models.RHRespuesta;
@@ -130,7 +129,7 @@ public class RegistroActivity extends AppCompatActivity {
 
                     mAppConfig.actualizarEstadoAuth(true);
                     mAppConfig.guardarNombreCliente(cliente.getNombre());
-                    mAppConfig.guardarIdCliente(response.body().getClient().getId());
+                    mAppConfig.guardarIdCliente(response.body().getCliente().getId());
                     mAppConfig.guardarNumeroCelular(cliente.getNumeroCelular());
 
                     Intent intent = new Intent(RegistroActivity.this, HomeActivity.class);

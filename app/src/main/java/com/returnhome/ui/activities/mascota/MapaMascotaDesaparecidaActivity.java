@@ -97,7 +97,7 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
         mMap.addMarker(new MarkerOptions().position(mPetMissingLatLng)
                 .title(mExtraPetName+" fue visto/a por ultima vez aqui")
                 .icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.ic_pet_location))).showInfoWindow();
+                        .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
@@ -112,7 +112,7 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    Mascota mascota = response.body().getPet();
+                    Mascota mascota = response.body().getMascota();
                     mTextViewPetName.setText(mascota.getNombre());
                     mTextViewBreed.setText(mascota.getRaza());
                     mTextViewGender.setText(String.valueOf(mascota.getGenero()));

@@ -16,12 +16,12 @@ public class AppConfig {
     }
 
     public boolean comprobarClienteAuth(){
-        return sharedPreferences.getBoolean("usuarioAuth", false);
+        return sharedPreferences.getBoolean("clienteAuth", false);
     }
 
-    public void actualizarEstadoAuth(boolean status){
+    public void actualizarEstadoAuth(boolean estado){
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("clienteAuth",status);
+        editor.putBoolean("clienteAuth",estado);
         editor.apply();
     }
 
@@ -35,9 +35,9 @@ public class AppConfig {
         return sharedPreferences.getString("nombreCliente", "Desconocido");
     }
 
-    public void guardarIdCliente(int id) {
+    public void guardarIdCliente(int idCliente) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("idCliente",id);
+        editor.putInt("idCliente",idCliente);
         editor.apply();
     }
 
@@ -45,9 +45,9 @@ public class AppConfig {
         return sharedPreferences.getInt("idCliente", 0);
     }
 
-    public void guardarNumeroCelular(String phoneNumber) {
+    public void guardarNumeroCelular(String numeroCelular) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("numeroCelular",phoneNumber);
+        editor.putString("numeroCelular",numeroCelular);
         editor.apply();
     }
 
@@ -55,9 +55,9 @@ public class AppConfig {
         return sharedPreferences.getString("numeroCelular", "Desconocido");
     }
 
-    public void guardarToken(String phoneNumber) {
+    public void guardarToken(String token) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("token",phoneNumber);
+        editor.putString("token",token);
         editor.apply();
     }
 

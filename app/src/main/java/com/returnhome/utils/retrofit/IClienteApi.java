@@ -24,7 +24,7 @@ public interface IClienteApi {
     Call<RHRespuesta> registrar(@Body Cliente cliente);
 
     @GET("ws_obtenerCliente.php")
-    Call<RHRespuesta> obtener(@Query("id") int idClient);
+    Call<RHRespuesta> obtener(@Query("idCliente") int idCliente);
 
     @POST("ws_autenticarCliente.php")
     Call<RHRespuesta> autenticar(@Body Map<String,String> auth);
@@ -32,14 +32,11 @@ public interface IClienteApi {
     @PUT("ws_actualizarCliente.php")
     Call<RHRespuesta> actualizar(@Body Cliente cliente);
 
-    @PUT("update-token.php")
-    Call<RHRespuesta> updateToken(@Body Map<String,String> tokenInfo);
-
     @PUT("ws_actualizarPassword.php")
     Call<RHRespuesta> actualizarPassword(@Body Map<String, String> password);
 
     @DELETE("ws_eliminarCliente.php")
-    Call<RHRespuesta> eliminar(@Query("id") int idClient);
+    Call<RHRespuesta> eliminar(@Query("idCliente") int idCliente);
 
 
 }

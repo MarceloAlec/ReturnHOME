@@ -22,7 +22,7 @@ import com.returnhome.utils.CanalNotificacion;
 
 import java.util.Map;
 
-public class NotificacionService extends FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final int NOTIFICATION_CODE = 100;
 

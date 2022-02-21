@@ -44,7 +44,7 @@
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_pet_location"
+        android:src="@drawable/ic_ubicacion_mascota"
         android:layout_marginTop="55dp"
         android:layout_gravity="center"/>
 
@@ -53,7 +53,7 @@
         android:id="@+id/btnSendNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
         android:text="SELECCIONAR UBICACIÓN"
         android:textColor="@color/colorIcons"

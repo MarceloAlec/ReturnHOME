@@ -2,7 +2,7 @@ package com.returnhome.models;
 
 public class Cliente {
 
-    private int id;
+    private int idCliente;
     private String nombre;
     private String email;
     private String password;
@@ -15,19 +15,19 @@ public class Cliente {
         this.numeroCelular = phoneNumber;
     }
 
-    public Cliente(int id, String nombre, String email, String phoneNumber) {
-        this.id = id;
+    public Cliente(int idCliente, String nombre, String email, String phoneNumber) {
+        this.idCliente = idCliente;
         this.nombre = nombre;
         this.email = email;
         this.numeroCelular = phoneNumber;
     }
 
     public int getId() {
-        return id;
+        return idCliente;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.idCliente = id;
     }
 
     public String getNombre() {

@@ -119,7 +119,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    mascota.setIdMascota(response.body().getPet().getIdMascota());
+                    mascota.setIdMascota(response.body().getMascota().getIdMascota());
                     mascotaArrayList.add(mascota);
                     showList(mascotaArrayList);
                     mBottomSheetDialog.dismiss();
@@ -151,7 +151,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    mascotaArrayList = response.body().getPets();
+                    mascotaArrayList = response.body().getMascotas();
                     showList(mascotaArrayList);
                 }
 

@@ -55,7 +55,7 @@
             android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="80dp"
             android:layout_marginBottom="10dp">
 
             <ImageView
@@ -123,24 +123,24 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="bottom"
-            android:paddingBottom="20dp">
+            android:paddingBottom="10dp">
 
             <Button
-                android:id="@+id/btnSignIn"
+                android:id="@+id/btnIniciarSesion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Iniciar Sesión"
-                android:background="@drawable/rounded_button"
+                android:background="@drawable/boton_redondeado"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="13sp"
                 android:layout_margin="10dp"/>
 
             <Button
-                android:id="@+id/btnGoToRegister"
+                android:id="@+id/btnIrARegistrar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
+                android:background="@drawable/boton_redondeado"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"

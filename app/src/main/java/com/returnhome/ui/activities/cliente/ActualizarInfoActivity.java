@@ -70,7 +70,7 @@ public class ActualizarInfoActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
-                    mCliente = response.body().getClient();
+                    mCliente = response.body().getCliente();
                     showClientInformation();
                 }
             }

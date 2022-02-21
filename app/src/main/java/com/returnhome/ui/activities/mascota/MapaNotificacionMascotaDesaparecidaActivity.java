@@ -45,6 +45,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
+import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.FCMCuerpo;
 import com.returnhome.models.FCMRespuesta;
 import com.returnhome.models.Mascota;
@@ -204,7 +205,7 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
 
     private void updateStatusMissingPet(Mascota mascota){
 
-        Mascota.actualizarMascotaDesaparecida(mascota).enqueue(new Callback<RHRespuesta>() {
+        MascotaController.actualizarMascotaDesaparecida(mascota).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
 

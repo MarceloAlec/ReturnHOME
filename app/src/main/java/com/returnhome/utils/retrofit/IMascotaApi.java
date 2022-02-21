@@ -19,20 +19,20 @@ public interface IMascotaApi {
             "Content-Type:application/json"
     })
 
-    @POST("create.php")
-    Call<RHRespuesta> create(@Body Mascota mascota);
+    @POST("ws_registrarMascota.php")
+    Call<RHRespuesta> registrar(@Body Mascota mascota);
 
-    @GET("read.php")
-    Call<RHRespuesta> read(@Query("id") int id, @Query("action") int action);
+    @GET("ws_obtenerMascota.php")
+    Call<RHRespuesta> obtener(@Query("id") int id, @Query("opcion") int opcion);
 
-    @PUT("update.php")
-    Call<RHRespuesta> update(@Body Mascota mascota);
+    @PUT("ws_actualizarMascota.php")
+    Call<RHRespuesta> actualizar(@Body Mascota mascota);
 
-    @PUT("update-status-missing.php")
-    Call<RHRespuesta> updateStatusMissing(@Body Mascota mascota);
+    @PUT("ws_actualizarMascotaDesaparecida.php")
+    Call<RHRespuesta> actualizarEstadoDesaparecida(@Body Mascota mascota);
 
-    @DELETE("delete.php")
-    Call<RHRespuesta> delete(@Query("id") int idPet);
+    @DELETE("ws_eliminarMascota.php")
+    Call<RHRespuesta> eliminar(@Query("idMascota") int idMascota);
 
 
 }

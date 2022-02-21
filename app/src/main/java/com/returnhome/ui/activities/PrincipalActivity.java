@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.TokenController;
-import com.returnhome.models.Token;
 import com.returnhome.models.RHRespuesta;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.controllers.NotificacionController;
@@ -30,8 +29,8 @@ import retrofit2.Response;
 
 public class PrincipalActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button mButtonSignIn;
-    private Button mButtonRegister;
+    private Button mButtonIniciarSesion;
+    private Button mButtonRegistrar;
     private TextInputEditText mTextInputEmail;
     private TextInputEditText mTextInputPassword;
 
@@ -42,21 +41,24 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_principal);
 
-        initializeComponents();
+        inicializarComponentes();
 
         mAppConfig = new AppConfig(this);
 
-        mButtonSignIn.setOnClickListener(this);
+        mButtonIniciarSesion.setOnClickListener(this);
+
+        mButtonRegistrar.setOnClickListener(this);
+
 
     }
 
-    private void initializeComponents() {
+    private void inicializarComponentes() {
         mTextInputEmail = findViewById(R.id.textInputEmailLogin);
         mTextInputPassword = findViewById(R.id.textInputPasswordLogin);
-        mButtonSignIn = findViewById(R.id.btnSignIn);
-        mButtonRegister = findViewById(R.id.btnRegister);
+        mButtonIniciarSesion = findViewById(R.id.btnIniciarSesion);
+        mButtonRegistrar = findViewById(R.id.btnIrARegistrar);
 
 
     }
@@ -64,72 +66,66 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btnSignIn:
-                login();
+            case R.id.btnIniciarSesion:
+                iniciarSesion();
                 break;
 
-            case R.id.btnRegister:
-                register();
+            case R.id.btnIrARegistrar:
+                mostrarRegistroActivity();
                 break;
 
 
         }
     }
 
-    private void register(){
+    private void mostrarRegistroActivity(){
         Intent intent = new Intent(PrincipalActivity.this, RegistroActivity.class);
         startActivity(intent);
     }
 
-
-    private void login(){
+    private void iniciarSesion(){
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
-
         if(!email.isEmpty() && !password.isEmpty()) {
-            if (password.length() >= 6) {
-                Map<String, String> auth = new HashMap<>();
-                auth.put("email", email);
-                auth.put("password", password);
-                TokenController.crearToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if(task.isSuccessful()){
-                            authClient(auth, task.getResult());
-                        }
-                        else{
-                            Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
-                        }
+            Map<String, String> credenciales = new HashMap<>();
+            credenciales.put("email", email);
+            credenciales.put("password", password);
+            TokenController.crearToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if(task.isSuccessful()){
+                        autenticarCliente(credenciales, task.getResult());
                     }
-                });
-            }
-            else{
-                Toast.makeText(this, "La contraseña debe tener mas de 6 caracteres", Toast.LENGTH_SHORT).show();
-
-            }
+                    else{
+                        Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
         else{
             Toast.makeText(this, "La contraseña y el email son obligatorios", Toast.LENGTH_SHORT).show();
-
         }
-
     }
 
-    private void authClient(Map<String,String> auth, String token){
-        ClienteController.autenticar(auth).enqueue(new Callback<RHRespuesta>() {
+    private void autenticarCliente(Map<String,String> credenciales, String token){
+        ClienteController.autenticar(credenciales).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
 
                 if(response.isSuccessful()){
                     Map<String, String> tokenInfo = new HashMap<>();
-                    tokenInfo.put("idClient", String.valueOf(response.body().getClient().getId()));
+                    tokenInfo.put("idCliente", String.valueOf(response.body().getCliente().getId()));
                     tokenInfo.put("token", token);
-                    String name = response.body().getClient().getNombre();
-                    int id = response.body().getClient().getId();
-                    String phoneNumber = response.body().getClient().getNumeroCelular();
+                    String nombreCliente = response.body().getCliente().getNombre();
+                    int idCliente = response.body().getCliente().getId();
+                    String numeroCelular = response.body().getCliente().getNumeroCelular();
 
-                    updateToken(tokenInfo, name, id, phoneNumber);
-
+                    mAppConfig.actualizarEstadoAuth(true);
+                    mAppConfig.guardarNombreCliente(nombreCliente);
+                    mAppConfig.guardarIdCliente(idCliente);
+                    mAppConfig.guardarNumeroCelular(numeroCelular);
+                    mAppConfig.guardarToken(token);
+                    registrarToken(tokenInfo);
                 }
                 else{
                     Toast.makeText(PrincipalActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_SHORT).show();
@@ -138,25 +134,20 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-
-                Toast.makeText(PrincipalActivity.this, "Ingreso fallido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void updateToken(Map<String, String> tokenInfo, String name, int id, String phoneNumber){
+    private void registrarToken(Map<String, String> tokenInfo){
 
-        TokenController.actualizar(tokenInfo).enqueue(new Callback<RHRespuesta>() {
+        TokenController.registrar(tokenInfo).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
                 if(response.isSuccessful()){
 
                     NotificacionController.suscribirMascotaDesaparecida();
-
-                    mAppConfig.actualizarEstadoAuth(true);
-                    mAppConfig.guardarNombreCliente(name);
-                    mAppConfig.guardarIdCliente(id);
-                    mAppConfig.guardarNumeroCelular(phoneNumber);
 
                     Intent intent = new Intent(PrincipalActivity.this, HomeActivity.class);
                     //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
@@ -169,10 +160,11 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 

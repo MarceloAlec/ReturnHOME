@@ -21,30 +21,30 @@ import retrofit2.Call;
 
 public class ClienteController {
 
-    private static final String BASE_URL = "http://192.168.0.5:82/api.returnhome.com/v1/controllers/client/";
+    private static final String BASE_URL = "http://192.168.0.2:82/api.returnhome.com/v1/";
 
     public static Call<RHRespuesta> registrar(com.returnhome.models.Cliente cliente){
-        return ClienteRetrofit.getClient(BASE_URL).create(IClienteApi.class).create(cliente);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).registrar(cliente);
     }
 
     public static Call<RHRespuesta> obtener(int idClient){
-        return ClienteRetrofit.getClient(BASE_URL).create(IClienteApi.class).read(idClient);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).obtener(idClient);
     }
 
     public static Call<RHRespuesta> autenticar(Map<String,String> auth){
-        return ClienteRetrofit.getClient(BASE_URL).create(IClienteApi.class).authClient(auth);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).autenticar(auth);
     }
 
     public static Call<RHRespuesta> actualizarInfo(com.returnhome.models.Cliente cliente){
-        return ClienteRetrofit.getClient(BASE_URL).create(IClienteApi.class).update(cliente);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).actualizar(cliente);
     }
 
     public static Call<RHRespuesta> actualizarPassword(Map<String, String> password){
-        return ClienteRetrofit.getClient(BASE_URL).create(IClienteApi.class).update(password);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).actualizarPassword(password);
     }
 
     public static Call<RHRespuesta> eliminarCuenta(int idClient){
-        return ClienteRetrofit.getClient(BASE_URL).create(IClienteApi.class).delete(idClient);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).eliminar(idClient);
     }
 
     public static NdefMessage crearMensajeNdef(int idPet, String phoneNumber, LatLng petHomeCoordinates){

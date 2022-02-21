@@ -21,7 +21,7 @@ public class NotificacionController {
 
 
     public static Call<FCMRespuesta> enviarNotificacion(FCMCuerpo body) {
-        return ClienteRetrofit.getClient(BASE_URL).create(IFCMApi.class).send(body);
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(IFCMApi.class).enviarNotificacion(body);
     }
 
     public static void suscribirMascotaDesaparecida() {

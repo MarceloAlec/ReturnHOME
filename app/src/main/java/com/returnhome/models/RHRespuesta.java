@@ -11,27 +11,27 @@ public class RHRespuesta {
 
     ArrayList<Mascota> mascotas = new ArrayList<Mascota>();
 
-    public Cliente getClient() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setClient(Cliente cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-    public Mascota getPet() {
+    public Mascota getMascota() {
         return mascota;
     }
 
-    public void setPet(Mascota mascota) {
+    public void setMascota(Mascota mascota) {
         this.mascota = mascota;
     }
 
-    public ArrayList<Mascota> getPets() {
+    public ArrayList<Mascota> getMascotas() {
         return mascotas;
     }
 
-    public void setPets(ArrayList<Mascota> mascotas) {
+    public void setMascotas(ArrayList<Mascota> mascotas) {
         this.mascotas = mascotas;
     }
 }

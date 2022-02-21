@@ -223,7 +223,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if (response.isSuccessful()) {
-                    mascotaArrayList = response.body().getPets();
+                    mascotaArrayList = response.body().getMascotas();
                     showList(mascotaArrayList);
 
                 }
