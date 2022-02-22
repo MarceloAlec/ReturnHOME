@@ -43,7 +43,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView_nombreMascota"
+                    android:id="@+id/textViewNombreMascota"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imageView_pet"
@@ -71,8 +71,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:orientation="vertical"
                 android:layout_marginRight="10dp"
+                android:orientation="vertical"
                 android:src="@drawable/ic_menu_cardview" />
 
         </RelativeLayout>

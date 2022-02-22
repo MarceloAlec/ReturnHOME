@@ -17,17 +17,17 @@ public class MascotaController {
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IMascotaApi.class).obtener(id, opcion);
     }
 
-    public static Call<RHRespuesta> eliminar(int idPet){
+    public static Call<Void> eliminar(int idPet){
 
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IMascotaApi.class).eliminar(idPet);
     }
 
-    public static Call<RHRespuesta> actualizar(Mascota mascota){
+    public static Call<Void> actualizar(Mascota mascota){
 
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IMascotaApi.class).actualizar(mascota);
     }
 
-    public static Call<RHRespuesta> actualizarMascotaDesaparecida(Mascota mascota){
+    public static Call<Void> actualizarMascotaDesaparecida(Mascota mascota){
 
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IMascotaApi.class).actualizarEstadoDesaparecida(mascota);
     }

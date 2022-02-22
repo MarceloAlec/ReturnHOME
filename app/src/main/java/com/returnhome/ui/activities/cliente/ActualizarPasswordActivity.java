@@ -63,7 +63,7 @@ public class ActualizarPasswordActivity extends AppCompatActivity {
         mTextPasswordActual = findViewById(R.id.textInputPasswordActual);
         mTextPasswordNueva = findViewById(R.id.textInputPasswordNueva);
         mTextConfirmarPasswordNueva = findViewById(R.id.textInputConfirmarPasswordNueva);
-        mButtonActualizarPassword = findViewById(R.id.btnActualizarPassword);
+        mButtonActualizarPassword = findViewById(R.id.btnActualizarPassWord);
         mToolbar = findViewById(R.id.toolbar);
     }
 
@@ -77,12 +77,12 @@ public class ActualizarPasswordActivity extends AppCompatActivity {
             if(nuevaPassword.equals(confirmacionNuevaPassword)){
                 Map<String, String> password = new HashMap<>();
                 password.put("actualPassword", passwordActual);
-                password.put("password", nuevaPassword);
+                password.put("nuevoPassword", nuevaPassword);
                 password.put("idCliente", String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
 
-                ClienteController.actualizarPassword(password).enqueue(new Callback<RHRespuesta>() {
+                ClienteController.actualizarPassword(password).enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+                    public void onResponse(Call<Void> call, Response<Void> response) {
 
                         if(response.isSuccessful()){
                             Toast.makeText(ActualizarPasswordActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
@@ -93,7 +93,7 @@ public class ActualizarPasswordActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<RHRespuesta> call, Throwable t) {
+                    public void onFailure(Call<Void> call, Throwable t) {
                         Toast.makeText(ActualizarPasswordActivity.this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show();
                     }
                 });

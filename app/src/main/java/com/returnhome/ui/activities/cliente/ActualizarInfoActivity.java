@@ -99,9 +99,9 @@ public class ActualizarInfoActivity extends AppCompatActivity {
 
         if(!nombre.isEmpty() && !email.isEmpty() && !numeroCelular.isEmpty()){
 
-            ClienteController.actualizarInfo(new Cliente(mAppSharedPreferences.obtenerIdCliente(), nombre, email, numeroCelular)).enqueue(new Callback<RHRespuesta>() {
+            ClienteController.actualizarInfo(new Cliente(mAppSharedPreferences.obtenerIdCliente(), nombre, email, numeroCelular)).enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+                public void onResponse(Call<Void> call, Response<Void> response) {
 
                     if(response.isSuccessful()){
                         Toast.makeText(ActualizarInfoActivity.this, "Información actualizada con exito", Toast.LENGTH_SHORT).show();
@@ -115,7 +115,7 @@ public class ActualizarInfoActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<RHRespuesta> call, Throwable t) {
+                public void onFailure(Call<Void> call, Throwable t) {
                     Toast.makeText(ActualizarInfoActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
                 }
             });

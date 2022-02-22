@@ -26,13 +26,13 @@ public interface IMascotaApi {
     Call<RHRespuesta> obtener(@Query("id") int id, @Query("opcion") int opcion);
 
     @PUT("ws_actualizarMascota.php")
-    Call<RHRespuesta> actualizar(@Body Mascota mascota);
+    Call<Void> actualizar(@Body Mascota mascota);
 
     @PUT("ws_actualizarMascotaDesaparecida.php")
-    Call<RHRespuesta> actualizarEstadoDesaparecida(@Body Mascota mascota);
+    Call<Void> actualizarEstadoDesaparecida(@Body Mascota mascota);
 
     @DELETE("ws_eliminarMascota.php")
-    Call<RHRespuesta> eliminar(@Query("idMascota") int idMascota);
+    Call<Void> eliminar(@Query("idMascota") int idMascota);
 
 
 }

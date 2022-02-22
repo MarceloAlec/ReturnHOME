@@ -109,7 +109,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
                             .zoom(15f)
                             .build()
                     ));
-                    limitSearch();
+                    limitarBusqueda();
                     detenerLocalizacion();
                 }
             }
@@ -117,7 +117,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     };
 
     //LIMITAR LAS BUSQUEDAS POR REGION
-    private void limitSearch() {
+    private void limitarBusqueda() {
         //DISTANCIA PARA LIMITAR LAS BUSQUEDAS EN M
         LatLng norte = SphericalUtil.computeOffset(mActualLatLng, 5000, 0);
         LatLng sur = SphericalUtil.computeOffset(mActualLatLng, 5000, 180);
@@ -223,7 +223,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if (response.isSuccessful()) {
                     mascotaArrayList = response.body().getMascotas();
-                    showList(mascotaArrayList);
+                    mostrarLista(mascotaArrayList);
                 }
                 else{
                     Toast.makeText(MapaSeleccionHogarMascotaActivity.this, "No se pudo cargar sus mascotas", Toast.LENGTH_SHORT).show();
@@ -237,7 +237,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         });
     }
 
-    private void showList(ArrayList<Mascota> mascotas) {
+    private void mostrarLista(ArrayList<Mascota> mascotas) {
         mArrayAdapterMascotas = new ArrayAdapter(MapaSeleccionHogarMascotaActivity.this, R.layout.lista_mis_mascotas, mascotaArrayList);
         mSpinner.setAdapter(mArrayAdapterMascotas);
     }

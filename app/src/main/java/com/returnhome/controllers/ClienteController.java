@@ -35,15 +35,15 @@ public class ClienteController {
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).autenticar(auth);
     }
 
-    public static Call<RHRespuesta> actualizarInfo(com.returnhome.models.Cliente cliente){
+    public static Call<Void> actualizarInfo(com.returnhome.models.Cliente cliente){
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).actualizar(cliente);
     }
 
-    public static Call<RHRespuesta> actualizarPassword(Map<String, String> password){
+    public static Call<Void> actualizarPassword(Map<String, String> password){
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).actualizarPassword(password);
     }
 
-    public static Call<RHRespuesta> eliminarCuenta(int idClient){
+    public static Call<Void> eliminarCuenta(int idClient){
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).eliminar(idClient);
     }
 

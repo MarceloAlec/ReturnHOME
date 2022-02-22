@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +25,7 @@ import com.returnhome.controllers.ClienteController;
 import com.returnhome.models.Cliente;
 import com.returnhome.models.RHRespuesta;
 import com.returnhome.ui.activities.cliente.HomeActivity;
+import com.returnhome.ui.activities.cliente.SeleccionOpcionAjustesActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -35,21 +37,21 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
     private double mExtraMascotaEncontradaLat;
     private double mExtraMascotaEncontradLng;
     private String mExtraNombreMascotaEncontrada;
-    private int mExtraIdClient;
+    private int mExtraIdCliente;
 
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
+    private GoogleMap mMapa;
+    private SupportMapFragment mMapaFragment;
     private LocationRequest mLocationRequest;
 
-    private LatLng mPetFoundLatLng;
+    private LatLng mMascotaEncontradaLatLng;
 
-    private CircleImageView mCircleImageGoToHome;
+    private CircleImageView mCircleImageIrAHome;
 
-    private TextView mTextViewClientName;
+    private TextView mTextViewNombreCliente;
     private TextView mTextViewEmail;
-    private TextView mTextViewPhoneNumber;
-    private ImageView mImageViewCallUser;
-    private String phoneNumber;
+    private TextView mTextViewNumeroCelular;
+    private ImageView mImageViewLLamarCliente;
+    private String numeroCelular;
 
 
 
@@ -58,20 +60,20 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_mascota_encontrada);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mMapFragment.getMapAsync(this);
+        mMapaFragment.getMapAsync(this);
 
-        mExtraIdClient = getIntent().getIntExtra("idClient", 0);
-        mExtraNombreMascotaEncontrada = getIntent().getStringExtra("pet_name");
-        mExtraMascotaEncontradaLat = getIntent().getDoubleExtra("pet_lat", 0);
-        mExtraMascotaEncontradLng = getIntent().getDoubleExtra("pet_lng", 0);
+        mExtraIdCliente = getIntent().getIntExtra("idCliente", 0);
+        mExtraNombreMascotaEncontrada = getIntent().getStringExtra("nombreMascota");
+        mExtraMascotaEncontradaLat = getIntent().getDoubleExtra("mascotaEncontradaLat", 0);
+        mExtraMascotaEncontradLng = getIntent().getDoubleExtra("mascotaEncontradaLng", 0);
 
-        mPetFoundLatLng = new LatLng(mExtraMascotaEncontradaLat, mExtraMascotaEncontradLng);
+        mMascotaEncontradaLatLng = new LatLng(mExtraMascotaEncontradaLat, mExtraMascotaEncontradLng);
 
-        getClient(mExtraIdClient);
+        obtenerCliente(mExtraIdCliente);
 
-        mCircleImageGoToHome.setOnClickListener(new View.OnClickListener() {
+        mCircleImageIrAHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MapaMascotaEncontradaActivity.this, HomeActivity.class);
@@ -80,28 +82,28 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
             }
         });
 
-        mImageViewCallUser.setOnClickListener(new View.OnClickListener() {
+        mImageViewLLamarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialPhoneNumber(phoneNumber);
+                llamarNumeroCelular(numeroCelular);
             }
         });
     }
 
-    private void initializeComponents(){
-        mTextViewClientName = findViewById(R.id.textViewNombreClienteEncontroMascota);
+    private void inicializarComponentes(){
+        mTextViewNombreCliente = findViewById(R.id.textViewNombreClienteEncontroMascota);
         mTextViewEmail = findViewById(R.id.textViewEmailClienteEncontroMascota);
-        mTextViewPhoneNumber = findViewById(R.id.textViewNumeroCelularClienteEncontroMascota);
-        mImageViewCallUser = findViewById(R.id.btnContactarClienteEncontroMascota);
-        mCircleImageGoToHome = findViewById(R.id.btnIrAHomeDesdeMapaMascotaEncontrada);
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mTextViewNumeroCelular = findViewById(R.id.textViewNumeroCelularClienteEncontroMascota);
+        mImageViewLLamarCliente = findViewById(R.id.btnContactarClienteEncontroMascota);
+        mCircleImageIrAHome = findViewById(R.id.btnIrAHomeDesdeMapaMascotaEncontrada);
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
 
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMapa = googleMap;
+        mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mLocationRequest = LocationRequest.create()
                 .setInterval(1000)
@@ -109,14 +111,14 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(5);
 
-        mMap.addMarker(new MarkerOptions().position(mPetFoundLatLng)
+        mMapa.addMarker(new MarkerOptions().position(mMascotaEncontradaLatLng)
                 .title(mExtraNombreMascotaEncontrada +" se encuentra aquí")
                 .icon(BitmapDescriptorFactory
                 .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+        mMapa.animateCamera(CameraUpdateFactory.newCameraPosition(
                 new CameraPosition.Builder()
-                        .target(mPetFoundLatLng)
+                        .target(mMascotaEncontradaLatLng)
                         .zoom(15f)
                         .build()
         ));
@@ -124,27 +126,30 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
 
 
 
-    private void getClient(int mExtraIdClient) {
+    private void obtenerCliente(int mExtraIdClient) {
         ClienteController.obtener(mExtraIdClient).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
                     Cliente cliente = response.body().getCliente();
-                    mTextViewClientName.setText(cliente.getNombre());
+                    mTextViewNombreCliente.setText(cliente.getNombre());
                     mTextViewEmail.setText(cliente.getEmail());
-                    mTextViewPhoneNumber.setText(cliente.getNumeroCelular());
-                    phoneNumber = response.body().getCliente().getNumeroCelular();
+                    mTextViewNumeroCelular.setText(cliente.getNumeroCelular());
+                    numeroCelular = response.body().getCliente().getNumeroCelular();
+                }
+                else{
+                    Toast.makeText(MapaMascotaEncontradaActivity.this, "No se pudo cargar los datos del cliente", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-
+                Toast.makeText(MapaMascotaEncontradaActivity.this, "No se pudo cargar los datos del cliente", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void dialPhoneNumber(String phoneNumber) {
+    public void llamarNumeroCelular(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
         if (intent.resolveActivity(getPackageManager()) != null) {

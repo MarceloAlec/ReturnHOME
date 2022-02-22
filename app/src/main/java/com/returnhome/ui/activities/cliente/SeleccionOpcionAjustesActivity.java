@@ -47,9 +47,8 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
 
         mAppSharedPreferences = new AppSharedPreferences(this);
 
-
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Registro de usuario");
+        getSupportActionBar().setTitle("Seleccionar opción");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -174,9 +173,9 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
 
     private void eliminarCuenta(){
 
-        ClienteController.eliminarCuenta(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
+        ClienteController.eliminarCuenta(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if(response.isSuccessful()){
                     Toast.makeText(SeleccionOpcionAjustesActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
@@ -198,7 +197,7 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(SeleccionOpcionAjustesActivity.this, "No se pudo eliminar su cuenta", Toast.LENGTH_SHORT).show();
             }
         });

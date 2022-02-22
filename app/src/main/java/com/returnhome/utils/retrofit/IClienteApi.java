@@ -30,13 +30,13 @@ public interface IClienteApi {
     Call<RHRespuesta> autenticar(@Body Map<String,String> auth);
 
     @PUT("ws_actualizarCliente.php")
-    Call<RHRespuesta> actualizar(@Body Cliente cliente);
+    Call<Void> actualizar(@Body Cliente cliente);
 
     @PUT("ws_actualizarPassword.php")
-    Call<RHRespuesta> actualizarPassword(@Body Map<String, String> password);
+    Call<Void> actualizarPassword(@Body Map<String, String> password);
 
     @DELETE("ws_eliminarCliente.php")
-    Call<RHRespuesta> eliminar(@Query("idCliente") int idCliente);
+    Call<Void> eliminar(@Query("idCliente") int idCliente);
 
 
 }

@@ -66,8 +66,8 @@ import retrofit2.Response;
 
 public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
+    private GoogleMap mMapa;
+    private SupportMapFragment mMapaFragment;
 
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocation;
@@ -77,32 +77,32 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
-    private LatLng mPetLatLng;
-    private LatLng mPetHomeLatLng;
-    private Marker mMarkerPet;
-    private Marker mMarkerHomePet;
+    private LatLng mMascotaEncontradaLatLng;
+    private LatLng mHogarMascotaEncontradaLatLng;
+    private Marker mMarkerMascotaEncontrada;
+    private Marker mMarkerHogarMascotaEncontrada;
 
-    private Button mButtonGoToSendNotification;
-    private CircleImageView mGoToHome;
+    private Button mButtonNotificarMascotaEncontrada;
+    private CircleImageView mIrAHome;
 
-    private double mExtraPetHomeLat;
-    private double mExtraPetHomeLng;
+    private double mExtraHogarMascotaLat;
+    private double mExtraHogarMascotaLng;
 
-    private String mExtraPhoneNumber;
-    private int mExtraIdPet;
+    private String mExtraNumeroCelular;
+    private int mExtraIdMascota;
     private Cliente cliente;
     private Mascota mascota;
-    private String mPetLocation;
+    private String mMascotaUbicacion;
 
 
 
-    private TextView mTextViewPetName;
-    private TextView mTextViewBreed;
-    private TextView mTextViewGender;
-    private TextView mTextViewPhoneNumber;
+    private TextView mTextViewNombreMascota;
+    private TextView mTextViewRaza;
+    private TextView mTextViewGenero;
+    private TextView mTextViewNumeroCelular;
 
     private AppSharedPreferences mAppSharedPreferences;
-    private ImageView mImageViewCallUser;
+    private ImageView mImageViewLlamarPropietarioMascota;
 
 
     //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
@@ -113,22 +113,22 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
             for (Location location : locationResult.getLocations()) {
                 if (getApplicationContext() != null) {
 
-                    mPetLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMascotaEncontradaLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    mMarkerPet =  mMap.addMarker(new MarkerOptions().position(mPetLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ubicacion_mascota)));
-                    mMarkerHomePet= mMap.addMarker(new MarkerOptions().position(mPetHomeLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
+                    mMarkerMascotaEncontrada =  mMapa.addMarker(new MarkerOptions().position(mMascotaEncontradaLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ubicacion_mascota)));
+                    mMarkerHogarMascotaEncontrada = mMapa.addMarker(new MarkerOptions().position(mHogarMascotaEncontradaLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
 
-                    mMarkerHomePet.showInfoWindow();
+                    mMarkerHogarMascotaEncontrada.showInfoWindow();
 
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    builder.include(mMarkerPet.getPosition());
-                    builder.include(mMarkerHomePet.getPosition());
+                    builder.include(mMarkerMascotaEncontrada.getPosition());
+                    builder.include(mMarkerHogarMascotaEncontrada.getPosition());
 
                     LatLngBounds bounds = builder.build();
                     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 180);
-                    mMap.animateCamera(cu);
+                    mMapa.animateCamera(cu);
 
-                    stopLocation();
+                    detenerLocalizacion();
 
                     }
 
@@ -141,58 +141,58 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_notificacion_mascota_encontrada);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mMapFragment.getMapAsync(this);
+        mMapaFragment.getMapAsync(this);
 
         mAppSharedPreferences = new AppSharedPreferences(this);
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
-        mExtraPetHomeLat = getIntent().getDoubleExtra("pet_home_lat", 0);
-        mExtraPetHomeLng = getIntent().getDoubleExtra("pet_home_lng", 0);
-        mExtraPhoneNumber = getIntent().getStringExtra("phone_number");
-        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
+        mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
+        mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
+        mExtraNumeroCelular = getIntent().getStringExtra("numeroCelular");
+        mExtraIdMascota = getIntent().getIntExtra("idMascota", 0);
 
-        mTextViewPhoneNumber.setText(mExtraPhoneNumber);
+        mTextViewNumeroCelular.setText(mExtraNumeroCelular);
 
 
-        mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
+        mHogarMascotaEncontradaLatLng = new LatLng(mExtraHogarMascotaLat, mExtraHogarMascotaLng);
 
-        getPet(mExtraIdPet);
+        obtenerMascota(mExtraIdMascota);
 
-        mButtonGoToSendNotification.setOnClickListener(this);
+        mButtonNotificarMascotaEncontrada.setOnClickListener(this);
 
-        mGoToHome.setOnClickListener(this);
+        mIrAHome.setOnClickListener(this);
 
-        mImageViewCallUser.setOnClickListener(this);
+        mImageViewLlamarPropietarioMascota.setOnClickListener(this);
     }
 
 
-    private void initializeComponents(){
-        mTextViewPetName = findViewById(R.id.textViewNamePetNotification);
-        mTextViewBreed = findViewById(R.id.textViewBreedNotification);
-        mTextViewGender = findViewById(R.id.textViewGenderNotification);
-        mTextViewPhoneNumber = findViewById(R.id.textViewPhoneNumberNotification);
-        mGoToHome = findViewById(R.id.btnGoToHomeFromReportedFound);
-        mImageViewCallUser = findViewById(R.id.imageViewCallUserReportedFound);
-        mButtonGoToSendNotification = findViewById(R.id.btnGoToSendNotification);
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    private void inicializarComponentes(){
+        mTextViewNombreMascota = findViewById(R.id.textViewNombreMascotaNotificacion);
+        mTextViewRaza = findViewById(R.id.textViewRazaMascotaNotificacion);
+        mTextViewGenero = findViewById(R.id.textViewGeneroMascotaNotificacion);
+        mTextViewNumeroCelular = findViewById(R.id.textViewNumeroCelularNotificacion);
+        mIrAHome = findViewById(R.id.btnIrAHomeDesdeMapaMascotaEncontrada);
+        mImageViewLlamarPropietarioMascota = findViewById(R.id.btnContactarPropietarioMascota);
+        mButtonNotificarMascotaEncontrada = findViewById(R.id.btnSeleccionarLugarMascotaDesaparecida);
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btnGoToSendNotification:
-                getClientToSendNotification();
+            case R.id.btnNotificarPropietarioMascota:
+                obtenerPropietarioMascota();
                 break;
 
-            case R.id.btnGoToHomeFromReportedFound:
+            case R.id.btnIrAHomeDesdeNotificacionMascotaEncontrada:
                 finish();
                 break;
 
-            case R.id.imageViewCallUserReportedFound:
-                dialPhoneNumber(mExtraPhoneNumber);
+            case R.id.btnContactarPropietarioMascota:
+                llamarNumeroCelular(mExtraNumeroCelular);
                 break;
         }
     }
@@ -201,14 +201,14 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         //ElIMINA LA ACTUALIZACION DEL GPS
-        stopLocation();
+        detenerLocalizacion();
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setOnCameraIdleListener(mCameraListener);
+        mMapa = googleMap;
+        mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMapa.setOnCameraIdleListener(mCameraListener);
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(1000);
@@ -217,7 +217,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         mLocationRequest.setSmallestDisplacement(5);
 
 
-        startLocation();
+        iniciarLocalizacion();
     }
 
     @Override
@@ -227,59 +227,59 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (gpsActived()) {
+                    if (gpsActivado()) {
                         mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                     }
                     else {
-                        showAlertDialogNOGPS();
+                        mostrarCuadroDialogoActivarGPS();
                     }
                 }
                 else{
                     //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                    checkLocationPermissions();
+                    verificarPermisosUbicacion();
                 }
             }
             else{
                 //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                checkLocationPermissions();
+                verificarPermisosUbicacion();
             }
         }
     }
 
-    private void startLocation() {
+    private void iniciarLocalizacion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 //AL EJECTUTARSE EL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
-                if (gpsActived()) {
+                if (gpsActivado()) {
                     mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
                 } else {
-                    showAlertDialogNOGPS();
+                    mostrarCuadroDialogoActivarGPS();
                 }
             } else {
-                checkLocationPermissions();
+                verificarPermisosUbicacion();
             }
         } else {
-            if (gpsActived()) {
+            if (gpsActivado()) {
                 mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
             } else {
-                showAlertDialogNOGPS();
+                mostrarCuadroDialogoActivarGPS();
             }
         }
     }
 
-    private boolean gpsActived() {
-        boolean isActive = false;
+    private boolean gpsActivado() {
+        boolean activo = false;
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //SI EL GPS ESTA ACTIVADO
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            isActive = true;
+            activo = true;
         }
-        return isActive;
+        return activo;
     }
 
-    private void showAlertDialogNOGPS() {
+    private void mostrarCuadroDialogoActivarGPS() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setMessage("Por favor activa tu ubicacion para continuar");
@@ -305,19 +305,19 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTINGS_REQUEST_CODE && gpsActived()) {
+        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
         }
-        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActived()){
-            showAlertDialogNOGPS();
+        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActivado()){
+            mostrarCuadroDialogoActivarGPS();
         }
     }
 
-    private void checkLocationPermissions() {
+    private void verificarPermisosUbicacion() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -349,7 +349,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         }
     }
 
-    private void getClientToSendNotification() {
+    private void obtenerPropietarioMascota() {
 
         try{
             ClienteController.obtener(mascota.getIdCliente()).enqueue(new Callback<RHRespuesta>() {
@@ -357,7 +357,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                     if(response.isSuccessful()){
                         cliente = response.body().getCliente();
-                        sendNotification();
+                        enviarNotificacion();
                     }
                 }
 
@@ -373,14 +373,14 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
 
     }
 
-    private void sendNotification(){
+    private void enviarNotificacion(){
 
         try {
             Geocoder geocoder = new Geocoder(MapaNotificacionMascotaEncontradaActivity.this);
-            List<Address> addressList = geocoder.getFromLocation(mPetLatLng.latitude, mPetLatLng.longitude, 1);
-            String city = addressList.get(0).getLocality();
-            String address = addressList.get(0).getAddressLine(0);
-            mPetLocation = address + " " + city;
+            List<Address> listaDirecciones = geocoder.getFromLocation(mMascotaEncontradaLatLng.latitude, mMascotaEncontradaLatLng.longitude, 1);
+            String ciudad = listaDirecciones.get(0).getLocality();
+            String direccion = listaDirecciones.get(0).getAddressLine(0);
+            mMascotaUbicacion = direccion + " " + ciudad;
 
         } catch (IOException e) {
             Log.d("Error: ", "Se ha producido un error: " + e.getMessage());
@@ -390,19 +390,19 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         if(!token.equals("")){
             Map<String, String> map = new HashMap<>();
             map.put("title","Mascota encontrada");
-            map.put("body", mascota.getNombre()+" fue encontrada en: " +mPetLocation);
-            map.put("idClient",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
-            map.put("phoneNumber", mAppSharedPreferences.obtenerNumeroCelular());
-            map.put("pet_name", mascota.getNombre());
-            map.put("pet_lat",String.valueOf(mPetLatLng.latitude));
-            map.put("pet_lng",String.valueOf(mPetLatLng.longitude));
+            map.put("body", mascota.getNombre()+" fue encontrada en: " + mMascotaUbicacion);
+            map.put("idCliente",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
+            map.put("numeroCelular", mAppSharedPreferences.obtenerNumeroCelular());
+            map.put("nombreMascota", mascota.getNombre());
+            map.put("mascotaLat",String.valueOf(mMascotaEncontradaLatLng.latitude));
+            map.put("mascotaLng",String.valueOf(mMascotaEncontradaLatLng.longitude));
             FCMCuerpo fcmCuerpo = new FCMCuerpo(token, "high", map);
             NotificacionController.enviarNotificacion(fcmCuerpo).enqueue(new Callback<FCMRespuesta>() {
                 @Override
                 public void onResponse(Call<FCMRespuesta> call, Response<FCMRespuesta> response) {
                     if(response.body() != null){
                         if(response.body().getSuccess() == 1){
-                            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"CanalNotificacion enviada con exito",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"Notificacion enviada con exito",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
@@ -425,29 +425,29 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         }
     }
 
-    private void stopLocation(){
+    private void detenerLocalizacion(){
         if(mLocationCallback !=null && mFusedLocation != null){
             mFusedLocation.removeLocationUpdates(mLocationCallback);
         }
     }
 
-    public void dialPhoneNumber(String phoneNumber) {
+    public void llamarNumeroCelular(String numeroCelular) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + phoneNumber));
+        intent.setData(Uri.parse("tel:" + numeroCelular));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
     }
 
-    private void getPet(int idPet) {
+    private void obtenerMascota(int idPet) {
         MascotaController.obtener(idPet, 2).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
                     mascota = response.body().getMascota();
-                    mTextViewPetName.setText(mascota.getNombre());
-                    mTextViewBreed.setText(mascota.getRaza());
-                    mTextViewGender.setText(String.valueOf(mascota.getGenero()));
+                    mTextViewNombreMascota.setText(mascota.getNombre());
+                    mTextViewRaza.setText(mascota.getRaza());
+                    mTextViewGenero.setText(String.valueOf(mascota.getGenero()));
                 }
                 else{
                     Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();

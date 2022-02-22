@@ -33,15 +33,15 @@ import retrofit2.Response;
 public class MiMascotaFragment extends Fragment implements View.OnClickListener {
 
     private MiMascotaAdapter mMiMascotaAdapter;
-    private RecyclerView mRecyclerViewPets;
+    private RecyclerView mRecyclerViewMascotas;
     private AppSharedPreferences mAppSharedPreferences;
-    private FloatingActionButton mFloatingButtonAdd;
+    private FloatingActionButton mFloatingButtonAgregar;
     private BottomSheetDialog mBottomSheetDialog;
-    private Button mButtonUpdateAddPet;
-    private TextInputEditText mTextInputName;
-    private TextInputEditText mTextInputBreed;
-    private TextInputEditText mTextInputDescription;
-    private RadioButton mRadioButtonMalePet;
+    private Button mButtonAgregarActualizarMascota;
+    private TextInputEditText mTextInputNombre;
+    private TextInputEditText mTextInputRaza;
+    private TextInputEditText mTextInputDescripcion;
+    private RadioButton mRadioButtonGeneroMacho;
     private ArrayList<Mascota> mascotaArrayList;
 
     public MiMascotaFragment() {
@@ -55,17 +55,17 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
         View view = inflater.inflate(R.layout.fragment_mi_mascota, container, false);
 
         mascotaArrayList = new ArrayList<>();
-        mRecyclerViewPets = view.findViewById(R.id.recyclerViewMisMascotas);
+        mRecyclerViewMascotas = view.findViewById(R.id.recyclerViewMisMascotas);
         mAppSharedPreferences = new AppSharedPreferences(getContext());
-        mFloatingButtonAdd = view.findViewById(R.id.fab_agregarMascota);
+        mFloatingButtonAgregar = view.findViewById(R.id.fabAgregarMascota);
 
         inicializarComponentes();
 
-        mFloatingButtonAdd.setOnClickListener(this);
+        mFloatingButtonAgregar.setOnClickListener(this);
 
-        mButtonUpdateAddPet.setOnClickListener(this);
+        mButtonAgregarActualizarMascota.setOnClickListener(this);
 
-        getPets();
+        obtenerMascotas();
 
         return view;
     }
@@ -73,14 +73,14 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.fab_agregarMascota:
+            case R.id.fabAgregarMascota:
 
-                mButtonUpdateAddPet.setText("Actualizar");
+                mButtonAgregarActualizarMascota.setText("Agregar");
                 mBottomSheetDialog.show();
                 break;
 
-            case R.id.btnUpdateAddPet:
-                clickAdd();
+            case R.id.btnAgregarActualizarMascota:
+                clicAgregarActualizar();
                 break;
         }
     }
@@ -90,31 +90,28 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
         mBottomSheetDialog.setContentView(R.layout.popup_agregar_actualizar);
         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
-        mButtonUpdateAddPet = mBottomSheetDialog.findViewById(R.id.btnUpdateAddPet);
-        mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
-        mTextInputBreed = mBottomSheetDialog.findViewById(R.id.textInputBreed);
-        mTextInputDescription = mBottomSheetDialog.findViewById(R.id.textInputDescription);
-        mRadioButtonMalePet = mBottomSheetDialog.findViewById(R.id.radioButtonMalePet);
-
+        mButtonAgregarActualizarMascota = mBottomSheetDialog.findViewById(R.id.btnAgregarActualizarMascota);
+        mTextInputNombre = mBottomSheetDialog.findViewById(R.id.textInputNombreMascota);
+        mTextInputRaza = mBottomSheetDialog.findViewById(R.id.textInputRaza);
+        mTextInputDescripcion = mBottomSheetDialog.findViewById(R.id.textInputDescripcion);
+        mRadioButtonGeneroMacho = mBottomSheetDialog.findViewById(R.id.radioButtonGeneroMacho);
     }
 
-    private void clickAdd() {
-        String name = mTextInputName.getText().toString();
-        String breed = mTextInputBreed.getText().toString();
-        String description = mTextInputDescription.getText().toString();
-        char gender = ((mRadioButtonMalePet.isChecked() ? 'M' : 'F'));
+    private void clicAgregarActualizar() {
+        String nombre = mTextInputNombre.getText().toString();
+        String raza = mTextInputRaza.getText().toString();
+        String descripcion = mTextInputDescripcion.getText().toString();
+        char genero = ((mRadioButtonGeneroMacho.isChecked() ? 'M' : 'F'));
 
-
-        if(!name.isEmpty() && !breed.isEmpty()){
-            //DATOS INGRESADOS CORRECTAMENTE
-            createPet(new Mascota(name,breed,gender,description, false, mAppSharedPreferences.obtenerIdCliente()));
+        if(!nombre.isEmpty() && !raza.isEmpty()){
+            registrarMascota(new Mascota(nombre,raza,genero,descripcion, false, mAppSharedPreferences.obtenerIdCliente()));
         }
         else{
             Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void createPet(Mascota mascota) {
+    private void registrarMascota(Mascota mascota) {
         MascotaController.registrar(mascota).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
@@ -123,13 +120,13 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
                     mascotaArrayList.add(mascota);
                     showList(mascotaArrayList);
                     mBottomSheetDialog.dismiss();
-                    mTextInputName.getText().clear();
-                    mTextInputName.clearFocus();
-                    mTextInputBreed.getText().clear();
-                    mTextInputBreed.clearFocus();
-                    mTextInputDescription.getText().clear();
-                    mTextInputDescription.clearFocus();
-                    mRadioButtonMalePet.setChecked(true);
+                    mTextInputNombre.getText().clear();
+                    mTextInputNombre.clearFocus();
+                    mTextInputRaza.getText().clear();
+                    mTextInputRaza.clearFocus();
+                    mTextInputDescripcion.getText().clear();
+                    mTextInputDescripcion.clearFocus();
+                    mRadioButtonGeneroMacho.setChecked(true);
                 }
                 else{
                     Toast.makeText(getContext(), "Mascota añadida con éxito", Toast.LENGTH_SHORT).show();
@@ -144,17 +141,16 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
 
     }
 
-    private void getPets() {
-        int idClient = mAppSharedPreferences.obtenerIdCliente();
+    private void obtenerMascotas() {
+        int idCliente = mAppSharedPreferences.obtenerIdCliente();
 
-        MascotaController.obtener(idClient, 1).enqueue(new Callback<RHRespuesta>() {
+        MascotaController.obtener(idCliente, 1).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
                     mascotaArrayList = response.body().getMascotas();
                     showList(mascotaArrayList);
                 }
-
             }
 
             @Override
@@ -167,17 +163,9 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
     private void showList(ArrayList<Mascota> mascotas) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //MOSTRAR LOS VIEWS DE LA LISTA DE MANERA LINEAL
-        mRecyclerViewPets.setLayoutManager(linearLayoutManager);
+        mRecyclerViewMascotas.setLayoutManager(linearLayoutManager);
         //SE ENVIA LA LISTA DE MASCOTAS A PETPROVIDER
         mMiMascotaAdapter = new MiMascotaAdapter(getContext(), mascotas);
-        mRecyclerViewPets.setAdapter(mMiMascotaAdapter);
+        mRecyclerViewMascotas.setAdapter(mMiMascotaAdapter);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-
 }

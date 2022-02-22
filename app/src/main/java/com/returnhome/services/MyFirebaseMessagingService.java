@@ -37,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        RemoteMessage.Notification notificacion = remoteMessage.getNotification();
         Map<String, String> data = remoteMessage.getData();
         String title = data.get("title");
         String body = data.get("body");
@@ -48,49 +48,49 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 if(title.contains("Mascota encontrada")){
 
-                    int  idClient = Integer.valueOf(data.get("idClient"));
-                    String petName = data.get("pet_name");
-                    String phoneNumber = data.get("phoneNumber");
-                    double pet_lat = Double.parseDouble(data.get("pet_lat"));
-                    double pet_lng  = Double.parseDouble(data.get("pet_lng"));
+                    int  idCliente = Integer.valueOf(data.get("idClient"));
+                    String nombreMascota = data.get("nombreMascota");
+                    String numeroCelular = data.get("numeroCelular");
+                    double mascotaLat = Double.parseDouble(data.get("mascotaLat"));
+                    double mascotaLng  = Double.parseDouble(data.get("mascotaLng"));
 
-                    LatLng petLatLng = new LatLng(pet_lat, pet_lng);
-                    showNotificationApiOreoPetFound(title, body, idClient, phoneNumber, petName, petLatLng);
+                    LatLng petLatLng = new LatLng(mascotaLat, mascotaLng);
+                    mostrarNotificacionApiOreoMascotaEncontrada(title, body, idCliente, numeroCelular, nombreMascota, petLatLng);
 
                 }
                 else{
 
-                    int  idPet = Integer.valueOf(data.get("idPet"));
-                    String petName = data.get("pet_name");
-                    double pet_lat = Double.parseDouble(data.get("pet_lat"));
-                    double pet_lng  = Double.parseDouble(data.get("pet_lng"));
+                    int  idMascota = Integer.valueOf(data.get("idMascota"));
+                    String nombreMascota = data.get("nombreMascota");
+                    double mascotaLat = Double.parseDouble(data.get("mascotaLat"));
+                    double mascotaLng  = Double.parseDouble(data.get("mascotaLng"));
 
-                    LatLng petLatLng = new LatLng(pet_lat, pet_lng);
-                    showNotificationApiOreoPetMissing(title, body, idPet, petName, petLatLng);
+                    LatLng mascotaLatLng = new LatLng(mascotaLat, mascotaLng);
+                    mostrarNotificacionApiOreoMascotaDesaparecida(title, body, idMascota, nombreMascota, mascotaLatLng);
                 }
 
             }
             else{
                 if(title.contains("Mascota encontrada")){
 
-                    int  idClient = Integer.valueOf(data.get("idClient"));
-                    String petName = data.get("pet_name");
-                    String phoneNumber = data.get("phoneNumber");
-                    double pet_lat = Double.parseDouble(data.get("pet_lat"));
-                    double pet_lng  = Double.parseDouble(data.get("pet_lng"));
+                    int  idCliente = Integer.valueOf(data.get("idCliente"));
+                    String nombreMascota = data.get("nombreMascota");
+                    String numeroCelular = data.get("numeroCelular");
+                    double mascotaLat = Double.parseDouble(data.get("mascotaLat"));
+                    double mascotaLng  = Double.parseDouble(data.get("mascotaLng"));
 
-                    LatLng petLatLng = new LatLng(pet_lat, pet_lng);
-                    showNotificationPetFound(title, body, idClient, phoneNumber, petName, petLatLng);
+                    LatLng petLatLng = new LatLng(mascotaLat, mascotaLng);
+                    mostrarNotificacionMascotaEncontrada(title, body, idCliente, numeroCelular, nombreMascota, petLatLng);
                 }
                 else{
 
-                    int  idPet = Integer.valueOf(data.get("idPet"));
-                    String petName = data.get("pet_name");
-                    double pet_lat = Double.parseDouble(data.get("pet_lat"));
-                    double pet_lng  = Double.parseDouble(data.get("pet_lng"));
+                    int  idMascota = Integer.valueOf(data.get("idMascota"));
+                    String nombreMascota = data.get("nombreMascota");
+                    double mascotaLat = Double.parseDouble(data.get("mascotaLat"));
+                    double mascotaLng  = Double.parseDouble(data.get("mascotaLng"));
 
-                    LatLng petLatLng = new LatLng(pet_lat, pet_lng);
-                    showNotificationPetMissing(title, body, idPet, petName, petLatLng);
+                    LatLng mascotaLatLng = new LatLng(mascotaLat, mascotaLng);
+                    mostrarNotificacionMascotaDesaparecida(title, body, idMascota, nombreMascota, mascotaLatLng);
                 }
             }
 
@@ -98,82 +98,82 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    private void showNotificationPetFound(String title, String body, int idClient, String phoneNumber, String petName, LatLng petLatLng) {
+    private void mostrarNotificacionMascotaEncontrada(String title, String body, int idCliente, String numeroCelular, String nombreMascota, LatLng mascotaLatLng) {
 
-        Intent showPetFoundIntent = new Intent(this, MascotaEncontradaReceiver.class);
-        showPetFoundIntent.putExtra("idClient", idClient);
-        showPetFoundIntent.putExtra("pet_name", petName);
-        showPetFoundIntent.putExtra("pet_lat", petLatLng.latitude);
-        showPetFoundIntent.putExtra("pet_lng", petLatLng.longitude);
-        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent mascotaEncontradaIntent = new Intent(this, MascotaEncontradaReceiver.class);
+        mascotaEncontradaIntent.putExtra("idCliente", idCliente);
+        mascotaEncontradaIntent.putExtra("nombreMascota", nombreMascota);
+        mascotaEncontradaIntent.putExtra("mascotaLat", mascotaLatLng.latitude);
+        mascotaEncontradaIntent.putExtra("mascotaLng", mascotaLatLng.longitude);
+        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, mascotaEncontradaIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Action showPetFoundAction= new NotificationCompat.Action.Builder(
+        NotificationCompat.Action mascotaEncontradaAction= new NotificationCompat.Action.Builder(
                 R.drawable.ic_app,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();
 
-        Intent contactIntent = new Intent(this, ContactoReceiver.class);
-        contactIntent.putExtra("phoneNumber", phoneNumber);
-        PendingIntent contactPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, contactIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent contactoIntent = new Intent(this, ContactoReceiver.class);
+        contactoIntent.putExtra("numeroCelular", numeroCelular);
+        PendingIntent contactoPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, contactoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Action contactAction = new NotificationCompat.Action.Builder(
+        NotificationCompat.Action contactoAction = new NotificationCompat.Action.Builder(
                 R.drawable.ic_app,
                 "Contactar",
-                contactPendingIntent
+                contactoPendingIntent
         ).build();
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         CanalNotificacion canalNotificacion = new CanalNotificacion(getBaseContext());
-        NotificationCompat.Builder builder = canalNotificacion.getNotificationPetFound(title, body, sound, showPetFoundAction, contactAction);
+        NotificationCompat.Builder builder = canalNotificacion.getNotificationPetFound(title, body, sound, mascotaEncontradaAction, contactoAction);
         canalNotificacion.getManager().notify(1, builder.build());
     }
 
-    private void showNotificationPetMissing(String title, String body, int idPet, String petName, LatLng petLatLng) {
+    private void mostrarNotificacionMascotaDesaparecida(String title, String body, int idMascota, String nombreMascota, LatLng mascotaLatLng) {
 
-        Intent showPetMissingIntent = new Intent(this, MascotaDesaparecidaReceiver.class);
-        showPetMissingIntent.putExtra("idPet", idPet);
-        showPetMissingIntent.putExtra("pet_name", petName);
-        showPetMissingIntent.putExtra("pet_lat", petLatLng.latitude);
-        showPetMissingIntent.putExtra("pet_lng", petLatLng.longitude);
-        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetMissingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent mostrarMascotaDesaparecidaIntent = new Intent(this, MascotaDesaparecidaReceiver.class);
+        mostrarMascotaDesaparecidaIntent.putExtra("idMascota", idMascota);
+        mostrarMascotaDesaparecidaIntent.putExtra("nombreMascota", nombreMascota);
+        mostrarMascotaDesaparecidaIntent.putExtra("mascotaLat", mascotaLatLng.latitude);
+        mostrarMascotaDesaparecidaIntent.putExtra("mascotaLng", mascotaLatLng.longitude);
+        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, mostrarMascotaDesaparecidaIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Action showPetMissingAction= new NotificationCompat.Action.Builder(
-                R.mipmap.ic_launcher,
+        NotificationCompat.Action mostrarMascotaDesaparecidaAction = new NotificationCompat.Action.Builder(
+                R.drawable.ic_app,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         CanalNotificacion canalNotificacion = new CanalNotificacion(getBaseContext());
-        NotificationCompat.Builder builder = canalNotificacion.getNotificationPetMissing(title, body, sound, showPetMissingAction);
+        NotificationCompat.Builder builder = canalNotificacion.getNotificationPetMissing(title, body, sound, mostrarMascotaDesaparecidaAction );
         canalNotificacion.getManager().notify(1, builder.build());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotificationApiOreoPetFound(String title, String body, int idClient, String phoneNumber, String petName, LatLng petLatLng) {
+    private void mostrarNotificacionApiOreoMascotaEncontrada(String title, String body, int idCliente, String numeroCelular, String nombreMascota, LatLng mascotaLatLng) {
 
         Intent showPetFoundIntent = new Intent(this, MascotaEncontradaReceiver.class);
-        showPetFoundIntent.putExtra("idClient", idClient);
-        showPetFoundIntent.putExtra("pet_name", petName);
-        showPetFoundIntent.putExtra("pet_lat", petLatLng.latitude);
-        showPetFoundIntent.putExtra("pet_lng", petLatLng.longitude);
+        showPetFoundIntent.putExtra("idCliente", idCliente);
+        showPetFoundIntent.putExtra("nombreMascota", nombreMascota);
+        showPetFoundIntent.putExtra("mascotaLat", mascotaLatLng.latitude);
+        showPetFoundIntent.putExtra("mascotaLng", mascotaLatLng.longitude);
         PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetFoundIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action showPetFoundAction= new Notification.Action.Builder(
-                R.mipmap.ic_launcher,
+                R.drawable.ic_app,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();
 
-        Intent contactIntent = new Intent(this, ContactoReceiver.class);
-        contactIntent.putExtra("phoneNumber", phoneNumber);
-        PendingIntent contactPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, contactIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent contactoIntent = new Intent(this, ContactoReceiver.class);
+        contactoIntent.putExtra("numeroCelular", numeroCelular);
+        PendingIntent contactoPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, contactoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action contactAction = new Notification.Action.Builder(
-                R.mipmap.ic_launcher,
+                R.drawable.ic_app,
                 "Contactar",
-                contactPendingIntent
+                contactoPendingIntent
         ).build();
 
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -183,17 +183,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showNotificationApiOreoPetMissing(String title, String body, int idPet, String petName, LatLng petLatLng) {
+    private void mostrarNotificacionApiOreoMascotaDesaparecida(String title, String body, int idMascota, String nombreMascota, LatLng mascotaLatLng) {
 
-        Intent showPetMissingIntent = new Intent(this, MascotaDesaparecidaReceiver.class);
-        showPetMissingIntent.putExtra("idPet", idPet);
-        showPetMissingIntent.putExtra("pet_name", petName);
-        showPetMissingIntent.putExtra("pet_lat", petLatLng.latitude);
-        showPetMissingIntent.putExtra("pet_lng", petLatLng.longitude);
-        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, showPetMissingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent mascotaDesaparecidaIntent = new Intent(this, MascotaDesaparecidaReceiver.class);
+        mascotaDesaparecidaIntent.putExtra("idMascota", idMascota);
+        mascotaDesaparecidaIntent.putExtra("nombreMascota", nombreMascota);
+        mascotaDesaparecidaIntent.putExtra("mascotaLat", mascotaLatLng.latitude);
+        mascotaDesaparecidaIntent.putExtra("mascotaLng", mascotaLatLng.longitude);
+        PendingIntent viewPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, mascotaDesaparecidaIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Action showPetMissingAction= new Notification.Action.Builder(
-                R.mipmap.ic_launcher,
+                R.drawable.ic_app,
                 "Mostrar en mapa",
                 viewPendingIntent
         ).build();

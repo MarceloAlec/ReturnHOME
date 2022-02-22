@@ -63,8 +63,8 @@ import retrofit2.Response;
 
 public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private SupportMapFragment mMapFragment;
+    private GoogleMap mMapa;
+    private SupportMapFragment mMapaFragment;
 
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocation;
@@ -74,16 +74,16 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
-    private Button mButtonSendNotification;
+    private Button mButtonSeleccionarLugarDesaparecida;
 
-    private String mExtraPetName;
-    private int mExtraIdPet;
-    private LatLng mCurrentLatLng;
+    private String mExtraNombreMascota;
+    private int mExtraIdMascota;
+    private LatLng mActualUbicacionLatLng;
 
     private PlacesClient mPlaces;
-    private AutocompleteSupportFragment mAutoComplete;
-    private LatLng mPetLastLocationLatLng;
-    private String mPetLastLocation;
+    private AutocompleteSupportFragment mAutoCompletar;
+    private LatLng mUltimaUbicacionMascotaLatLng;
+    private String mUltimoLugarMascota;
     private androidx.appcompat.widget.Toolbar mToolbar;
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -94,38 +94,36 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
                 if (getApplicationContext() != null) {
 
 
-                    mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mActualUbicacionLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                     //OBTIENE LA UBICACION EN TIEMPO REAL
-                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                    mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
                             .target(new LatLng(location.getLatitude(), location.getLongitude()))
                             .zoom(15f)
                             .build()
                     ));
 
-                    limitSearch();
-                    stopLocation();
+                    limitarBusqueda();
+                    detenerLocalizacion();
 
                 }
             }
         }
     };
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_notificacion_mascota_desaparecida);
 
-        initializeComponents();
+        inicializarComponentes();
 
-        mMapFragment.getMapAsync(this);
+        mMapaFragment.getMapAsync(this);
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Registro de usuario");
+        getSupportActionBar().setTitle("Vista por ultima vez en:");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -135,14 +133,14 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
             }
         });
 
-        mExtraIdPet = getIntent().getIntExtra("idPet", 0);
-        mExtraPetName = getIntent().getStringExtra("pet_name");
+        mExtraIdMascota = getIntent().getIntExtra("idMascota", 0);
+        mExtraNombreMascota = getIntent().getStringExtra("nombreMascota");
 
-        mButtonSendNotification.setOnClickListener(new View.OnClickListener() {
+        mButtonSeleccionarLugarDesaparecida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Mascota mascota = new Mascota(mExtraIdPet, true);
-                updateStatusMissingPet(mascota);
+                Mascota mascota = new Mascota(mExtraIdMascota, true);
+                actualizarEstadoMascotaDesaparecida(mascota);
             }
         });
 
@@ -151,13 +149,13 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
         }
 
         mPlaces = Places.createClient(this);
-        instanceAutoCompletePetHome();
-        onCameraMove();
+        instanciarAutoCompletar();
+        movimientoCamara();
     }
 
-    private void initializeComponents(){
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mButtonSendNotification = findViewById(R.id.btnSendNotification);
+    private void inicializarComponentes(){
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mButtonSeleccionarLugarDesaparecida = findViewById(R.id.btnSeleccionarLugarMascotaDesaparecida);
         mToolbar = findViewById(R.id.toolbar);
     }
 
@@ -165,20 +163,20 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
     protected void onDestroy() {
         super.onDestroy();
         //ElIMINA LA ACTUALIZACION DEL GPS
-        stopLocation();
+        detenerLocalizacion();
     }
 
-    private void sendNotification(){
+    private void enviarNotificacion(){
 
         Map<String, String> map = new HashMap<>();
         map.put("title","Mascota desaparecida");
-        map.put("body","Vista por ultima vez en: "+mPetLastLocation);
-        map.put("idPet", String.valueOf(mExtraIdPet));
-        map.put("pet_name", mExtraPetName);
-        map.put("pet_lat",String.valueOf(mPetLastLocationLatLng.latitude));
-        map.put("pet_lng",String.valueOf(mPetLastLocationLatLng.longitude));
+        map.put("body","Vista por ultima vez en: "+ mUltimoLugarMascota);
+        map.put("idMascota", String.valueOf(mExtraIdMascota));
+        map.put("nombreMascota", mExtraNombreMascota);
+        map.put("mascotaLat",String.valueOf(mUltimaUbicacionMascotaLatLng.latitude));
+        map.put("mascotaLng",String.valueOf(mUltimaUbicacionMascotaLatLng.longitude));
 
-        FCMCuerpo fcmCuerpo = new FCMCuerpo("/topics/missing-pets", "high", map);
+        FCMCuerpo fcmCuerpo = new FCMCuerpo("/topics/mascotas-desaparecidas", "high", map);
         NotificacionController.enviarNotificacion(fcmCuerpo).enqueue(new Callback<FCMRespuesta>() {
             @Override
             public void onResponse(Call<FCMRespuesta> call, Response<FCMRespuesta> response) {
@@ -203,14 +201,14 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
 
     }
 
-    private void updateStatusMissingPet(Mascota mascota){
+    private void actualizarEstadoMascotaDesaparecida(Mascota mascota){
 
-        MascotaController.actualizarMascotaDesaparecida(mascota).enqueue(new Callback<RHRespuesta>() {
+        MascotaController.actualizarMascotaDesaparecida(mascota).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if(response.isSuccessful()){
-                    sendNotification();
+                    enviarNotificacion();
                 }
                 else{
                     Toast.makeText(MapaNotificacionMascotaDesaparecidaActivity.this, "La mascota ya fue reportada como desaparecida", Toast.LENGTH_SHORT).show();
@@ -218,25 +216,26 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MapaNotificacionMascotaDesaparecidaActivity.this, "No se pudo reportar a la mascota", Toast.LENGTH_SHORT).show();
 
             }
         });
     }
 
 
-    private void limitSearch() {
+    private void limitarBusqueda() {
         //DISTANCIA PARA LIMITAR LAS BUSQUEDAS EN M
-        LatLng northSide = SphericalUtil.computeOffset(mCurrentLatLng, 5000, 0);
-        LatLng southSide = SphericalUtil.computeOffset(mCurrentLatLng, 5000, 180);
-        mAutoComplete.setLocationBias(RectangularBounds.newInstance(southSide, northSide));
+        LatLng norte = SphericalUtil.computeOffset(mActualUbicacionLatLng, 5000, 0);
+        LatLng sur = SphericalUtil.computeOffset(mActualUbicacionLatLng, 5000, 180);
+        mAutoCompletar.setLocationBias(RectangularBounds.newInstance(sur, norte));
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setOnCameraIdleListener(mCameraListener);
+        mMapa = googleMap;
+        mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMapa.setOnCameraIdleListener(mCameraListener);
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(1000);
@@ -244,7 +243,7 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(5);
 
-        startLocation();
+        iniciarLocalizacion();
     }
 
     @Override
@@ -254,58 +253,58 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (gpsActived()) {
+                    if (gpsActivado()) {
                         mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
                     }
                     else {
-                        showAlertDialogNOGPS();
+                        mostrarCuadroDialogoActivarGPS();
                     }
                 }
                 else{
                     //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                    checkLocationPermissions();
+                    verificarPermisosUbicacion();
                 }
             }
             else{
                 //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                checkLocationPermissions();
+                verificarPermisosUbicacion();
             }
         }
     }
 
-    private void startLocation() {
+    private void iniciarLocalizacion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 //AL EJECTUTARSE EL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
-                if (gpsActived()) {
+                if (gpsActivado()) {
                     mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                 } else {
-                    showAlertDialogNOGPS();
+                    mostrarCuadroDialogoActivarGPS();
                 }
             } else {
-                checkLocationPermissions();
+                verificarPermisosUbicacion();
             }
         } else {
-            if (gpsActived()) {
+            if (gpsActivado()) {
                 mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             } else {
-                showAlertDialogNOGPS();
+                mostrarCuadroDialogoActivarGPS();
             }
         }
     }
 
-    private boolean gpsActived() {
-        boolean isActive = false;
+    private boolean gpsActivado() {
+        boolean activo = false;
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //SI EL GPS ESTA ACTIVADO
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            isActive = true;
+            activo = true;
         }
-        return isActive;
+        return activo;
     }
 
-    private void showAlertDialogNOGPS() {
+    private void mostrarCuadroDialogoActivarGPS() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
         builder.setMessage("Por favor activa tu ubicacion para continuar");
@@ -331,18 +330,18 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTINGS_REQUEST_CODE && gpsActived()) {
+        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
-        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActived()){
-            showAlertDialogNOGPS();
+        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActivado()){
+            mostrarCuadroDialogoActivarGPS();
         }
     }
 
-    private void checkLocationPermissions() {
+    private void verificarPermisosUbicacion() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -374,7 +373,7 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
         }
     }
 
-    private void onCameraMove() {
+    private void movimientoCamara() {
 
         mCameraListener = new GoogleMap.OnCameraIdleListener() {
             @Override
@@ -382,12 +381,12 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
                 try {
                     //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
                     Geocoder geocoder = new Geocoder(MapaNotificacionMascotaDesaparecidaActivity.this);
-                    mPetLastLocationLatLng = mMap.getCameraPosition().target;
-                    List<Address> addressList = geocoder.getFromLocation(mPetLastLocationLatLng.latitude, mPetLastLocationLatLng.longitude, 1);
-                    String city = addressList.get(0).getLocality();
-                    String address = addressList.get(0).getAddressLine(0);
-                    mPetLastLocation = address + " " + city;
-                    mAutoComplete.setText(address + " " + city);
+                    mUltimaUbicacionMascotaLatLng = mMapa.getCameraPosition().target;
+                    List<Address> listaDirecciones = geocoder.getFromLocation(mUltimaUbicacionMascotaLatLng.latitude, mUltimaUbicacionMascotaLatLng.longitude, 1);
+                    String ciudad = listaDirecciones.get(0).getLocality();
+                    String direccion = listaDirecciones.get(0).getAddressLine(0);
+                    mUltimoLugarMascota = direccion + " " + ciudad;
+                    mAutoCompletar.setText(direccion + " " + ciudad);
 
                 } catch (Exception e) {
                     Log.d("Error: ", "Mensaje error: " + e.getMessage());
@@ -397,10 +396,10 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
 
     }
 
-    private void instanceAutoCompletePetHome() {
-        mAutoComplete = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.placeAutocompletePetHome);
-        mAutoComplete.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
-        mAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    private void instanciarAutoCompletar() {
+        mAutoCompletar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.lugarAutocompletarLugarMascotaDesaparecida);
+        mAutoCompletar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
+        mAutoCompletar.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onError(@NonNull Status status) {
 
@@ -409,9 +408,9 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
             @Override
             public void onPlaceSelected(@NonNull Place place) {
 
-                mPetLastLocationLatLng = place.getLatLng();
-                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                        .target(new LatLng(mPetLastLocationLatLng.latitude, mPetLastLocationLatLng.longitude))
+                mUltimaUbicacionMascotaLatLng = place.getLatLng();
+                mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                        .target(new LatLng(mUltimaUbicacionMascotaLatLng.latitude, mUltimaUbicacionMascotaLatLng.longitude))
                         .zoom(15f)
                         .build()
                 ));
@@ -420,7 +419,7 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
         });
     }
 
-    private void stopLocation(){
+    private void detenerLocalizacion(){
         if(mLocationCallback !=null && mFusedLocation != null){
             mFusedLocation.removeLocationUpdates(mLocationCallback);
         }

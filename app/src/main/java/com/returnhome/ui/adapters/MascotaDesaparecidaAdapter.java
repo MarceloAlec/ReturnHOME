@@ -32,14 +32,14 @@ public class MascotaDesaparecidaAdapter extends RecyclerView.Adapter<MascotaDesa
     @Override
     public MascotaDesaparecidaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.cardview_mascota_desaparecida, parent, false);
-        MascotaDesaparecidaViewHolder petsViewHolder = new MascotaDesaparecidaViewHolder(view);
-        return petsViewHolder;
+        MascotaDesaparecidaViewHolder mascotasViewHolder = new MascotaDesaparecidaViewHolder(view);
+        return mascotasViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MascotaDesaparecidaViewHolder holder, int position) {
-        holder.mTextViewNamePet.setText(mascotaArrayList.get(position).getNombre());
-        holder.mTextViewBreedPet.setText(mascotaArrayList.get(position).getRaza());
+        holder.mTextViewNombreMascota.setText(mascotaArrayList.get(position).getNombre());
+        holder.mTextViewRaza.setText(mascotaArrayList.get(position).getRaza());
     }
 
     @Override
@@ -50,15 +50,15 @@ public class MascotaDesaparecidaAdapter extends RecyclerView.Adapter<MascotaDesa
 
     public class MascotaDesaparecidaViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mTextViewNamePet;
-        TextView mTextViewBreedPet;
-        ImageView mImageViewPet;
+        TextView mTextViewNombreMascota;
+        TextView mTextViewRaza;
+        ImageView mImageViewMascota;
 
         public MascotaDesaparecidaViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextViewNamePet = itemView.findViewById(R.id.nameMissingPet);
-            mTextViewBreedPet = itemView.findViewById(R.id.breedMissingPet);
-            mImageViewPet = itemView.findViewById(R.id.imageViewMissingPet);
+            mTextViewNombreMascota = itemView.findViewById(R.id.textViewNombreMascotaDesaparecidaLista);
+            mTextViewRaza = itemView.findViewById(R.id.textViewRazaMascotaDesaparecidaLista);
+            mImageViewMascota = itemView.findViewById(R.id.imageViewMascotaDesaparecidaLista);
         }
 
     }

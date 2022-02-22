@@ -38,12 +38,12 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
 
 
     //LISTA MASCOTAS SE ENVIAN AL RECYCLERVIEW
-    private Button mButtonUpdate;
-    private TextInputEditText mTextInputName;
-    private TextInputEditText mTextInputBreed;
-    private TextInputEditText mTextInputDescription;
-    private RadioButton mRadioButtonMalePet;
-    private RadioButton mRadioButtonFemalePet;
+    private Button mButtonAgregarActualizarMascota;
+    private TextInputEditText mTextInputNombre;
+    private TextInputEditText mTextInputRaza;
+    private TextInputEditText mTextInputDescripcion;
+    private RadioButton mRadioButtonGeneroMacho;
+    private RadioButton mRadioButtonGeneroFemenino;
     private ArrayList<Mascota> mascotaArrayList;
     private BottomSheetDialog mBottomSheetDialog;
     LayoutInflater inflater;
@@ -66,8 +66,8 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
         //COMO PARAMETRO TAMBIEN SE INDICA EL DISEÑO QUE TENDRA CADA ITEM DE LA LISTA
         View view = inflater.inflate(R.layout.cardview_mis_mascotas, parent, false);
         //SE ENVIA LA VISTA AL CONSTRUCTOR DE LA CLASE PETSVIEWHOLDER
-        MiMascotaViewHolder petsViewHolder = new MiMascotaViewHolder(view);
-        return petsViewHolder;
+        MiMascotaViewHolder mascotasViewHolder = new MiMascotaViewHolder(view);
+        return mascotasViewHolder;
     }
 
     //CADA ITEM DEL RECYCLERVIEW HACE USO DE LA VISTA CREADA EN EL VIEWHOLDER
@@ -80,8 +80,8 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
     @Override
     public void onBindViewHolder(@NonNull MiMascotaViewHolder holder, int position) {
         //A CADA POSICION DEL RECYCLER TENDRA LA MISMA VISTA CREADA EN ONCREATEVIEWHOLDER
-        holder.mTextViewNamePet.setText(mascotaArrayList.get(position).getNombre());
-        holder.mTextViewBreedPet.setText(mascotaArrayList.get(position).getRaza());
+        holder.mTextViewNombreMascota.setText(mascotaArrayList.get(position).getNombre());
+        holder.mTextViewRaza.setText(mascotaArrayList.get(position).getRaza());
 
         holder.mButtonMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,38 +103,38 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.cardview_edit:
+                    case R.id.cardview_editar:
 
                         mBottomSheetDialog = new BottomSheetDialog(context);
                         mBottomSheetDialog.setContentView(R.layout.popup_agregar_actualizar);
                         mBottomSheetDialog.setCanceledOnTouchOutside(true);
 
-                        initializeComponents();
+                        inicializarComponentes();
 
-                        mButtonUpdate.setText("Actualizar");
+                        mButtonAgregarActualizarMascota.setText("Actualizar");
 
-                        mTextInputName.setText(mascotaArrayList.get(holder.getBindingAdapterPosition()).getNombre());
-                        mTextInputBreed.setText(mascotaArrayList.get(holder.getBindingAdapterPosition()).getRaza());
-                        mTextInputDescription.setText(mascotaArrayList.get(holder.getBindingAdapterPosition()).getDescripcion());
+                        mTextInputNombre.setText(mascotaArrayList.get(holder.getBindingAdapterPosition()).getNombre());
+                        mTextInputRaza.setText(mascotaArrayList.get(holder.getBindingAdapterPosition()).getRaza());
+                        mTextInputDescripcion.setText(mascotaArrayList.get(holder.getBindingAdapterPosition()).getDescripcion());
                         if(mascotaArrayList.get(holder.getBindingAdapterPosition()).getGenero()=='M'){
-                            mRadioButtonMalePet.setChecked(true);
+                            mRadioButtonGeneroMacho.setChecked(true);
                         }
                         else{
-                            mRadioButtonFemalePet.setChecked(true);
+                            mRadioButtonGeneroFemenino.setChecked(true);
                         }
 
                         mBottomSheetDialog.show();
 
-                        mButtonUpdate.setOnClickListener(new View.OnClickListener() {
+                        mButtonAgregarActualizarMascota.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                clickUpdate(holder);
+                                clicActualizar(holder);
                             }
                         });
 
                         return true;
 
-                    case R.id.cardview_delete:
+                    case R.id.cardview_eliminar:
 
                         AlertDialog builder = new AlertDialog.Builder(context).create();
                         builder.setTitle("ReturnHOME");
@@ -142,7 +142,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
                         builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                deletePet(holder);
+                                eliminarMascota(holder);
                             }
                         });
                         builder.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
@@ -156,22 +156,21 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
 
                     return true;
 
-                    case R.id.cardview_missing_pet:
-                        int idPet = mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota();
-                        String petName = mascotaArrayList.get(holder.getBindingAdapterPosition()).getNombre();
+                    case R.id.cardview_mascota_desaparecida:
+                        int idMascota = mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota();
+                        String nombreMascota = mascotaArrayList.get(holder.getBindingAdapterPosition()).getNombre();
 
                         Intent intent = new Intent(context, MapaNotificacionMascotaDesaparecidaActivity.class);
-                        intent.putExtra("idPet",idPet);
-                        intent.putExtra("pet_name",petName);
+                        intent.putExtra("idMascota",idMascota);
+                        intent.putExtra("nombreMascota",nombreMascota);
                         context.startActivity(intent);
-
 
                         return true;
 
-                    case R.id.cardview_found_pet:
-                        int idPet1= mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota();
-                        Mascota mascota1 = new Mascota(idPet1,false);
-                        updateStatusMissingPet(mascota1);
+                    case R.id.cardview_mascota_encontrada:
+                        int idMascota1= mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota();
+                        Mascota mascota1 = new Mascota(idMascota1,false);
+                        actualizarEstadoMascotaDesaparecida(mascota1);
 
                         return true;
 
@@ -183,11 +182,11 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
         popupMenuCardView.show();
     }
 
-    private void updateStatusMissingPet(Mascota mascota){
+    private void actualizarEstadoMascotaDesaparecida(Mascota mascota){
 
-        MascotaController.actualizarMascotaDesaparecida(mascota).enqueue(new Callback<RHRespuesta>() {
+        MascotaController.actualizarMascotaDesaparecida(mascota).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if(response.isSuccessful()){
                     Toast.makeText(context, "Mascota reportada como encontrada", Toast.LENGTH_SHORT).show();
@@ -198,65 +197,60 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Se ha producido un error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-
-
-    private void deletePet(MiMascotaViewHolder holder){
-        MascotaController.eliminar(mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota()).enqueue(new Callback<RHRespuesta>() {
+    private void eliminarMascota(MiMascotaViewHolder holder){
+        MascotaController.eliminar(mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota()).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     mascotaArrayList.remove(holder.getBindingAdapterPosition());
                     notifyItemRemoved(holder.getBindingAdapterPosition());
                 }
+                else{
+                    Toast.makeText(context, "No se pudo eliminar la mascota", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Eliminación fallida", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void clickUpdate(MiMascotaViewHolder holder) {
-        int idPet = mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota();
-        String name = mTextInputName.getText().toString();
-        String breed = mTextInputBreed.getText().toString();
-        String description = mTextInputDescription.getText().toString();
-        char gender = ((mRadioButtonMalePet.isChecked() ? 'M' : 'F'));
-        int position = holder.getBindingAdapterPosition();
+    private void clicActualizar(MiMascotaViewHolder holder) {
+        int idMascota = mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota();
+        String nombre = mTextInputNombre.getText().toString();
+        String raza = mTextInputRaza.getText().toString();
+        String descripcion = mTextInputDescripcion.getText().toString();
+        char genero = ((mRadioButtonGeneroMacho.isChecked() ? 'M' : 'F'));
+        int posicion = holder.getBindingAdapterPosition();
 
-
-        if(!name.isEmpty() && !breed.isEmpty()){
+        if(!nombre.isEmpty() && !raza.isEmpty()){
                 //DATOS INGRESADOS CORRECTAMENTE
-            updatePet(new Mascota(idPet,name,breed,gender,description), position);
-
+            actualizarMascota(new Mascota(idMascota,nombre,raza,genero,descripcion), posicion);
         }
         else{
             Toast.makeText(context, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
-
         }
-
     }
 
-    private void updatePet(Mascota mascota, int position) {
-        MascotaController.actualizar(mascota).enqueue(new Callback<RHRespuesta>() {
+    private void actualizarMascota(Mascota mascota, int posicion) {
+        MascotaController.actualizar(mascota).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
-
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if(response.isSuccessful()){
-                    mascotaArrayList.get(position).setNombre(mascota.getNombre());
-                    mascotaArrayList.get(position).setRaza(mascota.getRaza());
-                    mascotaArrayList.get(position).setDescripcion(mascota.getDescripcion());
-                    mascotaArrayList.get(position).setGenero(mascota.getGenero());
-                    notifyItemChanged(position);
+                    mascotaArrayList.get(posicion).setNombre(mascota.getNombre());
+                    mascotaArrayList.get(posicion).setRaza(mascota.getRaza());
+                    mascotaArrayList.get(posicion).setDescripcion(mascota.getDescripcion());
+                    mascotaArrayList.get(posicion).setGenero(mascota.getGenero());
+                    notifyItemChanged(posicion);
                     mBottomSheetDialog.dismiss();
                     Toast.makeText(context, "Actualización exitosa", Toast.LENGTH_SHORT).show();
                 }
@@ -267,7 +261,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
             }
 
             @Override
-            public void onFailure(Call<RHRespuesta> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Actualización fallida", Toast.LENGTH_SHORT).show();
                 mBottomSheetDialog.dismiss();
             }
@@ -282,38 +276,30 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
         return mascotaArrayList.size();
     }
 
-    private void initializeComponents(){
-        mButtonUpdate = mBottomSheetDialog.findViewById(R.id.btnUpdateAddPet);
-        mTextInputName = mBottomSheetDialog.findViewById(R.id.textInputNamePet);
-        mTextInputBreed = mBottomSheetDialog.findViewById(R.id.textInputBreed);
-        mTextInputDescription = mBottomSheetDialog.findViewById(R.id.textInputDescription);
-        mRadioButtonMalePet = mBottomSheetDialog.findViewById(R.id.radioButtonMalePet);
-        mRadioButtonFemalePet = mBottomSheetDialog.findViewById(R.id.radioButtonFemalePet);
+    private void inicializarComponentes(){
+        mButtonAgregarActualizarMascota = mBottomSheetDialog.findViewById(R.id.btnAgregarActualizarMascota);
+        mTextInputNombre = mBottomSheetDialog.findViewById(R.id.textInputNombreMascota);
+        mTextInputRaza = mBottomSheetDialog.findViewById(R.id.textInputRaza);
+        mTextInputDescripcion = mBottomSheetDialog.findViewById(R.id.textInputDescripcion);
+        mRadioButtonGeneroMacho = mBottomSheetDialog.findViewById(R.id.radioButtonGeneroMacho);
+        mRadioButtonGeneroFemenino = mBottomSheetDialog.findViewById(R.id.radioButtonGeneroHembra);
     }
 
 
     //MANEJA LOS ELEMENTOS QUE CONTIENE LA VISTA DE CADA ITEM DENTRO DEL RECYCLER
     public class MiMascotaViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mTextViewNamePet;
-        TextView mTextViewBreedPet;
-        ImageView mImageViewPet;
+        TextView mTextViewNombreMascota;
+        TextView mTextViewRaza;
+        ImageView mImageViewMascota;
         AppCompatImageButton mButtonMenu;
-
-
 
         public MiMascotaViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextViewNamePet = itemView.findViewById(R.id.namePet);
-            mTextViewBreedPet = itemView.findViewById(R.id.breedPet);
-            mImageViewPet = itemView.findViewById(R.id.imageView_pet);
-            mButtonMenu = itemView.findViewById(R.id.imageButton_menu);
-
-
+            mTextViewNombreMascota = itemView.findViewById(R.id.textViewNombreMascota);
+            mTextViewRaza = itemView.findViewById(R.id.textViewRaza);
+            mImageViewMascota = itemView.findViewById(R.id.imageView_pet);
+            mButtonMenu = itemView.findViewById(R.id.btnMiMascota);
         }
-
-
     }
-
-
 }

@@ -26,8 +26,8 @@ import retrofit2.Response;
 public class MascotaDesaparecidaFragment extends Fragment {
 
 
-    private MascotaDesaparecidaAdapter mPetAdapter;
-    private RecyclerView mRecyclerViewMissingPets;
+    private MascotaDesaparecidaAdapter mMascotaDesaparecidaAdapter;
+    private RecyclerView mRecyclerViewMascotasDesaparecidas;
     private ArrayList<Mascota> mascotaArrayList;
 
     public MascotaDesaparecidaFragment() {
@@ -40,22 +40,22 @@ public class MascotaDesaparecidaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mascota_desaparecida, container, false);
 
         mascotaArrayList = new ArrayList<>();
-        mRecyclerViewMissingPets = view.findViewById(R.id.recyclerViewMissingPets);
+        mRecyclerViewMascotasDesaparecidas = view.findViewById(R.id.recyclerViewMascotasDesaparecidas);
 
         return view;
     }
 
-    private void getMissingPets() {
+    private void obtenerMascotasDesaparecidas() {
 
         MascotaController.obtener(0, 3).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
                     mascotaArrayList = response.body().getMascotas();
-                    showList(mascotaArrayList);
+                    mostrarLista(mascotaArrayList);
                 }
                 else{
-                    mRecyclerViewMissingPets.setAdapter(null);
+                    mRecyclerViewMascotasDesaparecidas.setAdapter(null);
                 }
             }
 
@@ -66,12 +66,12 @@ public class MascotaDesaparecidaFragment extends Fragment {
         });
     }
 
-    private void showList(ArrayList<Mascota> mascotas) {
+    private void mostrarLista(ArrayList<Mascota> mascotas) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-        mRecyclerViewMissingPets.setLayoutManager(linearLayoutManager);
-        mPetAdapter = new MascotaDesaparecidaAdapter(getContext(), mascotas);
-        mRecyclerViewMissingPets.setAdapter(mPetAdapter);
+        mRecyclerViewMascotasDesaparecidas.setLayoutManager(linearLayoutManager);
+        mMascotaDesaparecidaAdapter = new MascotaDesaparecidaAdapter(getContext(), mascotas);
+        mRecyclerViewMascotasDesaparecidas.setAdapter(mMascotaDesaparecidaAdapter);
 
 
     }
@@ -79,6 +79,6 @@ public class MascotaDesaparecidaFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getMissingPets();
+        obtenerMascotasDesaparecidas();
     }
 }

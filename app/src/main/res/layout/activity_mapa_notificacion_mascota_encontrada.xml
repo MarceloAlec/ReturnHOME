@@ -175,7 +175,7 @@
 
 
     <Button
-        android:id="@+id/btnIrANotificarPropietarioMascota"
+        android:id="@+id/btnNotificarPropietarioMascota"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"

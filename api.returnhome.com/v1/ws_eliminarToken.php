@@ -6,11 +6,11 @@ $username = "root";
 $password = "1998*";
 $database_name = "dbreturnhome";
 
-if(isset($_GET["token"]) && isset($_GET["idCliente"])){
+$contenido = file_get_contents("php://input");
 
-    $token = $_GET["token"];
-    $idCliente = $_GET["idCliente"];
+if($contenido){
 
+    $data = json_decode($contenido, true);
 
     //CONEXION A LA BASE DE DATOS
     $conexion=new PDO("mysql:host=".$hostname.";dbname=".$database_name."",
@@ -20,8 +20,8 @@ if(isset($_GET["token"]) && isset($_GET["idCliente"])){
 
     $consulta = "DELETE FROM tbltoken WHERE idCliente = ? AND token = ?";
     $stmt = $conexion->prepare($consulta);
-    $stmt->bindValue(1,$idCliente);
-    $stmt->bindValue(2,$token);
+    $stmt->bindValue(1,$data["idCliente"]);
+    $stmt->bindValue(2,$data["token"]);
     $stmt->execute();
 
     $filas_modificadas = $stmt->rowCount();

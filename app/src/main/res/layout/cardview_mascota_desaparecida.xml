@@ -20,7 +20,7 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageViewMascotaDesaparecida"
+                android:id="@+id/imageViewMascotaDesaparecidaLista"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_alignParentStart="true"
@@ -39,7 +39,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="2dp"
-                android:layout_toRightOf="@+id/imageViewMascotaDesaparecida"
+                android:layout_toRightOf="@+id/imageViewMascotaDesaparecidaLista"
                 android:orientation="vertical">
 
                 <TextView
