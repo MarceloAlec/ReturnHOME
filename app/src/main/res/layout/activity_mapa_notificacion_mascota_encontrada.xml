@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginBottom="130dp"/>
+        android:layout_marginBottom="200dp"/>
 
     <com.github.florent37.shapeofview.shapes.CutCornerView
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="230dp"
         android:elevation="4dp"
         app:shape_cutCorner_topRightSize="10dp"
         app:shape_cutCorner_topLeftSize="10dp"
@@ -108,7 +108,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Genero:"
+                        android:text="Género:"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
                         android:textColor="@android:color/white"
@@ -140,7 +140,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Numero de contacto:"
+                            android:text="Número de contacto:"
                             android:textColor="@android:color/white"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -166,13 +166,38 @@
 
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción:"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:layout_marginTop="5dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewDescripcionMascotaNotificacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@android:color/white"
+                        android:maxLines="3"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
     </com.github.florent37.shapeofview.shapes.CutCornerView>
-
-
 
     <Button
         android:id="@+id/btnNotificarPropietarioMascota"
@@ -180,9 +205,10 @@
         android:layout_height="wrap_content"
         android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
-        android:text="NOTIFICAR"
+        android:text="Notificar"
         android:textSize="13sp"
         android:textColor="@color/colorIcons"
+        android:textAllCaps="true"
         android:layout_gravity="right|top"
         android:layout_margin="20dp" />
 

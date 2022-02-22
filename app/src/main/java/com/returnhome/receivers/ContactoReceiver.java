@@ -11,7 +11,7 @@ public class ContactoReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        String phoneNumber = intent.getExtras().getString("phoneNumber");
+        String phoneNumber = intent.getExtras().getString("numeroCelular");
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancel(1);

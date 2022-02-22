@@ -65,7 +65,7 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
 
         mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
         mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
-        mExtraNumeroCelular = getIntent().getStringExtra("numeroCelular");
+        mExtraNumeroCelular = getIntent().getStringExtra("numeroContacto");
         mExtraIdMascota = getIntent().getIntExtra("idMascota", 0);
 
         mHogarMascotaLatLng = new LatLng(mExtraHogarMascotaLat, mExtraHogarMascotaLng);
@@ -123,7 +123,12 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
                     mascota = response.body().getMascota();
                     mTextViewNombreMascota.setText(mascota.getNombre());
                     mTextViewRaza.setText(mascota.getRaza());
-                    mTextViewGenero.setText(String.valueOf(mascota.getGenero()));
+                    if(mascota.getGenero()=='M'){
+                        mTextViewGenero.setText("Macho");
+                    }
+                    else{
+                        mTextViewGenero.setText("Hembra");
+                    }
                 }
                 else{
                     Toast.makeText(DetalleInfoLecturaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();

@@ -86,8 +86,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         mFilters = new IntentFilter[]{ndef};
         //SE AÑADE LAS TECNOLOGIAS DE ETIQUETAS QUE LA APLICACION PUEDE MANEJAR
-        mListaTech = new String[][] { new String[] { Ndef.class.getName() },
-                new String[] { NdefFormatable.class.getName() }};
+        mListaTech = new String[][] { new String[] { Ndef.class.getName() }, new String[] { NdefFormatable.class.getName() }};
 
         mIrAHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +99,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
     private void inicializarComponentes() {
         mAnimacionNfc = findViewById(R.id.animacionNfc);
         mIrAHome = findViewById(R.id.btnIrAHomeDesdeLecturaEtiqueta);
-        mTextViewTelefonoHabilitadoNFC = findViewById(R.id.textViewGeneroMascotaLectura);
+        mTextViewTelefonoHabilitadoNFC = findViewById(R.id.textViewTelefonoHabilitadoLecturaNFC);
     }
 
     private void mostrarCuadroDialogoActivarNFC() {
@@ -158,37 +157,35 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+        //OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
+        try{
+            Parcelable[] rawMensajes= intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefMessage message = ClienteController.leerMensajeNdef(rawMensajes);
+            NdefRecord record = message.getRecords()[0];
+            String tipo = new String(record.getType());
 
-            //OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
-            try{
-                Parcelable[] rawMensajes= intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-                NdefMessage message = ClienteController.leerMensajeNdef(rawMensajes);
-                NdefRecord record = message.getRecords()[0];
-                String tipo = new String(record.getType());
+            if(tipo.equals("application/json")){
+                String s = new String(record.getPayload());
+                JsonParser parser = new JsonParser();
+                JsonObject mascotaInfoJSON = (JsonObject) parser.parse(s);
 
-                if(tipo.equals("application/json")){
-                    String s = new String(record.getPayload());
-                    JsonParser parser = new JsonParser();
-                    JsonObject mascotaInfoJSON = (JsonObject) parser.parse(s);
+                idMascota = Integer.valueOf(mascotaInfoJSON.get("id").toString().replace('"',' ').trim());
+                numeroContacto = mascotaInfoJSON.get("tel").toString().replace('"',' ').trim();
+                String[] coordenadas = mascotaInfoJSON.get("geo").toString().split(",");
+                double latitud = Double.parseDouble(coordenadas[0].replace('"',' ').trim());
+                double longitud = Double.parseDouble(coordenadas[1].replace('"',' ').trim());
+                hogarMascotaLatLng = new LatLng(latitud,longitud);
 
-                    idMascota = Integer.valueOf(mascotaInfoJSON.get("id").toString().replace('"',' ').trim());
-                    numeroContacto = mascotaInfoJSON.get("tel").toString().replace('"',' ').trim();
-                    String[] coordenadas = mascotaInfoJSON.get("geo").toString().split(",");
-                    double latitud = Double.parseDouble(coordenadas[0].replace('"',' ').trim());
-                    double longitud = Double.parseDouble(coordenadas[1].replace('"',' ').trim());
-                    hogarMascotaLatLng = new LatLng(latitud,longitud);
-
-                    irADetalleLecturaONotificacionMascotaEncontradaActivity();
-                }
-                else{
-                    Toast.makeText(this, "Los datos en la etiqueta no se encuentra en formato Json", Toast.LENGTH_LONG).show();
-                }
+                irADetalleLecturaONotificacionMascotaEncontradaActivity();
             }
-            catch(Exception e){
-                Toast.makeText(this, "Error"+ e.toString(), Toast.LENGTH_LONG).show();
+            else{
+                Toast.makeText(this, "Los datos en la etiqueta no se encuentra en formato Json", Toast.LENGTH_LONG).show();
             }
         }
+        catch(Exception e){
+            Toast.makeText(this, "Error"+ e.toString(), Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void irADetalleLecturaONotificacionMascotaEncontradaActivity(){

@@ -94,8 +94,7 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         mFilters = new IntentFilter[]{ndef};
         //SE AÑADE LAS TECNOLOGIAS DE ETIQUETAS QUE LA APLICACION PUEDE MANEJAR
-        mListaTech = new String[][] { new String[] { Ndef.class.getName() },
-                new String[] { NdefFormatable.class.getName() }};
+        mListaTech = new String[][] { new String[] { Ndef.class.getName() }, new String[] { NdefFormatable.class.getName() }};
 
         mIrADetalleEscritura.setOnClickListener(new View.OnClickListener() {
             @Override

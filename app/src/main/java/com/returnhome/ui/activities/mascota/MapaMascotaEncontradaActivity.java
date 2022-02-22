@@ -66,8 +66,8 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
 
         mExtraIdCliente = getIntent().getIntExtra("idCliente", 0);
         mExtraNombreMascotaEncontrada = getIntent().getStringExtra("nombreMascota");
-        mExtraMascotaEncontradaLat = getIntent().getDoubleExtra("mascotaEncontradaLat", 0);
-        mExtraMascotaEncontradLng = getIntent().getDoubleExtra("mascotaEncontradaLng", 0);
+        mExtraMascotaEncontradaLat = getIntent().getDoubleExtra("mascotaLat", 0);
+        mExtraMascotaEncontradLng = getIntent().getDoubleExtra("mascotaLng", 0);
 
         mMascotaEncontradaLatLng = new LatLng(mExtraMascotaEncontradaLat, mExtraMascotaEncontradLng);
 

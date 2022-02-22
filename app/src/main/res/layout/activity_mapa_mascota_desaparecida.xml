@@ -7,18 +7,16 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.activities.mascota.MapaMascotaDesaparecidaActivity">
 
-
     <fragment
         android:id="@+id/mapa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_marginBottom="115dp"/>
-
+        android:layout_marginBottom="180dp"/>
 
     <com.github.florent37.shapeofview.shapes.CutCornerView
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="210dp"
         android:elevation="4dp"
         app:shape_cutCorner_topRightSize="10dp"
         app:shape_cutCorner_topLeftSize="10dp"
@@ -124,7 +122,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Genero:"
+                        android:text="Género:"
                         android:layout_marginLeft="10dp"
                         android:textColor="@android:color/white"
                         android:layout_marginTop="5dp"
@@ -141,6 +139,33 @@
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="2dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción:"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:layout_marginTop="5dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewDescripcionMascotaDesaparecida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@android:color/white"
+                        android:maxLines="3"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 

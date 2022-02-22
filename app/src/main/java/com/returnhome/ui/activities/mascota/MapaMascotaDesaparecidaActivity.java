@@ -48,6 +48,7 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
     private TextView mTextViewNombreMascota;
     private TextView mTextViewRaza;
     private TextView mTextViewGenero;
+    private TextView mTextViewDescripcion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
         mTextViewNombreMascota = findViewById(R.id.textViewNombreMascotaDesaparecida);
         mTextViewRaza = findViewById(R.id.textViewRazaMascotaDesaparecida);
         mTextViewGenero = findViewById(R.id.textViewGeneroMascotaDesaparecida);
+        mTextViewDescripcion = findViewById(R.id.textViewDescripcionMascotaDesaparecida);
         mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mCircleImageIrAHome = findViewById(R.id.btnIrAHomeDesdeMascotaDesaparecida);
     }
@@ -117,7 +119,13 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
                     Mascota mascota = response.body().getMascota();
                     mTextViewNombreMascota.setText(mascota.getNombre());
                     mTextViewRaza.setText(mascota.getRaza());
-                    mTextViewGenero.setText(String.valueOf(mascota.getGenero()));
+                    if(mascota.getGenero()=='M'){
+                        mTextViewGenero.setText("Macho");
+                    }
+                    else{
+                        mTextViewGenero.setText("Hembra");
+                    }
+                    mTextViewDescripcion.setText(mascota.getDescripcion());
                 }
                 else{
                     Toast.makeText(MapaMascotaDesaparecidaActivity.this, "No se pudo cargar los datos de la mascota", Toast.LENGTH_SHORT).show();

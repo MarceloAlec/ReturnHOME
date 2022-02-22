@@ -48,7 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 if(title.contains("Mascota encontrada")){
 
-                    int  idCliente = Integer.valueOf(data.get("idClient"));
+                    int  idCliente = Integer.valueOf(data.get("idCliente"));
                     String nombreMascota = data.get("nombreMascota");
                     String numeroCelular = data.get("numeroCelular");
                     double mascotaLat = Double.parseDouble(data.get("mascotaLat"));

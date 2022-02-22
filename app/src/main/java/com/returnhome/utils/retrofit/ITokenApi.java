@@ -24,6 +24,9 @@ public interface ITokenApi {
     @PUT("ws_registrarToken.php")
     Call<Void> registrar(@Body Map<String,String> tokenInfo);
 
+    @GET("ws_obtenerToken.php")
+    Call<RHRespuesta> obtener(@Query("idCliente") int idCliente);
+
     @HTTP(method = "DELETE", path = "ws_eliminarToken.php", hasBody = true)
     Call<Void> eliminar(@Body Map<String,String> tokenInfo);
 

@@ -62,11 +62,16 @@ public class DetalleInfoEscrituraActivity extends AppCompatActivity implements O
 
         mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
         mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
-        mMascota = (Mascota)getIntent().getSerializableExtra("pet");
+        mMascota = (Mascota)getIntent().getSerializableExtra("mascota");
 
         mTextViewNombreMascota.setText(mMascota.getNombre());
         mTextViewRaza.setText(mMascota.getRaza());
-        mTextViewGenero.setText(String.valueOf(mMascota.getGenero()));
+        if(mMascota.getGenero()=='M'){
+            mTextViewGenero.setText("Macho");
+        }
+        else{
+            mTextViewGenero.setText("Hembra");
+        }
         mTextViewNumeroCelular.setText(mAppSharedPreferences.obtenerNumeroCelular());
 
         mHogarMascotaLatLng = new LatLng(mExtraHogarMascotaLat, mExtraHogarMascotaLng);

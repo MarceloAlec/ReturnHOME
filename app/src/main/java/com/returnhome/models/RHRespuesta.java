@@ -11,6 +11,8 @@ public class RHRespuesta {
 
     ArrayList<Mascota> mascotas = new ArrayList<Mascota>();
 
+    ArrayList<Token> tokens = new ArrayList<Token>();
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -33,5 +35,13 @@ public class RHRespuesta {
 
     public void setMascotas(ArrayList<Mascota> mascotas) {
         this.mascotas = mascotas;
+    }
+
+    public ArrayList<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(ArrayList<Token> tokens) {
+        this.tokens = tokens;
     }
 }

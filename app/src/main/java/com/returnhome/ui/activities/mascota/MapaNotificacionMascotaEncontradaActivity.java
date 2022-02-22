@@ -46,15 +46,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.MascotaController;
+import com.returnhome.controllers.TokenController;
 import com.returnhome.models.Cliente;
 import com.returnhome.models.FCMCuerpo;
 import com.returnhome.models.FCMRespuesta;
 import com.returnhome.models.Mascota;
 import com.returnhome.models.RHRespuesta;
 import com.returnhome.controllers.NotificacionController;
+import com.returnhome.models.Token;
 import com.returnhome.utils.AppSharedPreferences;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,16 +93,16 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
 
     private String mExtraNumeroCelular;
     private int mExtraIdMascota;
-    private Cliente cliente;
+    private ArrayList<Token> tokens;
     private Mascota mascota;
     private String mMascotaUbicacion;
-
 
 
     private TextView mTextViewNombreMascota;
     private TextView mTextViewRaza;
     private TextView mTextViewGenero;
     private TextView mTextViewNumeroCelular;
+    private TextView mTextViewDescripcion;
 
     private AppSharedPreferences mAppSharedPreferences;
     private ImageView mImageViewLlamarPropietarioMascota;
@@ -151,7 +154,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
 
         mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
         mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
-        mExtraNumeroCelular = getIntent().getStringExtra("numeroCelular");
+        mExtraNumeroCelular = getIntent().getStringExtra("numeroContacto");
         mExtraIdMascota = getIntent().getIntExtra("idMascota", 0);
 
         mTextViewNumeroCelular.setText(mExtraNumeroCelular);
@@ -174,9 +177,10 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         mTextViewRaza = findViewById(R.id.textViewRazaMascotaNotificacion);
         mTextViewGenero = findViewById(R.id.textViewGeneroMascotaNotificacion);
         mTextViewNumeroCelular = findViewById(R.id.textViewNumeroCelularNotificacion);
-        mIrAHome = findViewById(R.id.btnIrAHomeDesdeMapaMascotaEncontrada);
+        mTextViewDescripcion = findViewById(R.id.textViewDescripcionMascotaNotificacion);
+        mIrAHome = findViewById(R.id.btnIrAHomeDesdeNotificacionMascotaEncontrada);
         mImageViewLlamarPropietarioMascota = findViewById(R.id.btnContactarPropietarioMascota);
-        mButtonNotificarMascotaEncontrada = findViewById(R.id.btnSeleccionarLugarMascotaDesaparecida);
+        mButtonNotificarMascotaEncontrada = findViewById(R.id.btnNotificarPropietarioMascota);
         mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
     }
 
@@ -352,12 +356,15 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private void obtenerPropietarioMascota() {
 
         try{
-            ClienteController.obtener(mascota.getIdCliente()).enqueue(new Callback<RHRespuesta>() {
+            TokenController.obtener(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
                 @Override
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                     if(response.isSuccessful()){
-                        cliente = response.body().getCliente();
+                        tokens = response.body().getTokens();
                         enviarNotificacion();
+                    }
+                    else{
+                        Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -386,43 +393,39 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
             Log.d("Error: ", "Se ha producido un error: " + e.getMessage());
         }
 
-        String token = cliente.getNombre();
-        if(!token.equals("")){
-            Map<String, String> map = new HashMap<>();
-            map.put("title","Mascota encontrada");
-            map.put("body", mascota.getNombre()+" fue encontrada en: " + mMascotaUbicacion);
-            map.put("idCliente",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
-            map.put("numeroCelular", mAppSharedPreferences.obtenerNumeroCelular());
-            map.put("nombreMascota", mascota.getNombre());
-            map.put("mascotaLat",String.valueOf(mMascotaEncontradaLatLng.latitude));
-            map.put("mascotaLng",String.valueOf(mMascotaEncontradaLatLng.longitude));
-            FCMCuerpo fcmCuerpo = new FCMCuerpo(token, "high", map);
-            NotificacionController.enviarNotificacion(fcmCuerpo).enqueue(new Callback<FCMRespuesta>() {
-                @Override
-                public void onResponse(Call<FCMRespuesta> call, Response<FCMRespuesta> response) {
-                    if(response.body() != null){
-                        if(response.body().getSuccess() == 1){
-                            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"Notificacion enviada con exito",Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else{
-                        Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
-                    }
+        ArrayList<String> numTokens = new ArrayList<>();
 
+        for (Token token: tokens) {
+            numTokens.add(token.getToken());
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("title","Mascota encontrada");
+        map.put("body", mascota.getNombre()+" fue encontrada en: " + mMascotaUbicacion);
+        map.put("idCliente",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
+        map.put("numeroCelular", mAppSharedPreferences.obtenerNumeroCelular());
+        map.put("nombreMascota", mascota.getNombre());
+        map.put("mascotaLat",String.valueOf(mMascotaEncontradaLatLng.latitude));
+        map.put("mascotaLng",String.valueOf(mMascotaEncontradaLatLng.longitude));
+        FCMCuerpo fcmCuerpo = new FCMCuerpo(numTokens, "high", map);
+        NotificacionController.enviarNotificacion(fcmCuerpo).enqueue(new Callback<FCMRespuesta>() {
+            @Override
+            public void onResponse(Call<FCMRespuesta> call, Response<FCMRespuesta> response) {
+
+                if(response.body().getSuccess()>0){
+                    Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"Notificacion enviada con exito",Toast.LENGTH_SHORT).show();
                 }
-
-                @Override
-                public void onFailure(Call<FCMRespuesta> call, Throwable t) {
+                else{
                     Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
-        else{
-            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
-        }
+
+            }
+
+            @Override
+            public void onFailure(Call<FCMRespuesta> call, Throwable t) {
+                Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void detenerLocalizacion(){
@@ -447,7 +450,13 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                     mascota = response.body().getMascota();
                     mTextViewNombreMascota.setText(mascota.getNombre());
                     mTextViewRaza.setText(mascota.getRaza());
-                    mTextViewGenero.setText(String.valueOf(mascota.getGenero()));
+                    if(mascota.getGenero()=='M'){
+                        mTextViewGenero.setText("Macho");
+                    }
+                    else{
+                        mTextViewGenero.setText("Hembra");
+                    }
+                    mTextViewDescripcion.setText(mascota.getDescripcion());
                 }
                 else{
                     Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();

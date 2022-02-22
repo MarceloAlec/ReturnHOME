@@ -23,6 +23,10 @@ public class TokenController {
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(ITokenApi.class).eliminar(tokenInfo);
     }
 
+    public static Call<RHRespuesta> obtener(int idCliente){
+        return ClienteRetrofit.obtenerCliente(BASE_URL).create(ITokenApi.class).obtener(idCliente);
+    }
+
     public static Task<Void> eliminar(){
         return FirebaseMessaging.getInstance().deleteToken();
     }

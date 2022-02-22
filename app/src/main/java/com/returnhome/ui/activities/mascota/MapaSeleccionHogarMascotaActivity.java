@@ -138,7 +138,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Registro de usuario");
+        getSupportActionBar().setTitle("Hogar de la Mascota");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
