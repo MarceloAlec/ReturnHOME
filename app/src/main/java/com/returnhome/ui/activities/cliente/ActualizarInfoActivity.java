@@ -110,7 +110,7 @@ public class ActualizarInfoActivity extends AppCompatActivity {
                         finish();
                     }
                     else{
-                        Toast.makeText(ActualizarInfoActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActualizarInfoActivity.this, "La información no se actualizado", Toast.LENGTH_SHORT).show();
                     }
                 }
 

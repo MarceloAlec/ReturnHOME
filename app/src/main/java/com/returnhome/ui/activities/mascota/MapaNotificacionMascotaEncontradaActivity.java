@@ -356,7 +356,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private void obtenerPropietarioMascota() {
 
         try{
-            TokenController.obtener(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
+            TokenController.obtener(mascota.getIdCliente()).enqueue(new Callback<RHRespuesta>() {
                 @Override
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                     if(response.isSuccessful()){
@@ -364,18 +364,21 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                         enviarNotificacion();
                     }
                     else{
-                        Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT)
+                                .show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<RHRespuesta> call, Throwable t) {
-                    Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
         }
         catch(Exception e){
-            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificación",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificación",Toast.LENGTH_SHORT)
+                    .show();
         }
 
     }
@@ -459,14 +462,16 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                     mTextViewDescripcion.setText(mascota.getDescripcion());
                 }
                 else{
-                    Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this, "Los datos de la mascota no se pudieron cargar",
+                            Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
 
-                Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this, "Los datos de la mascota no se pudieron cargar",
+                        Toast.LENGTH_LONG).show();
 
             }
         });

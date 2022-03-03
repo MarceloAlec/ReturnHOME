@@ -201,16 +201,16 @@
 
     <Button
         android:id="@+id/btnNotificarPropietarioMascota"
-        android:layout_width="130dp"
+        android:layout_width="153dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_margin="20dp"
         android:background="@drawable/boton_redondeado"
         android:backgroundTint="@color/colorAccent"
-        android:text="Notificar"
-        android:textSize="13sp"
-        android:textColor="@color/colorIcons"
+        android:text="Notificar Al\nPropietario"
         android:textAllCaps="true"
-        android:layout_gravity="right|top"
-        android:layout_margin="20dp" />
+        android:textColor="@color/colorIcons"
+        android:textSize="15sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/btnIrAHomeDesdeNotificacionMascotaEncontrada"

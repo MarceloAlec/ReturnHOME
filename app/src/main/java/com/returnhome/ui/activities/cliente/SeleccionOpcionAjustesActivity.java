@@ -108,7 +108,7 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
     private void mostrarDialogoCerrarSesion() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setTitle("ReturnHOME");
-        builder.setMessage("Esta seguro que desea cerrar sesion?");
+        builder.setMessage("Esta seguro que desea cerrar sesión?");
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

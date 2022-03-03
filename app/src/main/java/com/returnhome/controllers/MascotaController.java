@@ -9,7 +9,7 @@ import retrofit2.Call;
 
 public class MascotaController {
 
-    private static final String BASE_URL = "http://192.168.0.2:82/api.returnhome.com/v1/";
+    private static final String BASE_URL = "http://192.168.0.3:82/api.returnhome.com/v1/";
 
 
     public static Call<RHRespuesta> obtener(int id, int opcion){

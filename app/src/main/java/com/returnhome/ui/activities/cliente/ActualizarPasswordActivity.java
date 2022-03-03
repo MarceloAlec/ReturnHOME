@@ -41,7 +41,7 @@ public class ActualizarPasswordActivity extends AppCompatActivity {
 
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Registro de usuario");
+        getSupportActionBar().setTitle("Cambiar contraseña");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {

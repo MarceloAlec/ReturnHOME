@@ -13,7 +13,7 @@ import retrofit2.Call;
 
 public class TokenController {
 
-    private static final String BASE_URL = "http://192.168.0.2:82/api.returnhome.com/v1/";
+    private static final String BASE_URL = "http://192.168.0.3:82/api.returnhome.com/v1/";
 
     public static Call<Void> registrarTokenDB(Map<String,String> tokenInfo){
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(ITokenApi.class).registrar(tokenInfo);

@@ -72,7 +72,8 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
-            mTextViewTelefonoHabilitadoNFCInfo.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
+            mTextViewTelefonoHabilitadoNFCInfo
+                    .setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
             if(!mNfcAdapter.isEnabled()){
                 mostrarDialogoActivarNFC();
             }
@@ -170,7 +171,8 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
             //CON NfcAdapter.EXTRA_TAG es usado para obtener la informacion de la etiqueta
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-            NdefMessage newMessage = ClienteController.crearMensajeNdef(mExtraIdPet, mAppSharedPreferences.obtenerNumeroCelular(), mPetHomeLatLng);
+            NdefMessage newMessage = ClienteController
+                    .crearMensajeNdef(mExtraIdPet, mAppSharedPreferences.obtenerNumeroCelular(), mPetHomeLatLng);
             mostrarResultadoEscritura(ClienteController.escribirMensajeNdef(newMessage, tag));
         }
         catch(Exception e) {

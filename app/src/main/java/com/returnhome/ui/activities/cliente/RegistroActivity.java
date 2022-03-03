@@ -75,7 +75,9 @@ public class RegistroActivity extends AppCompatActivity {
         String numeroCelular = mTextInputNumeroCelular.getText().toString();
 
         if(!nombre.isEmpty() && !email.isEmpty() && !password.isEmpty() && !numeroCelular.isEmpty()){
-            ClienteController.registrar(new Cliente(nombre,email,password,codigoPais+" "+numeroCelular)).enqueue(new Callback<RHRespuesta>() {
+            ClienteController
+                    .registrar(new Cliente(nombre,email,password,codigoPais+" "+numeroCelular))
+                    .enqueue(new Callback<RHRespuesta>() {
                 @Override
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                     if(response.isSuccessful()){

@@ -225,9 +225,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
                     mascotaArrayList = response.body().getMascotas();
                     mostrarLista(mascotaArrayList);
                 }
-                else{
-                    Toast.makeText(MapaSeleccionHogarMascotaActivity.this, "No se pudo cargar sus mascotas", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override

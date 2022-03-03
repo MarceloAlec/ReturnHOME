@@ -21,7 +21,7 @@ import retrofit2.Call;
 
 public class ClienteController {
 
-    private static final String BASE_URL = "http://192.168.0.2:82/api.returnhome.com/v1/";
+    private static final String BASE_URL = "http://192.168.0.3:82/api.returnhome.com/v1/";
 
     public static Call<RHRespuesta> registrar(com.returnhome.models.Cliente cliente){
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IClienteApi.class).registrar(cliente);
@@ -76,7 +76,9 @@ public class ClienteController {
                 }
                 if (ndef.getMaxSize() < size) {
                     writingInfo.put("estado","NOK");
-                    writingInfo.put("mensaje","Los datos a ser escritos ("+ size +" bytes) superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
+                    writingInfo
+                            .put("mensaje","Los datos a ser escritos ("+ size +" bytes) " +
+                                    "superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
                     return writingInfo;
                 }
                 ndef.writeNdefMessage(message);

@@ -135,7 +135,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     registrarToken(tokenInfo);
                 }
                 else{
-                    Toast.makeText(PrincipalActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PrincipalActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
 

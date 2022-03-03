@@ -65,7 +65,8 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
-            mTextViewTelefonoHabilitadoNFC.setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA LEERLA");
+            mTextViewTelefonoHabilitadoNFC
+                    .setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA LEERLA");
             if(!mNfcAdapter.isEnabled()){
                 mostrarCuadroDialogoActivarNFC();
             }

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.returnhome.R;
 
 public class AppSharedPreferences {
-
     private Context context;
     private SharedPreferences sharedPreferences;
 
@@ -64,8 +63,4 @@ public class AppSharedPreferences {
     public String obtenerToken(){
         return sharedPreferences.getString("token", "Desconocido");
     }
-
-
-
-
 }

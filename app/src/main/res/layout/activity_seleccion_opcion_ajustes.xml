@@ -111,7 +111,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Cerrar sesion"
+                    android:text="Cerrar sesión"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"
                     android:layout_gravity="center_vertical"/>
