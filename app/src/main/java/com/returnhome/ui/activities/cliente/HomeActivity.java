@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
@@ -21,9 +22,13 @@ import com.returnhome.R;
 import com.returnhome.ui.activities.nfc.LecturaEtiquetaActivity;
 
 import com.returnhome.ui.activities.mascota.MapaSeleccionHogarMascotaActivity;
-import com.returnhome.ui.adapters.PaginacionFragmentoAdapter;
+import com.returnhome.ui.adapters.ViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
+import com.returnhome.ui.fragments.MascotaDesaparecidaFragment;
+import com.returnhome.ui.fragments.MiMascotaFragment;
 import com.returnhome.utils.AppSharedPreferences;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mToggle;
     private AppSharedPreferences mAppSharedPreferences;
 
-    private PaginacionFragmentoAdapter mPaginacionFragmentoAdapter;
+    private ViewPagerAdapter mViewPagerAdapter;
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
 
@@ -50,19 +55,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //CONFIGURACION DEL TOOLBAR
         setSupportActionBar(mToolbar);
+        setTitle(R.string.app_name);
 
         //CONFIGURACION DEL ICONO DE LA HAMBURGUESA EN EL TOOLBAR
         mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.abrir_drawer, R.string.cerrar_drawer);
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mPaginacionFragmentoAdapter = new PaginacionFragmentoAdapter(getSupportFragmentManager(), getLifecycle());
-        mViewPager2.setAdapter(mPaginacionFragmentoAdapter);
-
-        setTitle(R.string.app_name);
-
+        //CONFIGURACION VIEWPAGER
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle(), agregarFragments());
+        mViewPager2.setAdapter(mViewPagerAdapter);
         String[] tituloTab = new String[]{"Mis Mascotas", "Mascotas desaparecidas"};
         new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> tab.setText(tituloTab[position])).attach();
+        //
 
         mAppSharedPreferences = new AppSharedPreferences(this);
 
@@ -80,6 +85,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mTextViewNumeroCelular =mHeaderView.findViewById(R.id.textViewNumeroCelular);
         mTabLayout = findViewById(R.id.tabLayout);
         mViewPager2 = findViewById(R.id.viewPager2);
+    }
+
+    private ArrayList<Fragment> agregarFragments(){
+        ArrayList<Fragment> fragments = new ArrayList<>();
+
+        fragments.add(new MiMascotaFragment());
+        fragments.add(new MascotaDesaparecidaFragment());
+        return fragments;
     }
 
     @Override

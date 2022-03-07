@@ -9,28 +9,27 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.returnhome.ui.fragments.MascotaDesaparecidaFragment;
 import com.returnhome.ui.fragments.MiMascotaFragment;
 
-public class PaginacionFragmentoAdapter extends FragmentStateAdapter {
+import java.util.ArrayList;
 
-    public PaginacionFragmentoAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+public class ViewPagerAdapter extends FragmentStateAdapter {
+
+    //ARREGLO DE FRAGMENTOS INCRUSTADOS EN CADA TAB
+    private ArrayList<Fragment> fragments;
+
+    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, ArrayList<Fragment> fragments) {
         super(fragmentManager, lifecycle);
+        this.fragments = fragments;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-
-        switch (position){
-            case 1:
-                return new MascotaDesaparecidaFragment();
-
-        }
-
-        return new MiMascotaFragment();
+        return fragments.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return fragments.size();
     }
 
 
