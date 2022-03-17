@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.returnhome.ui.adapters.MascotaDesaparecidaAdapter;
 
 import java.util.ArrayList;

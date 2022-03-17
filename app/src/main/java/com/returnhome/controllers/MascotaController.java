@@ -1,7 +1,7 @@
 package com.returnhome.controllers;
 
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.returnhome.utils.retrofit.ClienteRetrofit;
 import com.returnhome.utils.retrofit.IMascotaApi;
 
@@ -11,6 +11,7 @@ public class MascotaController {
 
     private static final String BASE_URL = "http://192.168.0.3:82/api.returnhome.com/v1/";
 
+    //SE EJECUTAN LAS LLAMADAS AL SERVICIO WEB CON SUS RESPECTIVOS METODOS HTTP
 
     public static Call<RHRespuesta> obtener(int id, int opcion){
 

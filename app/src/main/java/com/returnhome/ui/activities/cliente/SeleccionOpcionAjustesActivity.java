@@ -18,7 +18,6 @@ import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.TokenController;
 import com.returnhome.controllers.NotificacionController;
 import com.returnhome.utils.AppSharedPreferences;
-import com.returnhome.models.RHRespuesta;
 
 import java.util.HashMap;
 import java.util.Map;

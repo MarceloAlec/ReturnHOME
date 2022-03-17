@@ -1,5 +1,9 @@
-package com.returnhome.models;
+package com.returnhome.utils.retrofit;
 
+
+import com.returnhome.models.Cliente;
+import com.returnhome.models.Mascota;
+import com.returnhome.models.Token;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.returnhome.models;
+package com.returnhome.utils.retrofit;
 
 import java.util.ArrayList;
 import java.util.Map;

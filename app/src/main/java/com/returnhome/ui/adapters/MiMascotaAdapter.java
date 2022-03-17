@@ -25,7 +25,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
 import com.returnhome.ui.activities.mascota.MapaNotificacionMascotaDesaparecidaActivity;
 
 import java.util.ArrayList;

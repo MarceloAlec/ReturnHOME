@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.returnhome.ui.activities.cliente.HomeActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;

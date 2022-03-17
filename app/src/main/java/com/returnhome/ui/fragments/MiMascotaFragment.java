@@ -21,7 +21,7 @@ import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
 import com.returnhome.ui.adapters.MiMascotaAdapter;
 import com.returnhome.utils.AppSharedPreferences;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 
 import java.util.ArrayList;
 
@@ -107,7 +107,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
             registrarMascota(new Mascota(nombre,raza,genero,descripcion, false, mAppSharedPreferences.obtenerIdCliente()));
         }
         else{
-            Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Ingrese todos los campos", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -129,13 +129,13 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
                     mRadioButtonGeneroMacho.setChecked(true);
                 }
                 else{
-                    Toast.makeText(getContext(), "Mascota añadida con éxito", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Mascota añadida con éxito", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-                Toast.makeText(getContext(), "Ocurrio un problema al agregar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Ocurrio un problema al agregar", Toast.LENGTH_LONG).show();
             }
         });
 

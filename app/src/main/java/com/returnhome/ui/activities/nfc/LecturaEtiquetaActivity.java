@@ -43,7 +43,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
     PendingIntent mPendingIntent;
     AppSharedPreferences mAppSharedPreferences;
 
-    private String numeroContacto;
+    private String numeroCelular;
     private LatLng hogarMascotaLatLng;
     int idMascota;
 
@@ -87,7 +87,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         mFilters = new IntentFilter[]{ndef};
         //SE AÑADE LAS TECNOLOGIAS DE ETIQUETAS QUE LA APLICACION PUEDE MANEJAR
-        mListaTech = new String[][] { new String[] { Ndef.class.getName() }, new String[] { NdefFormatable.class.getName() }};
+        mListaTech = new String[][] { new String[] { Ndef.class.getName() }};
 
         mIrAHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,17 +161,17 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         //OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
         try{
             Parcelable[] rawMensajes= intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            NdefMessage message = ClienteController.leerMensajeNdef(rawMensajes);
+            NdefMessage message = ClienteController.obtenerMensajeNdef(rawMensajes);
             NdefRecord record = message.getRecords()[0];
             String tipo = new String(record.getType());
 
             if(tipo.equals("application/json")){
-                String s = new String(record.getPayload());
+                String payload = new String(record.getPayload());
                 JsonParser parser = new JsonParser();
-                JsonObject mascotaInfoJSON = (JsonObject) parser.parse(s);
+                JsonObject mascotaInfoJSON = (JsonObject) parser.parse(payload);
 
                 idMascota = Integer.valueOf(mascotaInfoJSON.get("id").toString().replace('"',' ').trim());
-                numeroContacto = mascotaInfoJSON.get("tel").toString().replace('"',' ').trim();
+                numeroCelular = mascotaInfoJSON.get("tel").toString().replace('"',' ').trim();
                 String[] coordenadas = mascotaInfoJSON.get("geo").toString().split(",");
                 double latitud = Double.parseDouble(coordenadas[0].replace('"',' ').trim());
                 double longitud = Double.parseDouble(coordenadas[1].replace('"',' ').trim());
@@ -194,7 +194,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
             Intent intent = new Intent(LecturaEtiquetaActivity.this, MapaNotificacionMascotaEncontradaActivity.class);
             intent.putExtra("hogarMascotaLat", hogarMascotaLatLng.latitude);
             intent.putExtra("hogarMascotaLng", hogarMascotaLatLng.longitude);
-            intent.putExtra("numeroContacto", numeroContacto);
+            intent.putExtra("numeroContacto", numeroCelular);
             intent.putExtra("idMascota", idMascota);
             startActivity(intent);
             finish();
@@ -203,7 +203,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
             Intent intent = new Intent(LecturaEtiquetaActivity.this, DetalleInfoLecturaActivity.class);
             intent.putExtra("hogarMascotaLat", hogarMascotaLatLng.latitude);
             intent.putExtra("hogarMascotaLng", hogarMascotaLatLng.longitude);
-            intent.putExtra("numeroContacto", numeroContacto);
+            intent.putExtra("numeroContacto", numeroCelular);
             intent.putExtra("idMascota", idMascota);
             startActivity(intent);
         }

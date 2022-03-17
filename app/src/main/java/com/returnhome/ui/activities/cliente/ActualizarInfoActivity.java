@@ -13,7 +13,7 @@ import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.models.Cliente;
 import com.returnhome.utils.AppSharedPreferences;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -68,7 +68,9 @@ public class ActualizarInfoActivity extends AppCompatActivity {
     private void obtenerCliente() {
 
         ClienteController.obtener(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<RHRespuesta>() {
+            //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
             @Override
+            //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
 
                 if(response.isSuccessful()){
@@ -85,6 +87,7 @@ public class ActualizarInfoActivity extends AppCompatActivity {
                 }
             }
 
+            //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
                 Toast.makeText(ActualizarInfoActivity.this, "No se pudo cargar su información", Toast.LENGTH_SHORT).show();
@@ -100,7 +103,9 @@ public class ActualizarInfoActivity extends AppCompatActivity {
         if(!nombre.isEmpty() && !email.isEmpty() && !numeroCelular.isEmpty()){
 
             ClienteController.actualizarInfo(new Cliente(mAppSharedPreferences.obtenerIdCliente(), nombre, email, numeroCelular)).enqueue(new Callback<Void>() {
+                //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
                 @Override
+                //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
                 public void onResponse(Call<Void> call, Response<Void> response) {
 
                     if(response.isSuccessful()){
@@ -114,6 +119,7 @@ public class ActualizarInfoActivity extends AppCompatActivity {
                     }
                 }
 
+                //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
                     Toast.makeText(ActualizarInfoActivity.this, "No se pudo actualizar sus datos", Toast.LENGTH_SHORT).show();

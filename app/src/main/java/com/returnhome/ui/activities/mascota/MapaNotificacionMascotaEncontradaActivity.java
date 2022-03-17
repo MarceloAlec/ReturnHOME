@@ -44,14 +44,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
-import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.controllers.TokenController;
-import com.returnhome.models.Cliente;
-import com.returnhome.models.FCMCuerpo;
-import com.returnhome.models.FCMRespuesta;
+import com.returnhome.utils.retrofit.FCMCuerpo;
+import com.returnhome.utils.retrofit.FCMRespuesta;
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.returnhome.controllers.NotificacionController;
 import com.returnhome.models.Token;
 import com.returnhome.utils.AppSharedPreferences;
@@ -218,7 +216,6 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(5);
 
 
         iniciarLocalizacion();
@@ -421,7 +418,6 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                 else{
                     Toast.makeText(MapaNotificacionMascotaEncontradaActivity.this,"No se pudo enviar la notificacion",Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override

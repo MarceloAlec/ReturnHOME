@@ -69,11 +69,12 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
 
         mPetHomeLatLng = new LatLng(mExtraPetHomeLat, mExtraPetHomeLng);
 
-        //OBTIENE EL ADAPTADOR NFC DEL DISPOSITIVO MOVIL
+        //OBTIENE EL ADAPTADOR NFC DEL TELEFONO INTELIGENTE
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
             mTextViewTelefonoHabilitadoNFCInfo
-                    .setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
+                    .setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL " +
+                            "PARA ESCRIBIR EN ELLA");
             if(!mNfcAdapter.isEnabled()){
                 mostrarDialogoActivarNFC();
             }
@@ -91,11 +92,12 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         mPendingIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-        //SE AÑADE LOS FILTROS DE INTENTS QUE MANEJARAN LA ETIQUETA, SI ESTE FILTRO COINCIDE CON LA ETIQUETA ENTONCES LA APLICACION MANEJARÁ LA INTENCION
+        //SE AÑADE LOS FILTROS DE INTENTS QUE MANEJARÁ LA ETIQUETA, SI ESTE FILTRO COINCIDE
+        // CON LA ETIQUETA ENTONCES LA APLICACION MANEJARÁ LA INTENCION
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         mFilters = new IntentFilter[]{ndef};
-        //SE AÑADE LAS TECNOLOGIAS DE ETIQUETAS QUE LA APLICACION PUEDE MANEJAR
-        mListaTech = new String[][] { new String[] { Ndef.class.getName() }, new String[] { NdefFormatable.class.getName() }};
+        //SE AÑADE LA TECNOLOGIA DE ETIQUETA QUE LA APLICACION PUEDE MANEJAR
+        mListaTech = new String[][] { new String[] { Ndef.class.getName()}};
 
         mIrADetalleEscritura.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,12 +169,12 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         try{
-            //GUARDA LA INSTANCIA DE LA ETIQUETA DESCUBIERTA
-            //CON NfcAdapter.EXTRA_TAG es usado para obtener la informacion de la etiqueta
+
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             NdefMessage newMessage = ClienteController
                     .crearMensajeNdef(mExtraIdPet, mAppSharedPreferences.obtenerNumeroCelular(), mPetHomeLatLng);
+
             mostrarResultadoEscritura(ClienteController.escribirMensajeNdef(newMessage, tag));
         }
         catch(Exception e) {

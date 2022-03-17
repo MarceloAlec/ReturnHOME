@@ -23,9 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.models.Cliente;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.returnhome.ui.activities.cliente.HomeActivity;
-import com.returnhome.ui.activities.cliente.SeleccionOpcionAjustesActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -108,8 +107,8 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
         mLocationRequest = LocationRequest.create()
                 .setInterval(1000)
                 .setFastestInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setSmallestDisplacement(5);
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
 
         mMapa.addMarker(new MarkerOptions().position(mMascotaEncontradaLatLng)
                 .title(mExtraNombreMascotaEncontrada +" se encuentra aquí")
@@ -128,7 +127,9 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
 
     private void obtenerCliente(int mExtraIdClient) {
         ClienteController.obtener(mExtraIdClient).enqueue(new Callback<RHRespuesta>() {
+            //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
             @Override
+            //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
                     Cliente cliente = response.body().getCliente();
@@ -142,6 +143,7 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
                 }
             }
 
+            //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
                 Toast.makeText(MapaMascotaEncontradaActivity.this, "No se pudo cargar los datos del cliente", Toast.LENGTH_SHORT).show();

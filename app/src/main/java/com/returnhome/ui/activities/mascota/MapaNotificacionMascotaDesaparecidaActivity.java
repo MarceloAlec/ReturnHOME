@@ -46,10 +46,9 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
-import com.returnhome.models.FCMCuerpo;
-import com.returnhome.models.FCMRespuesta;
+import com.returnhome.utils.retrofit.FCMCuerpo;
+import com.returnhome.utils.retrofit.FCMRespuesta;
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
 import com.returnhome.controllers.NotificacionController;
 
 import java.util.Arrays;
@@ -241,7 +240,6 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(5);
 
         iniciarLocalizacion();
     }

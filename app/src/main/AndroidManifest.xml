@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.returnhome">
 
+    <!-- PERMISO DE ACCESO A INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- PERMISO DE GEOLOCALIZACIÓN -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- PERMISO DE ACCESO AL HARDWARE NFC -->
     <uses-permission android:name="android.permission.NFC" />
 
     <application
@@ -86,9 +89,11 @@
         <activity
             android:name=".ui.activities.cliente.RegistroActivity" />
 
+        <!-- SE ESPECIFICA LA API KEY PARA TENER ACCESO A LA API DE GOOGLE MAPS  -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />

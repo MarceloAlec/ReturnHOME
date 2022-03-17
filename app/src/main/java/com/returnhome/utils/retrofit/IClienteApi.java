@@ -1,7 +1,6 @@
 package com.returnhome.utils.retrofit;
 
 import com.returnhome.models.Cliente;
-import com.returnhome.models.RHRespuesta;
 
 import java.util.Map;
 
@@ -19,6 +18,13 @@ public interface IClienteApi {
     @Headers({
             "Content-Type:application/json"
     })
+
+    //ENDPOINTS
+    //SE DEFINE LOS METODOS QUE GENERAN LAS PETICIONES HTTP
+
+    //EN LA CLASE CALL SE ESPECIFICA LA RESPUESTA QUE TENDRA CADA PETICION
+    //SE GENERA UN MODELO DE RESPUESTA DENOMINADO RHRESPUESTA SI LA API DEVUELVE INFORMACION
+    //DE LO CONTRARIO, SE INDICA CON VOID QUE ESA PETICION NO TENDRA RESPUESTA EN SU CUERPO.
 
     @POST("ws_registrarCliente.php")
     Call<RHRespuesta> registrar(@Body Cliente cliente);

@@ -14,7 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.controllers.TokenController;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.google.android.material.textfield.TextInputEditText;
 import com.returnhome.controllers.NotificacionController;
 import com.returnhome.utils.AppSharedPreferences;
@@ -34,6 +34,11 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private TextInputEditText mTextInputPassword;
 
     private AppSharedPreferences mAppSharedPreferences;
+
+    private String nombreCliente;
+    private int idCliente;
+    private String numeroCelular;
+
 
 
     @Override
@@ -104,49 +109,47 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         autenticarCliente(credenciales, task.getResult());
                     }
                     else{
-                        Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
                     }
                 }
             });
         }
         else{
-            Toast.makeText(this, "La contraseña y el email son obligatorios", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "La contraseña y el email son obligatorios", Toast.LENGTH_LONG).show();
         }
     }
-///////////////////
+
     private void autenticarCliente(Map<String,String> credenciales, String token){
         ClienteController.autenticar(credenciales).enqueue(new Callback<RHRespuesta>() {
+            //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
             @Override
+            //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
 
                 if(response.isSuccessful()){
                     Map<String, String> tokenInfo = new HashMap<>();
                     tokenInfo.put("idCliente", String.valueOf(response.body().getCliente().getId()));
                     tokenInfo.put("token", token);
-                    String nombreCliente = response.body().getCliente().getNombre();
-                    int idCliente = response.body().getCliente().getId();
-                    String numeroCelular = response.body().getCliente().getNumeroCelular();
-
-                    mAppSharedPreferences.actualizarEstadoAuth(true);
-                    mAppSharedPreferences.guardarNombreCliente(nombreCliente);
-                    mAppSharedPreferences.guardarIdCliente(idCliente);
-                    mAppSharedPreferences.guardarNumeroCelular(numeroCelular);
-                    mAppSharedPreferences.guardarToken(token);
+                    nombreCliente = response.body().getCliente().getNombre();
+                    idCliente = response.body().getCliente().getId();
+                    numeroCelular = response.body().getCliente().getNumeroCelular();
                     registrarToken(tokenInfo);
                 }
                 else{
-                    Toast.makeText(PrincipalActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_SHORT)
+                    Toast.makeText(PrincipalActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_LONG)
                             .show();
                 }
             }
 
             @Override
+            //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-                Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+                //SI ALGO FALLA EN LA PETICION SE MUESTRA UN MENSAJE AMIGABLE AL USUARIO
+                Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
             }
         });
     }
-//////////////////////
+
     private void registrarToken(Map<String, String> tokenInfo){
 
         TokenController.registrarTokenDB(tokenInfo).enqueue(new Callback<Void>() {
@@ -157,23 +160,29 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                     NotificacionController.suscribirMascotaDesaparecida();
 
+                    mAppSharedPreferences.actualizarEstadoAuth(true);
+                    mAppSharedPreferences.guardarNombreCliente(nombreCliente);
+                    mAppSharedPreferences.guardarIdCliente(idCliente);
+                    mAppSharedPreferences.guardarNumeroCelular(numeroCelular);
+                    mAppSharedPreferences.guardarToken(tokenInfo.get("token"));
+
                     Intent intent = new Intent(PrincipalActivity.this, HomeActivity.class);
                     //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
             }
         });
 
     }
-//////////////////////
+
 
 }

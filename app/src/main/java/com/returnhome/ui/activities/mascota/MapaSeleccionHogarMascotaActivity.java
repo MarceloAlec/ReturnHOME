@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +50,7 @@ import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
 import com.returnhome.ui.activities.nfc.DetalleInfoEscrituraActivity;
 import com.returnhome.utils.AppSharedPreferences;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,9 +62,13 @@ import retrofit2.Response;
 
 public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    //PROPORCIONA ACCESO A LA VISTA Y LOS DATOS DEL MAPA
     private GoogleMap mMapa;
+    //ADMINISTRA EL CICLO DE VIDA DEL MAPA
     private SupportMapFragment mMapaFragment;
 
+    //VARIABLE QUE PERMITIRA ESTABLECER LA CALIDAD DE SERVICIO
+    //PARA LAS PETICIONES DEL FUSEDLOCATIONPROVIDER
     private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocation;
 
@@ -93,26 +95,21 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     private Button mButtonSeleccionHogarMascota;
     private androidx.appcompat.widget.Toolbar mToolbar;
 
-    //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
+    //OBTIENE LA UBICACION DEL USUARIO
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
-            super.onLocationResult(locationResult);
-            for (Location ubicacion : locationResult.getLocations()) {
-                if (getApplicationContext() != null) {
 
-                    mActualLatLng = new LatLng(ubicacion.getLatitude(), ubicacion.getLongitude());
+            mActualLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
 
-                    //OBTIENE LA UBICACION EN TIEMPO REAL
-                    mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                            .target(new LatLng(ubicacion.getLatitude(), ubicacion.getLongitude()))
-                            .zoom(15f)
-                            .build()
-                    ));
-                    limitarBusqueda();
-                    detenerLocalizacion();
-                }
-            }
+            mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                    .target(new LatLng(mActualLatLng.latitude, mActualLatLng.longitude))
+                    .zoom(15f)
+                    .build()
+            ));
+
+            limitarBusqueda();
+            detenerLocalizacion();
         }
     };
 
@@ -132,9 +129,9 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
 
         inicializarComponentes();
 
-        mMapaFragment.getMapAsync(this);
 
         //INICIA O DETIENE LA UBICACION DEL USUARIO
+        //INSTANCIO EL CLIENTE DE SERVICIOS DE UBICACION
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         setSupportActionBar(mToolbar);
@@ -165,15 +162,14 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         mButtonSeleccionHogarMascota.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mascotaSeleccionada){
+                if (mascotaSeleccionada) {
                     Intent intent = new Intent(MapaSeleccionHogarMascotaActivity.this, DetalleInfoEscrituraActivity.class);
                     intent.putExtra("hogarMascotaLat", mHogarMascotaLatLng.latitude);
                     intent.putExtra("hogarMascotaLng", mHogarMascotaLatLng.longitude);
-                    intent.putExtra("mascota",(Mascota)mSpinner.getSelectedItem());
+                    intent.putExtra("mascota", (Mascota) mSpinner.getSelectedItem());
                     startActivity(intent);
-                }
-                else{
-                    Toast.makeText(MapaSeleccionHogarMascotaActivity.this,"Debe seleccionar una mascota previamente registrada en la aplicación",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MapaSeleccionHogarMascotaActivity.this, "Debe seleccionar una mascota previamente registrada en la aplicación", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -189,7 +185,12 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     }
 
     private void inicializarComponentes() {
+
+        //SE OBTIENE EL SUPPORTMAPFRAGMENT
         mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        //LA ACTIVIDAD ACTUAL ADMINISTRARÁ EL MAPA
+        mMapaFragment.getMapAsync(this);
+
         mSpinner = findViewById(R.id.spinnerMisMascotas);
         mButtonSeleccionHogarMascota = findViewById(R.id.btnSeleccionarHogarMascota);
         mToolbar = findViewById(R.id.toolbar);
@@ -205,12 +206,11 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         detenerLocalizacion();
     }
 
-    private void detenerLocalizacion(){
-        if(mLocationCallback !=null && mFusedLocation != null){
+    private void detenerLocalizacion() {
+        if (mLocationCallback != null && mFusedLocation != null) {
             mFusedLocation.removeLocationUpdates(mLocationCallback);
         }
     }
@@ -240,24 +240,24 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     }
 
     private void movimientoCamara() {
-            mCameraListener = new GoogleMap.OnCameraIdleListener() {
-                @Override
-                public void onCameraIdle() {
-                    try {
-                        //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
-                        Geocoder geocoder = new Geocoder(MapaSeleccionHogarMascotaActivity.this);
-                        mHogarMascotaLatLng = mMapa.getCameraPosition().target;
-                        List<Address> addressList = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
-                        String city = addressList.get(0).getLocality();
-                        String address = addressList.get(0).getAddressLine(0);
+        mCameraListener = new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                try {
+                    //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
+                    Geocoder geocoder = new Geocoder(MapaSeleccionHogarMascotaActivity.this);
+                    mHogarMascotaLatLng = mMapa.getCameraPosition().target;
+                    List<Address> addressList = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
+                    String city = addressList.get(0).getLocality();
+                    String address = addressList.get(0).getAddressLine(0);
 
-                        mAutoCompletar.setText(address + " " + city);
+                    mAutoCompletar.setText(address + " " + city);
 
-                    } catch (Exception e) {
-                        Log.d("Error: ", "Mensaje error: " + e.getMessage());
-                    }
+                } catch (Exception e) {
+                    Log.d("Error: ", "Mensaje error: " + e.getMessage());
                 }
-            };
+            }
+        };
     }
 
     private void instanciarAutoCompletarHogarMascota() {
@@ -283,17 +283,23 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         });
     }
 
+    //METODO QUE SE EJECUTA CUANDO EL MAPA SE HA AGREGADO EN EL FRAGMENT CORRESPONDIENTE
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMapa = googleMap;
+        //ESTABLECE EL TIPO DE MAPA COMO NORMAL
         mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //SE AÑADE UN OYENTE CUANDO LA CAMARA SE MUEVA
         mMapa.setOnCameraIdleListener(mCameraListener);
 
+        //CONFIGURACION DE LA UBICACION
         mLocationRequest = LocationRequest.create();
+        //SE ESTABLECE LA FRECUENCIA EN ms CON LA QUE LLEGARAN LAS ACTUALIZACIONES DE UBICACIÓN
         mLocationRequest.setInterval(1000);
+        //SE ESTABLECE UNA FRECUENCIA MENOR A SET INTERVAL PARA GANAR PRIORIDAD CON OTRAS APLICACIONES
         mLocationRequest.setFastestInterval(1000);
+        //PARA OBTENER LA UBICACION CON LA MAYOR PRECISION POSIBLE YA QUE HACE USO DEL GPS
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(5);
 
         iniciarLocalizacion();
     }
@@ -305,38 +311,37 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
 
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     if (gpsActivado()) {
                         mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
-                    }
-                    else {
+                    } else {
                         mostrarCuadroDialogoActivarGPS();
                     }
-                }
-                else{
+                } else {
                     //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                    verificarPermisoUbicacion();
+                    solicitarPermisoUbicacion();
                 }
-            }
-            else{
-                //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                verificarPermisoUbicacion();
+            } else {
+                solicitarPermisoUbicacion();
             }
         }
     }
 
     private void iniciarLocalizacion() {
+        //APARTIR DE LA VERSION 6.0 SE SOLICITA LA ACTIVACION DE PERMISOS EN TIEMPO DE EJECUCION
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                //AL EJECTUTARSE EL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
+            //SE USA LA CLASE ACTIVITYCOMPAT PARA CHECKEAR LOS PERMISOS, EN ESTE CASO EL DE UBICACIÓN
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 if (gpsActivado()) {
+                    //AL LLAMAR AL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
+                    //EL TERCER PARAMETRO INDICA QUE LA PETICION DE UBICACION SE EJECUTARA EN UN HILO DIFERENTE
                     mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                 } else {
                     mostrarCuadroDialogoActivarGPS();
                 }
             } else {
-                verificarPermisoUbicacion();
+                solicitarPermisoUbicacion();
             }
         } else {
             if (gpsActivado()) {
@@ -365,6 +370,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //ESPERA Y ESCUCHA HASTA QUE EL USUARIO ACTIVE EL GPS
+                //ESTE METODO RECIBE UN CODIGO DE SOLICITUD QUE IDENTIFICA A LA PETICION
                 startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), SETTINGS_REQUEST_CODE);
             }
         });
@@ -378,22 +384,26 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
 
     }
 
+    //METODO QUE SE EJECUTA AL ABRIR UNA APLICACION EXTERNA QUE DEVUELVE ALGUNA INFORMACION
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
+
+        if (gpsActivado()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
-        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActivado()){
+        else if (!gpsActivado()){
             mostrarCuadroDialogoActivarGPS();
         }
     }
 
-    private void verificarPermisoUbicacion() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void solicitarPermisoUbicacion() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 AlertDialog builder = new AlertDialog.Builder(this).create();

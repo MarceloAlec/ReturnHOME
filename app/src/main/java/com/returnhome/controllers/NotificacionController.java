@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.returnhome.models.FCMCuerpo;
-import com.returnhome.models.FCMRespuesta;
+import com.returnhome.utils.retrofit.FCMCuerpo;
+import com.returnhome.utils.retrofit.FCMRespuesta;
 import com.returnhome.utils.retrofit.IFCMApi;
 import com.returnhome.utils.retrofit.ClienteRetrofit;
 
@@ -20,6 +20,7 @@ public class NotificacionController {
 
 
 
+    //SE EJECUTA LA PETICION AL SERVICIO DE FIREBASE
     public static Call<FCMRespuesta> enviarNotificacion(FCMCuerpo body) {
         return ClienteRetrofit.obtenerCliente(BASE_URL).create(IFCMApi.class).enviarNotificacion(body);
     }

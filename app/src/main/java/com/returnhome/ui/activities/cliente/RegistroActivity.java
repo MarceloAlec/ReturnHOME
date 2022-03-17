@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.returnhome.R;
 import com.returnhome.controllers.ClienteController;
 import com.returnhome.models.Cliente;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
@@ -66,7 +66,6 @@ public class RegistroActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
     }
 
-//////////////////
     private void registrar() {
         String nombre = mTextInputNombre.getText().toString();
         String email = mTextInputEmail.getText().toString();
@@ -78,26 +77,28 @@ public class RegistroActivity extends AppCompatActivity {
             ClienteController
                     .registrar(new Cliente(nombre,email,password,codigoPais+" "+numeroCelular))
                     .enqueue(new Callback<RHRespuesta>() {
+                        //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
                 @Override
+                //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                     if(response.isSuccessful()){
-                        Toast.makeText(RegistroActivity.this, "La cuenta fue creada con exito", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistroActivity.this, "La cuenta fue creada con exito", Toast.LENGTH_LONG).show();
                         finish();
                     }
                     else{
-                        Toast.makeText(RegistroActivity.this, "El correo ya se encuentra registrado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegistroActivity.this, "El correo ya se encuentra registrado", Toast.LENGTH_LONG).show();
                     }
                 }
+                //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
                 @Override
                 public void onFailure(Call<RHRespuesta> call, Throwable t) {
 
-                    Toast.makeText(RegistroActivity.this, "Registro fallido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroActivity.this, "Registro fallido", Toast.LENGTH_LONG).show();
                 }
             });
         }
         else{
-            Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ingrese todos los campos", Toast.LENGTH_LONG).show();
         }
     }
 }
-///////////////////////

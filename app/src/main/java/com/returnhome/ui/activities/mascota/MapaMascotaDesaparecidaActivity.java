@@ -21,9 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
-import com.returnhome.models.RHRespuesta;
+import com.returnhome.utils.retrofit.RHRespuesta;
 import com.returnhome.ui.activities.cliente.HomeActivity;
-import com.returnhome.ui.activities.cliente.SeleccionOpcionAjustesActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -95,8 +94,7 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
         mLocationRequest = LocationRequest.create()
                 .setInterval(1000)
                 .setFastestInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setSmallestDisplacement(5);
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         mMapa.addMarker(new MarkerOptions().position(mMascotaDesaparecidaLatLng)
                 .title(mExtraNombreMascota +" fue visto/a por ultima vez aqui")
