@@ -10,9 +10,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,12 +34,14 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
@@ -60,16 +64,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
 
     //PROPORCIONA ACCESO A LA VISTA Y LOS DATOS DEL MAPA
     private GoogleMap mMapa;
     //ADMINISTRA EL CICLO DE VIDA DEL MAPA
     private SupportMapFragment mMapaFragment;
 
-    //VARIABLE QUE PERMITIRA ESTABLECER LA CALIDAD DE SERVICIO
-    //PARA LAS PETICIONES DEL FUSEDLOCATIONPROVIDER
-    private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocation;
 
     private Spinner mSpinner;
@@ -95,32 +96,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     private Button mButtonSeleccionHogarMascota;
     private androidx.appcompat.widget.Toolbar mToolbar;
 
-    //OBTIENE LA UBICACION DEL USUARIO
-    LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(@NonNull LocationResult locationResult) {
-
-            mActualLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
-
-            mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                    .target(new LatLng(mActualLatLng.latitude, mActualLatLng.longitude))
-                    .zoom(15f)
-                    .build()
-            ));
-
-            limitarBusqueda();
-            detenerLocalizacion();
-        }
-    };
-
-    //LIMITAR LAS BUSQUEDAS POR REGION
-    private void limitarBusqueda() {
-        //DISTANCIA PARA LIMITAR LAS BUSQUEDAS EN M
-        LatLng norte = SphericalUtil.computeOffset(mActualLatLng, 5000, 0);
-        LatLng sur = SphericalUtil.computeOffset(mActualLatLng, 5000, 180);
-        mAutoCompletar.setLocationBias(RectangularBounds.newInstance(sur, norte));
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +103,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         setContentView(R.layout.activity_mapa_seleccion_hogar_mascota);
 
         inicializarComponentes();
-
 
         //INICIA O DETIENE LA UBICACION DEL USUARIO
         //INSTANCIO EL CLIENTE DE SERVICIOS DE UBICACION
@@ -175,13 +149,17 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             }
         });
 
+
         if (!Places.isInitialized()) {
+            //SE INICIALIZA PLACES SDK PARA ANDROID
             Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         }
 
         mPlaces = Places.createClient(this);
         instanciarAutoCompletarHogarMascota();
-        movimientoCamara();
+
+        iniciarLocalizacion();
+
     }
 
     private void inicializarComponentes() {
@@ -196,26 +174,36 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         mToolbar = findViewById(R.id.toolbar);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        obtenerMascotas();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        detenerLocalizacion();
-    }
-
-    private void detenerLocalizacion() {
-        if (mLocationCallback != null && mFusedLocation != null) {
-            mFusedLocation.removeLocationUpdates(mLocationCallback);
+    private void iniciarLocalizacion() {
+        //APARTIR DE LA VERSION 6.0 SE SOLICITA LA ACTIVACION DE PERMISOS EN TIEMPO DE EJECUCION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //SE USA LA CLASE ACTIVITYCOMPAT PARA CHECKEAR LOS PERMISOS, EN ESTE CASO EL DE UBICACIÓN
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (gpsActivado()) {
+                    obtenerUbicacionActual();
+                } else {
+                    mostrarCuadroDialogoActivarGPS();
+                }
+            } else {
+                solicitarPermisoUbicacion();
+            }
+        } else {
+            if (gpsActivado()) {
+                obtenerUbicacionActual();
+            } else {
+                mostrarCuadroDialogoActivarGPS();
+            }
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        obtenerMascotas();
+    }
+
     private void obtenerMascotas() {
+
         int idCliente = mAppSharedPreferences.obtenerIdCliente();
 
         MascotaController.obtener(idCliente, 1).enqueue(new Callback<RHRespuesta>() {
@@ -239,46 +227,28 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         mSpinner.setAdapter(mArrayAdapterMascotas);
     }
 
-    private void movimientoCamara() {
-        mCameraListener = new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                try {
-                    //CUANDO EL USARIO CAMBIA LA POSICION DE LA CAMARA EN EL MAPA
-                    Geocoder geocoder = new Geocoder(MapaSeleccionHogarMascotaActivity.this);
-                    mHogarMascotaLatLng = mMapa.getCameraPosition().target;
-                    List<Address> addressList = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
-                    String city = addressList.get(0).getLocality();
-                    String address = addressList.get(0).getAddressLine(0);
-
-                    mAutoCompletar.setText(address + " " + city);
-
-                } catch (Exception e) {
-                    Log.d("Error: ", "Mensaje error: " + e.getMessage());
-                }
-            }
-        };
-    }
-
     private void instanciarAutoCompletarHogarMascota() {
+
+        //SE INICIALIZA EL AUTOCOMPLETESUPPORTFRAGMENT
         mAutoCompletar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.lugarAutocompletarHogarMascota);
+        //SE ESPECIFICA LOS DATOS DEL LUGAR QUE DEVOLVERA LA API, EN ESTE CASO SU ID, LATITUD & LONGITUD Y NOMBRE DEL LUGAR
         mAutoCompletar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
+        //TEXTO QUE SE MUESTRA EN EL COMPONENTE DE AUTOCOMPLETAR
         mAutoCompletar.setHint("Hogar de su mascota");
+        //SE CONFIGURA UN ESCUCHADOR QUE MANEJA LA RESPUESTA
         mAutoCompletar.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onError(@NonNull Status status) {
-
+                Log.e("ERROR:", status.toString());
             }
 
             @Override
             public void onPlaceSelected(@NonNull Place place) {
 
                 mHogarMascotaLatLng = place.getLatLng();
-                mMapa.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                        .target(new LatLng(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude))
-                        .zoom(15f)
-                        .build()
-                ));
+
+                //SE CAMBIA LA VISTA DEL MAPA DE ACUERDO CON EL LUGAR ESCOGIDO
+                mMapa.animateCamera(CameraUpdateFactory.newLatLngZoom(mHogarMascotaLatLng, 15f));
             }
         });
     }
@@ -289,31 +259,75 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
         mMapa = googleMap;
         //ESTABLECE EL TIPO DE MAPA COMO NORMAL
         mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        //SE AÑADE UN OYENTE CUANDO LA CAMARA SE MUEVA
-        mMapa.setOnCameraIdleListener(mCameraListener);
-
-        //CONFIGURACION DE LA UBICACION
-        mLocationRequest = LocationRequest.create();
-        //SE ESTABLECE LA FRECUENCIA EN ms CON LA QUE LLEGARAN LAS ACTUALIZACIONES DE UBICACIÓN
-        mLocationRequest.setInterval(1000);
-        //SE ESTABLECE UNA FRECUENCIA MENOR A SET INTERVAL PARA GANAR PRIORIDAD CON OTRAS APLICACIONES
-        mLocationRequest.setFastestInterval(1000);
-        //PARA OBTENER LA UBICACION CON LA MAYOR PRECISION POSIBLE YA QUE HACE USO DEL GPS
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        iniciarLocalizacion();
+        //SE AÑADE UN OYENTE SI EL USUARIO DESPLAZA EL MAPA
+        mMapa.setOnCameraIdleListener(this);
     }
 
+    //CUANDO EL MAPA DEJA DE DESPLAZARSE SE EJECUTA EL SIGUIENTE METODO
+    @Override
+    public void onCameraIdle() {
+        try {
 
+            //SE USA LA CLASE GEOCODER PARA TRANSFORMAR UNA COORDENADA LATITUD Y LONGITUD EN UNA DIRECCION DE CALLE
+            Geocoder geocoder = new Geocoder(MapaSeleccionHogarMascotaActivity.this);
+            mHogarMascotaLatLng = mMapa.getCameraPosition().target;
+            //SE OBTIENE UNA LISTA DE DIRECCIONES CON LA INFORMACION DEL LUGAR SEGUN LA LATITUD Y LONGITUD ASIGNADA COMO PARAMETRO
+            List<Address> addressList = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
+            String city = addressList.get(0).getLocality();
+            String address = addressList.get(0).getAddressLine(0);
+
+            //SE AÑADE LA DIRECCION OBTENIDA EN EL COMPONENTE DEL AUTOCOMPLETAR
+            mAutoCompletar.setText(address + " " + city);
+
+        } catch (Exception e) {
+            Log.e("Error: ",e.getMessage());
+        }
+    }
+
+    private void obtenerUbicacionActual() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        //MEDIANTE LA CONSTANTE HIGH ACCURACY SE OBTIENE LA MAYOR PRECISION POSIBLE YA QUE HACE USO DEL GPS DEL DISPOSITIVO
+        mFusedLocation.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(MapaSeleccionHogarMascotaActivity.this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                mActualLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                mMapa.moveCamera(CameraUpdateFactory.newLatLngZoom(mActualLatLng, 15f));
+
+                limitarBusqueda();
+            }
+        });
+    }
+
+    //LIMITAR LAS BUSQUEDAS POR REGION
+    private void limitarBusqueda() {
+        //SE OBTIENE LAS COORDENADAS DE LATITUD Y LONGITUD AL MOVERSE UNA DISTANCIA DE 50000 METROS
+        //POR DEFECTO EL DESPLAZAMIENTO ES CON RUMBO HACIA EL NORTE, ESTO SE MODIFICA ESPECIFICANDO EL NUMERO DE GRADOS DEL NUEVO DESPLAZAMIENTO EN EL SENTIDO DE
+        //LAS AGUJAS DEL RELOJ
+        LatLng noreste = SphericalUtil.computeOffset(mActualLatLng, 50000, 45);
+        LatLng sureste = SphericalUtil.computeOffset(mActualLatLng, 50000, 225);
+
+        //SE RESTRINGE LOS RESULTADOS DEL AUTOCOMPLETAR
+        //SE ESTABLECEN LAS COORDENADAS DE NORESTE Y SURESTE PARA LIMITAR LAS BUSQUEDAS DENTRO DE UN CUADRO DELIMITADOR
+        mAutoCompletar.setLocationRestriction(RectangularBounds.newInstance(sureste, noreste));
+    }
+
+    //METODO QUE SE EJECUTA CUANDO EL USUARIO SELECCIONA LA OPCION DE PERMITIR O RECHAZAR LOS PERMISOS
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == LOCATION_REQUEST_CODE) {
+
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     if (gpsActivado()) {
-                        mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                       obtenerUbicacionActual();
 
                     } else {
                         mostrarCuadroDialogoActivarGPS();
@@ -324,30 +338,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
                 }
             } else {
                 solicitarPermisoUbicacion();
-            }
-        }
-    }
-
-    private void iniciarLocalizacion() {
-        //APARTIR DE LA VERSION 6.0 SE SOLICITA LA ACTIVACION DE PERMISOS EN TIEMPO DE EJECUCION
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //SE USA LA CLASE ACTIVITYCOMPAT PARA CHECKEAR LOS PERMISOS, EN ESTE CASO EL DE UBICACIÓN
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                if (gpsActivado()) {
-                    //AL LLAMAR AL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
-                    //EL TERCER PARAMETRO INDICA QUE LA PETICION DE UBICACION SE EJECUTARA EN UN HILO DIFERENTE
-                    mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                } else {
-                    mostrarCuadroDialogoActivarGPS();
-                }
-            } else {
-                solicitarPermisoUbicacion();
-            }
-        } else {
-            if (gpsActivado()) {
-                mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-            } else {
-                mostrarCuadroDialogoActivarGPS();
             }
         }
     }
@@ -389,13 +379,10 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (gpsActivado()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
+           obtenerUbicacionActual();
         }
-        else if (!gpsActivado()){
+        else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActivado()){
             mostrarCuadroDialogoActivarGPS();
         }
     }
@@ -413,22 +400,20 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
                 builder.setButton( AlertDialog.BUTTON_POSITIVE,"OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //HABILITA LOS PERMISOS PARA USAR LA UBICACION
+                        //MUESTRA UN CUADRO DE DIALOGO SOLICITANDO QUE SE CONCEDAN LOS PERMISOS
                         ActivityCompat.requestPermissions(MapaSeleccionHogarMascotaActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                     }
                 });
                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        //ANTES DE AGREGAR ESTE EVENTO, SI EL USARIO PRESIONABA EL BOTON DE IR HACIA ATRAS DE LA UI DEL SISTEMA EL MENSAJE QUE
-                        //SOLICITABA QUE EL USARIO ACTIVE LOS PERMISOS SE OCULTABA MOSTRANDO EL MAPA DEL MUNDO SIN REALIZAR NINGUNA ACCIÓN POR LO TANTO
-                        //SE AGREGA ESTE EVENTO DE TAL MANERA QUE SI EL USUARIO PRESIONA EL BOTON ANTES MENCIONADO FINALIZARA LA ACTIVIDAD
                         finish();
                     }
                 });
                 builder.show();
             }
             else {
+
                 ActivityCompat.requestPermissions(MapaSeleccionHogarMascotaActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
         }

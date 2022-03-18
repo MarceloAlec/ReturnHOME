@@ -21,26 +21,32 @@
 
         <activity
             android:name=".ui.activities.mascota.MapaMascotaDesaparecidaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.mascota.MapaNotificacionMascotaDesaparecidaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".receivers.MascotaEncontradaReceiver"
-            android:enabled="true" />
+            android:enabled="true"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".receivers.MascotaDesaparecidaReceiver"
-            android:enabled="true" />
+            android:enabled="true"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".receivers.ContactoReceiver"
-            android:enabled="true" />
+            android:enabled="true"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.activities.mascota.MapaMascotaEncontradaActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
 
         <service
             android:name=".services.MyFirebaseMessagingService">
@@ -51,43 +57,58 @@
 
         <activity
             android:name=".ui.activities.mascota.MapaNotificacionMascotaEncontradaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.nfc.DetalleInfoLecturaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.nfc.LecturaEtiquetaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.nfc.EscrituraEtiquetaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.mascota.MapaSeleccionHogarMascotaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.activities.nfc.DetalleInfoEscrituraActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.cliente.ActualizarPasswordActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.cliente.SeleccionOpcionAjustesActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.cliente.ActualizarInfoActivity"
-            android:exported="false" />
-        <activity android:name=".ui.activities.cliente.HomeActivity" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.activities.cliente.HomeActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".ui.activities.cliente.PrincipalActivity">
+            android:name=".ui.activities.cliente.PrincipalActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".ui.activities.cliente.RegistroActivity" />
+            android:name=".ui.activities.cliente.RegistroActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- SE ESPECIFICA LA API KEY PARA TENER ACCESO A LA API DE GOOGLE MAPS  -->
         <meta-data
