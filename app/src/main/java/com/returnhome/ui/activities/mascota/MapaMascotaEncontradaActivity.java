@@ -40,7 +40,6 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
 
     private GoogleMap mMapa;
     private SupportMapFragment mMapaFragment;
-    private LocationRequest mLocationRequest;
 
     private LatLng mMascotaEncontradaLatLng;
 
@@ -52,16 +51,12 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
     private ImageView mImageViewLLamarCliente;
     private String numeroCelular;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_mascota_encontrada);
 
         inicializarComponentes();
-
-        mMapaFragment.getMapAsync(this);
 
         mExtraIdCliente = getIntent().getIntExtra("idCliente", 0);
         mExtraNombreMascotaEncontrada = getIntent().getStringExtra("nombreMascota");
@@ -96,7 +91,7 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
         mImageViewLLamarCliente = findViewById(R.id.btnContactarClienteEncontroMascota);
         mCircleImageIrAHome = findViewById(R.id.btnIrAHomeDesdeMapaMascotaEncontrada);
         mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
-
+        mMapaFragment.getMapAsync(this);
     }
 
     @Override
@@ -104,26 +99,13 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
         mMapa = googleMap;
         mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        mLocationRequest = LocationRequest.create()
-                .setInterval(1000)
-                .setFastestInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-
         mMapa.addMarker(new MarkerOptions().position(mMascotaEncontradaLatLng)
                 .title(mExtraNombreMascotaEncontrada +" se encuentra aquí")
                 .icon(BitmapDescriptorFactory
                 .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
 
-        mMapa.animateCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition.Builder()
-                        .target(mMascotaEncontradaLatLng)
-                        .zoom(15f)
-                        .build()
-        ));
+        mMapa.animateCamera(CameraUpdateFactory.newLatLngZoom(mMascotaEncontradaLatLng, 15f));
     }
-
-
 
     private void obtenerCliente(int mExtraIdClient) {
         ClienteController.obtener(mExtraIdClient).enqueue(new Callback<RHRespuesta>() {
@@ -158,6 +140,4 @@ public class MapaMascotaEncontradaActivity extends AppCompatActivity implements 
             startActivity(intent);
         }
     }
-
-
 }

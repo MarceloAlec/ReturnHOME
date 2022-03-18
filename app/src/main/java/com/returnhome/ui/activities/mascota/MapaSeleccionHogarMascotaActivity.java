@@ -10,7 +10,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -18,7 +17,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -30,16 +28,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -52,7 +46,7 @@ import com.google.maps.android.SphericalUtil;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.models.Mascota;
-import com.returnhome.ui.activities.nfc.DetalleInfoEscrituraActivity;
+import com.returnhome.ui.activities.nfc.MapaDetalleInfoEscrituraActivity;
 import com.returnhome.utils.AppSharedPreferences;
 import com.returnhome.utils.retrofit.RHRespuesta;
 
@@ -80,8 +74,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
 
     private LatLng mHogarMascotaLatLng;
     private boolean mascotaSeleccionada = false;
-
-    private GoogleMap.OnCameraIdleListener mCameraListener;
 
     private AppSharedPreferences mAppSharedPreferences;
     private ArrayList<Mascota> mascotaArrayList;
@@ -137,7 +129,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             @Override
             public void onClick(View v) {
                 if (mascotaSeleccionada) {
-                    Intent intent = new Intent(MapaSeleccionHogarMascotaActivity.this, DetalleInfoEscrituraActivity.class);
+                    Intent intent = new Intent(MapaSeleccionHogarMascotaActivity.this, MapaDetalleInfoEscrituraActivity.class);
                     intent.putExtra("hogarMascotaLat", mHogarMascotaLatLng.latitude);
                     intent.putExtra("hogarMascotaLng", mHogarMascotaLatLng.longitude);
                     intent.putExtra("mascota", (Mascota) mSpinner.getSelectedItem());
@@ -163,7 +155,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     }
 
     private void inicializarComponentes() {
-
         //SE OBTIENE EL SUPPORTMAPFRAGMENT
         mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         //LA ACTIVIDAD ACTUAL ADMINISTRARÁ EL MAPA
@@ -272,12 +263,12 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             Geocoder geocoder = new Geocoder(MapaSeleccionHogarMascotaActivity.this);
             mHogarMascotaLatLng = mMapa.getCameraPosition().target;
             //SE OBTIENE UNA LISTA DE DIRECCIONES CON LA INFORMACION DEL LUGAR SEGUN LA LATITUD Y LONGITUD ASIGNADA COMO PARAMETRO
-            List<Address> addressList = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
-            String city = addressList.get(0).getLocality();
-            String address = addressList.get(0).getAddressLine(0);
+            List<Address> listaDirecciones = geocoder.getFromLocation(mHogarMascotaLatLng.latitude, mHogarMascotaLatLng.longitude, 1);
+            String ciudad = listaDirecciones.get(0).getLocality();
+            String direccion = listaDirecciones.get(0).getAddressLine(0);
 
             //SE AÑADE LA DIRECCION OBTENIDA EN EL COMPONENTE DEL AUTOCOMPLETAR
-            mAutoCompletar.setText(address + " " + city);
+            mAutoCompletar.setText(direccion + " " + ciudad);
 
         } catch (Exception e) {
             Log.e("Error: ",e.getMessage());
@@ -355,7 +346,7 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
     private void mostrarCuadroDialogoActivarGPS() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
-        builder.setMessage("Por favor activa tu ubicacion para continuar");
+        builder.setMessage("Por favor activa tu ubicación para continuar");
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "Configuraciones", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -371,7 +362,6 @@ public class MapaSeleccionHogarMascotaActivity extends AppCompatActivity impleme
             }
         });
         builder.show();
-
     }
 
     //METODO QUE SE EJECUTA AL ABRIR UNA APLICACION EXTERNA QUE DEVUELVE ALGUNA INFORMACION

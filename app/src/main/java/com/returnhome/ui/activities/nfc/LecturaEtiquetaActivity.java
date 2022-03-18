@@ -12,7 +12,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.Ndef;
-import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -39,13 +38,13 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
 
     private NfcAdapter mNfcAdapter;
     private String[][] mListaTech;
-    IntentFilter[] mFilters;
-    PendingIntent mPendingIntent;
-    AppSharedPreferences mAppSharedPreferences;
+    private IntentFilter[] mFilters;
+    private PendingIntent mPendingIntent;
+    private AppSharedPreferences mAppSharedPreferences;
 
     private String numeroCelular;
     private LatLng hogarMascotaLatLng;
-    int idMascota;
+    private int idMascota;
 
     private final static int NFC_REQUEST_CODE = 1;
 
@@ -200,7 +199,7 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
             finish();
         }
         else{
-            Intent intent = new Intent(LecturaEtiquetaActivity.this, DetalleInfoLecturaActivity.class);
+            Intent intent = new Intent(LecturaEtiquetaActivity.this, MapaDetalleInfoLecturaActivity.class);
             intent.putExtra("hogarMascotaLat", hogarMascotaLatLng.latitude);
             intent.putExtra("hogarMascotaLng", hogarMascotaLatLng.longitude);
             intent.putExtra("numeroContacto", numeroCelular);

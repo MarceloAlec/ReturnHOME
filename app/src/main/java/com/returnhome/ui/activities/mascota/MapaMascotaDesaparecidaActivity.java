@@ -38,7 +38,6 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
 
     private GoogleMap mMapa;
     private SupportMapFragment mMapaFragment;
-    private LocationRequest mLocationRequest;
 
     private LatLng mMascotaDesaparecidaLatLng;
 
@@ -63,8 +62,6 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
 
         mMascotaDesaparecidaLatLng = new LatLng(mExtraMascotaLat, mExtraMascotaLng);
 
-        mMapaFragment.getMapAsync(this);
-
         obtenerMascota(mExtraIdMascota);
 
         mCircleImageIrAHome.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +79,10 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
         mTextViewRaza = findViewById(R.id.textViewRazaMascotaDesaparecida);
         mTextViewGenero = findViewById(R.id.textViewGeneroMascotaDesaparecida);
         mTextViewDescripcion = findViewById(R.id.textViewDescripcionMascotaDesaparecida);
-        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         mCircleImageIrAHome = findViewById(R.id.btnIrAHomeDesdeMascotaDesaparecida);
+
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mMapaFragment.getMapAsync(this);
     }
 
     @Override
@@ -91,22 +90,12 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
         mMapa = googleMap;
         mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        mLocationRequest = LocationRequest.create()
-                .setInterval(1000)
-                .setFastestInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
         mMapa.addMarker(new MarkerOptions().position(mMascotaDesaparecidaLatLng)
                 .title(mExtraNombreMascota +" fue visto/a por ultima vez aqui")
                 .icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
+                .fromResource(R.drawable.ic_ubicacion_mascota))).showInfoWindow();
 
-        mMapa.animateCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition.Builder()
-                        .target(mMascotaDesaparecidaLatLng)
-                        .zoom(15f)
-                        .build()
-        ));
+        mMapa.animateCamera(CameraUpdateFactory.newLatLngZoom(mMascotaDesaparecidaLatLng, 15f));
     }
 
     private void obtenerMascota(int idMascota) {
@@ -136,6 +125,4 @@ public class MapaMascotaDesaparecidaActivity extends AppCompatActivity implement
             }
         });
     }
-
-
 }

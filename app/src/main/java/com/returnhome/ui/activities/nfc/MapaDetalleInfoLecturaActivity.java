@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapaDetalleInfoLecturaActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private double mExtraHogarMascotaLat;
     private double mExtraHogarMascotaLng;
@@ -49,9 +49,6 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
 
     private GoogleMap mMapa;
     private SupportMapFragment mMapaFragment;
-    private LocationRequest mLocationRequest;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +56,6 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
         setContentView(R.layout.activity_detalle_info_lectura);
 
         inicializarComponentes();
-
-        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
-        mMapaFragment.getMapAsync(this);
 
         mExtraHogarMascotaLat = getIntent().getDoubleExtra("hogarMascotaLat", 0);
         mExtraHogarMascotaLng = getIntent().getDoubleExtra("hogarMascotaLng", 0);
@@ -75,7 +69,7 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
         mCircleImageIrASeleccionOpcionNFC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetalleInfoLecturaActivity.this, HomeActivity.class);
+                Intent intent = new Intent(MapaDetalleInfoLecturaActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -90,6 +84,8 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
         mTextViewGenero = findViewById(R.id.textViewGeneroMascotaLectura);
         mTextViewNumeroCelular = findViewById(R.id.textViewNumeroCelularLectura);
         mCircleImageIrASeleccionOpcionNFC = findViewById(R.id.btnIrAHomeDesdeDetalleLectura);
+        mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mMapaFragment.getMapAsync(this);
     }
 
     @Override
@@ -97,22 +93,9 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
         mMapa = googleMap;
         mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        mLocationRequest = LocationRequest.create()
-                .setInterval(1000)
-                .setFastestInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setSmallestDisplacement(5);
-
-
         mMapa.addMarker(new MarkerOptions().position(mHogarMascotaLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home))).showInfoWindow();
 
-        mMapa.animateCamera(CameraUpdateFactory.newCameraPosition(
-                new CameraPosition.Builder()
-                        .target(mHogarMascotaLatLng)
-                        .zoom(15f)
-                        .build()
-        ));
-
+        mMapa.animateCamera(CameraUpdateFactory.newLatLngZoom(mHogarMascotaLatLng, 15f));
     }
 
     private void obtenerMascota(int idPet) {
@@ -131,13 +114,13 @@ public class DetalleInfoLecturaActivity extends AppCompatActivity implements OnM
                     }
                 }
                 else{
-                    Toast.makeText(DetalleInfoLecturaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapaDetalleInfoLecturaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
-                Toast.makeText(DetalleInfoLecturaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapaDetalleInfoLecturaActivity.this, "Los datos de la mascota no se pudieron cargar", Toast.LENGTH_LONG).show();
 
             }
         });

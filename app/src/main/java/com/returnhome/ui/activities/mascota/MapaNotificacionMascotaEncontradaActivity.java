@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.returnhome.R;
 import com.returnhome.controllers.MascotaController;
 import com.returnhome.controllers.TokenController;
@@ -70,10 +71,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private GoogleMap mMapa;
     private SupportMapFragment mMapaFragment;
 
-    private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocation;
-
-    private GoogleMap.OnCameraIdleListener mCameraListener;
 
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
@@ -105,46 +103,12 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private AppSharedPreferences mAppSharedPreferences;
     private ImageView mImageViewLlamarPropietarioMascota;
 
-
-    //ESCUCHA CUANDO EL USARIO ESTE EN MOVIMIENTO
-    LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(@NonNull LocationResult locationResult) {
-            super.onLocationResult(locationResult);
-            for (Location location : locationResult.getLocations()) {
-                if (getApplicationContext() != null) {
-
-                    mMascotaEncontradaLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-                    mMarkerMascotaEncontrada =  mMapa.addMarker(new MarkerOptions().position(mMascotaEncontradaLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ubicacion_mascota)));
-                    mMarkerHogarMascotaEncontrada = mMapa.addMarker(new MarkerOptions().position(mHogarMascotaEncontradaLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
-
-                    mMarkerHogarMascotaEncontrada.showInfoWindow();
-
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    builder.include(mMarkerMascotaEncontrada.getPosition());
-                    builder.include(mMarkerHogarMascotaEncontrada.getPosition());
-
-                    LatLngBounds bounds = builder.build();
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 180);
-                    mMapa.animateCamera(cu);
-
-                    detenerLocalizacion();
-
-                    }
-
-                }
-            }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa_notificacion_mascota_encontrada);
 
         inicializarComponentes();
-
-        mMapaFragment.getMapAsync(this);
 
         mAppSharedPreferences = new AppSharedPreferences(this);
 
@@ -167,6 +131,8 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         mIrAHome.setOnClickListener(this);
 
         mImageViewLlamarPropietarioMascota.setOnClickListener(this);
+
+        iniciarLocalizacion();
     }
 
 
@@ -180,6 +146,29 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         mImageViewLlamarPropietarioMascota = findViewById(R.id.btnContactarPropietarioMascota);
         mButtonNotificarMascotaEncontrada = findViewById(R.id.btnNotificarPropietarioMascota);
         mMapaFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
+        mMapaFragment.getMapAsync(this);
+    }
+
+    private void iniciarLocalizacion() {
+        //APARTIR DE LA VERSION 6.0 SE SOLICITA LA ACTIVACION DE PERMISOS EN TIEMPO DE EJECUCION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //SE USA LA CLASE ACTIVITYCOMPAT PARA CHECKEAR LOS PERMISOS, EN ESTE CASO EL DE UBICACIÓN
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (gpsActivado()) {
+                    obtenerUbicacionActual();
+                } else {
+                    mostrarCuadroDialogoActivarGPS();
+                }
+            } else {
+                solicitarPermisoUbicacion();
+            }
+        } else {
+            if (gpsActivado()) {
+                obtenerUbicacionActual();
+            } else {
+                mostrarCuadroDialogoActivarGPS();
+            }
+        }
     }
 
     @Override
@@ -199,73 +188,69 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //ElIMINA LA ACTUALIZACION DEL GPS
-        detenerLocalizacion();
-    }
 
+    //METODO QUE SE EJECUTA CUANDO EL MAPA SE HA AGREGADO EN EL FRAGMENT CORRESPONDIENTE
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMapa = googleMap;
+        //ESTABLECE EL TIPO DE MAPA COMO NORMAL
         mMapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMapa.setOnCameraIdleListener(mCameraListener);
 
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-
-        iniciarLocalizacion();
     }
 
+    private void obtenerUbicacionActual() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        //MEDIANTE LA CONSTANTE HIGH ACCURACY SE OBTIENE LA MAYOR PRECISION POSIBLE YA QUE HACE USO DEL GPS DEL DISPOSITIVO
+        mFusedLocation.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(MapaNotificacionMascotaEncontradaActivity.this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+
+                mMascotaEncontradaLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                //SE AGREGAN LOS MARCADORES QUE IDENTIFICAN LA UBICACION DEL HOGAR DE UNA MASCOTA QUE ACABA DE SER ENCONTRADA
+                //Y EL HOGAR DE LA MISMA
+                mMarkerMascotaEncontrada =  mMapa.addMarker(new MarkerOptions().position(mMascotaEncontradaLatLng).title("Mascota encontrada").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_ubicacion_mascota)));
+                mMarkerHogarMascotaEncontrada = mMapa.addMarker(new MarkerOptions().position(mHogarMascotaEncontradaLatLng).title("Hogar de la mascota").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_home)));
+
+                mMarkerHogarMascotaEncontrada.showInfoWindow();
+
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(mMarkerMascotaEncontrada.getPosition());
+                builder.include(mMarkerHogarMascotaEncontrada.getPosition());
+
+                LatLngBounds bounds = builder.build();
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 180);
+                mMapa.animateCamera(cu);
+
+            }
+        });
+    }
+
+    //METODO QUE SE EJECUTA CUANDO EL USUARIO SELECCIONA LA OPCION DE PERMITIR O RECHAZAR LOS PERMISOS
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == LOCATION_REQUEST_CODE) {
+
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     if (gpsActivado()) {
-                        mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                    }
-                    else {
+                        obtenerUbicacionActual();
+
+                    } else {
                         mostrarCuadroDialogoActivarGPS();
                     }
-                }
-                else{
-                    //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                    verificarPermisosUbicacion();
-                }
-            }
-            else{
-                //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
-                verificarPermisosUbicacion();
-            }
-        }
-    }
-
-    private void iniciarLocalizacion() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                //AL EJECTUTARSE EL EVENTO REQUESTLOCALTIONUPDATES, SE EJECUTA EL EVENTO LOCATIONCALLBACK
-                if (gpsActivado()) {
-                    mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
                 } else {
-                    mostrarCuadroDialogoActivarGPS();
+                    //EN CASO DE QUE EL USUARIO NO ACEPTE LOS PERMISOS, SE MOSTRARA EL ALERTDIALOG INDICANDO QUE LOS DEBE ACEPTAR
+                    solicitarPermisoUbicacion();
                 }
             } else {
-                verificarPermisosUbicacion();
-            }
-        } else {
-            if (gpsActivado()) {
-                mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
-            } else {
-                mostrarCuadroDialogoActivarGPS();
+                solicitarPermisoUbicacion();
             }
         }
     }
@@ -283,11 +268,12 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private void mostrarCuadroDialogoActivarGPS() {
         AlertDialog builder = new AlertDialog.Builder(this).create();
         builder.setCanceledOnTouchOutside(false);
-        builder.setMessage("Por favor activa tu ubicacion para continuar");
+        builder.setMessage("Por favor activa tu ubicación para continuar");
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "Configuraciones", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //ESPERA Y ESCUCHA HASTA QUE EL USUARIO ACTIVE EL GPS
+                //ESTE METODO RECIBE UN CODIGO DE SOLICITUD QUE IDENTIFICA A LA PETICION
                 startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), SETTINGS_REQUEST_CODE);
             }
         });
@@ -298,28 +284,25 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
             }
         });
         builder.show();
-
-
-
     }
 
+    //METODO QUE SE EJECUTA AL ABRIR UNA APLICACION EXTERNA QUE DEVUELVE ALGUNA INFORMACION
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
+        if (requestCode == SETTINGS_REQUEST_CODE && gpsActivado()) {
+            obtenerUbicacionActual();
         }
         else if (requestCode == SETTINGS_REQUEST_CODE && !gpsActivado()){
             mostrarCuadroDialogoActivarGPS();
         }
     }
 
-    private void verificarPermisosUbicacion() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void solicitarPermisoUbicacion() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 AlertDialog builder = new AlertDialog.Builder(this).create();
@@ -329,22 +312,20 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
                 builder.setButton( AlertDialog.BUTTON_POSITIVE,"OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //HABILITA LOS PERMISOS PARA USAR LA UBICACION
+                        //MUESTRA UN CUADRO DE DIALOGO SOLICITANDO QUE SE CONCEDAN LOS PERMISOS
                         ActivityCompat.requestPermissions(MapaNotificacionMascotaEncontradaActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                     }
                 });
                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        //ANTES DE AGREGAR ESTE EVENTO, SI EL USARIO PRESIONABA EL BOTON DE IR HACIA ATRAS DE LA UI DEL SISTEMA EL MENSAJE QUE
-                        //SOLICITABA QUE EL USARIO ACTIVE LOS PERMISOS SE OCULTABA MOSTRANDO EL MAPA DEL MUNDO SIN REALIZAR NINGUNA ACCIÓN POR LO TANTO
-                        //SE AGREGA ESTE EVENTO DE TAL MANERA QUE SI EL USUARIO PRESIONA EL BOTON ANTES MENCIONADO FINALIZARA LA ACTIVIDAD
                         finish();
                     }
                 });
                 builder.show();
             }
             else {
+
                 ActivityCompat.requestPermissions(MapaNotificacionMascotaEncontradaActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
         }
@@ -383,6 +364,7 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
     private void enviarNotificacion(){
 
         try {
+            //SE USA LA CLASE GEOCODER PARA TRANSFORMAR UNA COORDENADA LATITUD Y LONGITUD EN UNA DIRECCION DE CALLE
             Geocoder geocoder = new Geocoder(MapaNotificacionMascotaEncontradaActivity.this);
             List<Address> listaDirecciones = geocoder.getFromLocation(mMascotaEncontradaLatLng.latitude, mMascotaEncontradaLatLng.longitude, 1);
             String ciudad = listaDirecciones.get(0).getLocality();
@@ -427,12 +409,6 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         });
     }
 
-    private void detenerLocalizacion(){
-        if(mLocationCallback !=null && mFusedLocation != null){
-            mFusedLocation.removeLocationUpdates(mLocationCallback);
-        }
-    }
-
     public void llamarNumeroCelular(String numeroCelular) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + numeroCelular));
@@ -441,8 +417,8 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
         }
     }
 
-    private void obtenerMascota(int idPet) {
-        MascotaController.obtener(idPet, 2).enqueue(new Callback<RHRespuesta>() {
+    private void obtenerMascota(int idMascota) {
+        MascotaController.obtener(idMascota, 2).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
                 if(response.isSuccessful()){
@@ -472,4 +448,6 @@ public class MapaNotificacionMascotaEncontradaActivity extends AppCompatActivity
             }
         });
     }
+
+
 }

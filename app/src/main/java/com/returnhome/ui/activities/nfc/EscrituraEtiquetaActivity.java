@@ -41,10 +41,9 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
 
     private NfcAdapter mNfcAdapter;
     private String[][] mListaTech;
-    IntentFilter[] mFilters;
-    PendingIntent mPendingIntent;
-    AppSharedPreferences mAppSharedPreferences;
-
+    private IntentFilter[] mFilters;
+    private PendingIntent mPendingIntent;
+    private AppSharedPreferences mAppSharedPreferences;
 
     private double mExtraPetHomeLat;
     private double mExtraPetHomeLng;
