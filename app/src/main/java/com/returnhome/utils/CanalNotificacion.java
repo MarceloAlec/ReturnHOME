@@ -3,6 +3,7 @@ package com.returnhome.utils;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
@@ -23,13 +24,14 @@ public class CanalNotificacion extends ContextWrapper {
 
     public CanalNotificacion(Context base) {
         super(base);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel();
+            crearCanal();
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createChannel(){
+    private void crearCanal(){
         NotificationChannel notificationChannel = new
                 NotificationChannel(
                         CHANNEL_ID,
@@ -51,61 +53,40 @@ public class CanalNotificacion extends ContextWrapper {
         return manager;
     }
 
-    //PARA CREAR NOTIFICACIONES EN VERSIONES 26 O SUPERIOR DE ANDROID
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotificationPetMissing(String title, String body, Uri soundUri, Notification.Action showPetMissingAction ) {
-        return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(soundUri)
-                .setShowWhen(true)
-                .addAction(showPetMissingAction)
-                .setSmallIcon(R.drawable.ic_app_notificacion)
-                .setStyle(new Notification.BigTextStyle()
-                        .bigText(body).setBigContentTitle(title));
-    }
+    public NotificationCompat.Builder crearNotificationMascotaEncontrada(String title, String body, Uri soundUri, PendingIntent mascotaEncontrada, PendingIntent contacto) {
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotificationPetFound(String title, String body, Uri soundUri, Notification.Action showPetMissingAction, Notification.Action cancelAction) {
-        return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
+        //SE CONFIGURA EL CONTENIDO DE LA NOTIFICACION MEDIANTE LA CLASE NOTIFICATIONCOMPAT.BUILDER
+        //RECIBE COMO PARAMETRO EL CONTEXTO DE LA APLICACION Y UN IDENTIFICADOR DE CANAL
+        //EL ID DE CANAL ES NECESARIO PARA LAS VERSIONES 8.0 Y SUPERIORES, LAS VERSIONES ANTERIORES LO IGNORARAN
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setAutoCancel(true)
+                //SE ESPECIFICA EL NIVEL DE INTRUSION DE LA NOTIFICACION PARA LA VERSION 7.1 Y ANTERIORES
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSound(soundUri)
+                //SE ESTABLECE LA HORA EN QUE OCURRE LA NOTIFICACION
                 .setShowWhen(true)
-                .addAction(showPetMissingAction)
-                .addAction(cancelAction)
+                //ICONO QUE IDENTIFICA A QUE APP PERTENECE LA NOTIFICACION
                 .setSmallIcon(R.drawable.ic_app_notificacion)
-                .setStyle(new Notification.BigTextStyle()
-                        .bigText(body).setBigContentTitle(title));
+                //SE ESTABLECEN LAS ACCIONES QUE CONTENDRA LA NOTIFICACION
+                .addAction( R.drawable.ic_app_notificacion, "Mostrar en mapa", mascotaEncontrada)
+                .addAction(  R.drawable.ic_app_notificacion, "Contactar", contacto)
+                //SE AJUSTA LA NOTIFICACION PARA QUE ABARQUE EL MENSAJE POR COMPLETO
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 
 
-    public NotificationCompat.Builder getNotificationPetMissing(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction) {
+    public NotificationCompat.Builder crearNotificationMascotaDesaparecida(String title, String body, Uri soundUri, PendingIntent mascotaDesaparecida) {
 
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSound(soundUri)
                 .setShowWhen(true)
                 .setSmallIcon(R.drawable.ic_app_notificacion)
-                .addAction(showPetFoundAction)
+                .addAction( R.drawable.ic_app_notificacion, "Mostrar en mapa", mascotaDesaparecida)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 
-    public NotificationCompat.Builder getNotificationPetFound(String title, String body, Uri soundUri, NotificationCompat.Action showPetFoundAction, NotificationCompat.Action contactAction) {
-
-        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(soundUri)
-                .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_app_notificacion)
-                .addAction(showPetFoundAction)
-                .addAction(contactAction)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
-    }
 }

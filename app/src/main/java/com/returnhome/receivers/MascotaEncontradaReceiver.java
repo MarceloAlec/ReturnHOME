@@ -18,7 +18,7 @@ public class MascotaEncontradaReceiver extends BroadcastReceiver {
         double mascotaLng = intent.getExtras().getDouble("mascotaLng");
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.cancel(1);
+        manager.cancel(0);
 
         Intent intent1 = new Intent(context, MapaMascotaEncontradaActivity.class);
         intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

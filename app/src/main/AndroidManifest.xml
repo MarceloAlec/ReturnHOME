@@ -110,7 +110,7 @@
             android:name=".ui.activities.cliente.RegistroActivity"
             android:screenOrientation="portrait"/>
 
-        <!-- SE ESPECIFICA LA API KEY PARA TENER ACCESO A LA API DE GOOGLE MAPS  -->
+        <!-- SE ESPECIFICA LA API KEY PARA TENER ACCESO A LAS API DE GOOGLE  -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

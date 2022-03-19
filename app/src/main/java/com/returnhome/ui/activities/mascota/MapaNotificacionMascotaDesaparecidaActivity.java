@@ -156,7 +156,7 @@ public class MapaNotificacionMascotaDesaparecidaActivity extends AppCompatActivi
 
     private void instanciarAutoCompletar() {
         //SE INICIALIZA EL AUTOCOMPLETESUPPORTFRAGMENT
-        mAutoCompletar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.lugarAutocompletarHogarMascota);
+        mAutoCompletar = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.lugarAutocompletarLugarMascotaDesaparecida);
         //SE ESPECIFICA LOS DATOS DEL LUGAR QUE DEVOLVERA LA API, EN ESTE CASO SU ID, LATITUD & LONGITUD Y NOMBRE DEL LUGAR
         mAutoCompletar.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
         //TEXTO QUE SE MUESTRA EN EL COMPONENTE DE AUTOCOMPLETAR
