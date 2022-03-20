@@ -81,7 +81,7 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "SI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TokenController.eliminar().addOnCompleteListener(new OnCompleteListener<Void>() {
+                TokenController.eliminarToken().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
@@ -112,14 +112,20 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                TokenController.eliminar().addOnCompleteListener(new OnCompleteListener<Void>() {
+                TokenController.eliminarToken().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+
                         if(task.isSuccessful()){
-                            Map<String, String> tokenInfo = new HashMap<>();
-                            tokenInfo.put("idCliente",String.valueOf(mAppSharedPreferences.obtenerIdCliente()));
-                            tokenInfo.put("token", String.valueOf(mAppSharedPreferences.obtenerToken()));
-                            eliminarTokenDB(tokenInfo);
+                            NotificacionController.desuscribirMascotaDesaparecida();
+                            mAppSharedPreferences.actualizarEstadoAuth(false);
+                            mAppSharedPreferences.guardarNumeroCelular(null);
+                            mAppSharedPreferences.guardarNombreCliente(null);
+                            mAppSharedPreferences.guardarIdCliente(0);
+
+                            Intent intent = new Intent(SeleccionOpcionAjustesActivity.this, PrincipalActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
                         else{
                             Toast.makeText(SeleccionOpcionAjustesActivity.this,"No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
@@ -138,38 +144,6 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
         builder.show();
     }
 
-
-    private void eliminarTokenDB(Map<String, String> tokenInfo){
-
-        TokenController.eliminarTokenDB(tokenInfo).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful()){
-                    NotificacionController.desuscribirMascotaDesaparecida();
-                    mAppSharedPreferences.guardarToken(null);
-                    mAppSharedPreferences.actualizarEstadoAuth(false);
-                    mAppSharedPreferences.guardarNumeroCelular(null);
-                    mAppSharedPreferences.guardarNombreCliente(null);
-                    mAppSharedPreferences.guardarIdCliente(0);
-
-                    Intent intent = new Intent(SeleccionOpcionAjustesActivity.this, PrincipalActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(SeleccionOpcionAjustesActivity.this, "No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(SeleccionOpcionAjustesActivity.this, "No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-
     private void eliminarCuenta(){
 
         ClienteController.eliminarCuenta(mAppSharedPreferences.obtenerIdCliente()).enqueue(new Callback<Void>() {
@@ -179,7 +153,6 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
                 if(response.isSuccessful()){
                     Toast.makeText(SeleccionOpcionAjustesActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
                     NotificacionController.desuscribirMascotaDesaparecida();
-                    mAppSharedPreferences.guardarToken(null);
                     mAppSharedPreferences.actualizarEstadoAuth(false);
                     mAppSharedPreferences.guardarNumeroCelular(null);
                     mAppSharedPreferences.guardarNombreCliente(null);

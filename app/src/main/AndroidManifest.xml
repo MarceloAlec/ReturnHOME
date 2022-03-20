@@ -23,6 +23,7 @@
             android:name=".ui.activities.mascota.MapaMascotaDesaparecidaActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.activities.mascota.MapaNotificacionMascotaDesaparecidaActivity"
             android:exported="false"
@@ -100,8 +101,10 @@
             android:name=".receivers.ContactoReceiver"
             android:enabled="true"/>
 
+        <!-- SE DEFINE EL SERVICIO QUE EXTIENDE DE FIREBASE MESSAGING SERVICE  -->
         <service
             android:name=".services.MyFirebaseMessagingService">
+            <!-- PARA RECIBIR NOTIFICACIONES CUANDO LA APP SE ENCUENTRE EN SEGUNDO PLANO  -->
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -112,6 +115,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <!-- PARA QUE FIREBASE NO GENERE TOKENS AUTOMATICAMENTE AL INICIAR LA APLICACION
+             SE AÑADE EL SIGUIENTE METADATO-->
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />

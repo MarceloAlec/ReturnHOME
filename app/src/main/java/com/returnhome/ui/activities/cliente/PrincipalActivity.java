@@ -158,16 +158,25 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                 if(response.isSuccessful()){
 
+                    /*
+                    EL USUARIO AUTENTICADO SE SUSBRIBE AL TEMA MASCOTAS DESAPARECIDAS PARA RECIBIR
+                    NOTIFICACIONES DE LAS MASCOTAS REPORTADAS COMO DESAPARECIDAS
+                     */
+
                     NotificacionController.suscribirMascotaDesaparecida();
+
+                    /*
+                    SE ALMACENAN DE MANERA LOCAL LOS DATOS DEL USUARIO AUTENTICADO ATRAVES DE LA
+                    CLASE SHAREDPREFERENCES
+                     */
 
                     mAppSharedPreferences.actualizarEstadoAuth(true);
                     mAppSharedPreferences.guardarNombreCliente(nombreCliente);
                     mAppSharedPreferences.guardarIdCliente(idCliente);
                     mAppSharedPreferences.guardarNumeroCelular(numeroCelular);
-                    mAppSharedPreferences.guardarToken(tokenInfo.get("token"));
 
                     Intent intent = new Intent(PrincipalActivity.this, HomeActivity.class);
-                    //SI EL USUARIO INGRESA AL NAVIGATION ACTIVITY NO PODRA REGRESAR AL REGISTER ACTIVITY
+                    //SI EL USUARIO INGRESA AL HOME ACTIVITY NO PODRA REGRESAR AL PRINCIPAL ACTIVITY
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
@@ -181,8 +190,5 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
-
 }

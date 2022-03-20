@@ -54,13 +54,4 @@ public class AppSharedPreferences {
         return sharedPreferences.getString("numeroCelular", "Desconocido");
     }
 
-    public void guardarToken(String token) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("token",token);
-        editor.apply();
-    }
-
-    public String obtenerToken(){
-        return sharedPreferences.getString("token", "Desconocido");
-    }
 }
