@@ -5,9 +5,13 @@ import java.util.Map;
 
 public class FCMCuerpo {
 
+    //ATRIBUTO QUE PERMITE ESPECIFICAR EL NOMBRE DEL TEMA AL QUE SE ENVIA UN MENSAJE
     private String to;
+    //LISTA DE TOKENS A LOS QUE SE ENVIARAN UN MENSAJE
     private ArrayList<String> registration_ids;
+    //ESTABLECE LA PRIORIDAD DEL ENVIO DE MENSAJE
     private String priority;
+    //VARIBLE QUE INCLUIRA EL CONTENIDO DEL MENSAJE COMO TITULO, CUERPO, ETC
     Map<String, String> data;
 
     public FCMCuerpo(String to, String priority, Map<String, String> data) {

@@ -102,7 +102,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             Map<String, String> credenciales = new HashMap<>();
             credenciales.put("email", email);
             credenciales.put("password", password);
-            TokenController.crearToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            TokenController.obtenerToken().addOnCompleteListener(new OnCompleteListener<String>() {
                 @Override
                 public void onComplete(@NonNull Task<String> task) {
                     if(task.isSuccessful()){

@@ -9,6 +9,11 @@ import com.returnhome.ui.activities.mascota.MapaMascotaDesaparecidaActivity;
 
 public class MascotaDesaparecidaReceiver extends BroadcastReceiver {
 
+    /*
+        EL BROADCAST RECEIVER ES UN PUNTO DE ENTRADA INDEPENDIENTE A LA APLICACIÓN, ES DECIR EL SISTEMA
+        ANDROID PUEDE INICIAR LA APLICACION Y RECIBIR UN INTENT SI LA APP NO SE ESTA EJECUTANDO
+        ACTUALMENTE
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
 

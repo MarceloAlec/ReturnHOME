@@ -32,7 +32,14 @@ public class TokenController {
         return FirebaseMessaging.getInstance().deleteToken();
     }
 
-    public static Task<String> crearToken(){
+
+    /*
+        PARA RECIBIR Y ENVIAR MENSAJES SE OBTIENE UN TOKEN DE REGISTRO QUE IDENTIFICA DE FORMA UNICA
+        LA INSTANCIA DE LA APLICACIÓN
+        REGISTRO EL DISPOSITIVO PARA RECIBIR MENSAJES DE FCM
+     */
+
+    public static Task<String> obtenerToken(){
 
         return FirebaseMessaging.getInstance().getToken();
     }

@@ -62,22 +62,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void mostrarNotificacionMascotaEncontrada(String titulo, String mensaje, int idCliente, String numeroCelular, String nombreMascota, LatLng mascotaLatLng) {
 
+        /*
+         SE CREA UN INTENT QUE INICIA UN BROADCAST RECEIVER, ESTE REALIZA UN TRABAJO EN SEGUNDO
+         PLANO PARA QUE LA ACCION NO INTERRUMPA UNA APLICACION ABIERTA
+         */
         Intent mascotaEncontradaIntent = new Intent(this, MascotaEncontradaReceiver.class);
         mascotaEncontradaIntent.putExtra("idCliente", idCliente);
         mascotaEncontradaIntent.putExtra("nombreMascota", nombreMascota);
         mascotaEncontradaIntent.putExtra("mascotaLat", mascotaLatLng.latitude);
         mascotaEncontradaIntent.putExtra("mascotaLng", mascotaLatLng.longitude);
+        //SE CREA UN PENDING INTENT QUE ENCAPSULA UN INTENT, EL CUAL SERA LANZADO AL OPRIMIR UNA OPCION EN LA NOTIFICACION
+        //LA BANDERA UPDATE CURRENT INDICA QUE, SI EL PENDING INTENT YA EXISTE, SE CONSERVE PERO REEMPLAZE EL INTENT QUE CONTIENE.
         PendingIntent mascotaEncontradaPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, mascotaEncontradaIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
 
         Intent contactoIntent = new Intent(this, ContactoReceiver.class);
         contactoIntent.putExtra("numeroCelular", numeroCelular);
         PendingIntent contactoPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, contactoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
         Uri sonido = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         CanalNotificacion canalNotificacion = new CanalNotificacion(getBaseContext());
         NotificationCompat.Builder notificacion = canalNotificacion.crearNotificationMascotaEncontrada(titulo, mensaje, sonido, mascotaEncontradaPendingIntent, contactoPendingIntent);
+        //SE MUESTRA LA NOTIFICACION, RECIBE UN ID EL CUAL SIRVE PARA ACTUALIZAR O ELIMINAR LA NOTIFICACION POSTERIORMENTE
         canalNotificacion.getManager().notify(0, notificacion.build());
     }
 
@@ -92,8 +97,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri sonido = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         CanalNotificacion canalNotificacion = new CanalNotificacion(getBaseContext());
-        NotificationCompat.Builder builder = canalNotificacion.crearNotificationMascotaDesaparecida(titulo, mensaje, sonido, mascotaEncontradaPendingIntent );
-        canalNotificacion.getManager().notify(1, builder.build());
+        NotificationCompat.Builder notificacion = canalNotificacion.crearNotificationMascotaDesaparecida(titulo, mensaje, sonido, mascotaEncontradaPendingIntent );
+        canalNotificacion.getManager().notify(1, notificacion.build());
     }
 
 }

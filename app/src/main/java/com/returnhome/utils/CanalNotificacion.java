@@ -26,23 +26,32 @@ public class CanalNotificacion extends ContextWrapper {
         super(base);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            /*
+            ANTES DE ENVIAR NOTIFICACIONES SE DEBE CREAR UN CANAL DE NOTIFICACIONES DE LA
+            APLICACION PARA ENVIAR NOTIFICACIONES EN ANDROID 8.0 Y VERSIONES POSTERIORES
+             */
             crearCanal();
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void crearCanal(){
-        NotificationChannel notificationChannel = new
-                NotificationChannel(
-                        CHANNEL_ID,
-                        CHANNEL_NAME,
-                        NotificationManager.IMPORTANCE_HIGH);
 
+        /*
+        EL CONTRUCTOR DE NOTIFICATION CHANNEL REQUIERE DE UN IMPORTANCE, ESTE PARAMETRO INDICA
+        COMO INTERRUMPIR AL USUARIO PARA CUALQUIER NOTIFICACION QUE PERTENEZCA AL CANAL
+         */
+        NotificationChannel notificationChannel = new
+                NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+
+        //PROPIEDADES DEL CANAL QUE SE ESTABLECEN A TODAS LAS NOTIFICACIONES QUE PERTENEZCAN A ESTE
         notificationChannel.enableLights(true);
+        //LAS NOTIFICACIONES DE ESTE CANAL VIBRARÁN
         notificationChannel.enableVibration(true);
         notificationChannel.setLightColor(Color.GRAY);
+        //LAS NOTIFCACIONES DE ESTE CANAL NO APARECEN EN LA PANTALLA DE BLOQUEO
         notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
+        //SE REGISTRA EL CANAL CON EL SISTEMA
         getManager().createNotificationChannel(notificationChannel);
     }
 
@@ -55,9 +64,9 @@ public class CanalNotificacion extends ContextWrapper {
 
     public NotificationCompat.Builder crearNotificationMascotaEncontrada(String title, String body, Uri soundUri, PendingIntent mascotaEncontrada, PendingIntent contacto) {
 
-        //SE CONFIGURA EL CONTENIDO DE LA NOTIFICACION MEDIANTE LA CLASE NOTIFICATIONCOMPAT.BUILDER
+        //SE CONFIGURA LA NOTIFICACION MEDIANTE LA CLASE NOTIFICATIONCOMPAT.BUILDER
         //RECIBE COMO PARAMETRO EL CONTEXTO DE LA APLICACION Y UN IDENTIFICADOR DE CANAL
-        //EL ID DE CANAL ES NECESARIO PARA LAS VERSIONES 8.0 Y SUPERIORES, LAS VERSIONES ANTERIORES LO IGNORARAN
+        //EL ID DE CANAL ES NECESARIO PARA LAS VERSIONES 8.0 Y SUPERIORES, LAS VERSIONES ANTERIORES LO IGNORAN
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
@@ -74,7 +83,6 @@ public class CanalNotificacion extends ContextWrapper {
                 //SE AJUSTA LA NOTIFICACION PARA QUE ABARQUE EL MENSAJE POR COMPLETO
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
-
 
     public NotificationCompat.Builder crearNotificationMascotaDesaparecida(String title, String body, Uri soundUri, PendingIntent mascotaDesaparecida) {
 
