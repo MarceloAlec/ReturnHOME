@@ -134,6 +134,7 @@
                 app:ccp_autoDetectCountry="true"
                 app:ccpDialog_showTitle="false"
                 android:layout_gravity="center"
+                app:ccp_defaultPhoneCode="593"
                 app:ccp_showFlag="false"/>
 
             <com.google.android.material.textfield.TextInputLayout

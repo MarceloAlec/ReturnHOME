@@ -152,12 +152,12 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
         }
     }
 
-    //METODO QUE SE EJECUTA AUTOMATICAMENTE CUANDO LA ETIQUETA ES DESCUBIERTA
+    //METODO QUE SE EJECUTA AUTOMATICAMENTE CUANDO LA ETIQUETA ES ESCANEADA
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        //OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
+        //SE OBTIENE LOS DATOS CONTENIDOS EN LA INTENCION
         try{
             Parcelable[] rawMensajes= intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage message = ClienteController.obtenerMensajeNdef(rawMensajes);
@@ -169,17 +169,24 @@ public class LecturaEtiquetaActivity extends AppCompatActivity {
                 JsonParser parser = new JsonParser();
                 JsonObject mascotaInfoJSON = (JsonObject) parser.parse(payload);
 
-                idMascota = Integer.valueOf(mascotaInfoJSON.get("id").toString().replace('"',' ').trim());
-                numeroCelular = mascotaInfoJSON.get("tel").toString().replace('"',' ').trim();
-                String[] coordenadas = mascotaInfoJSON.get("geo").toString().split(",");
-                double latitud = Double.parseDouble(coordenadas[0].replace('"',' ').trim());
-                double longitud = Double.parseDouble(coordenadas[1].replace('"',' ').trim());
+                idMascota = Integer.parseInt(mascotaInfoJSON.get("id")
+                                    .toString().replace('"',' ').trim());
+                numeroCelular = mascotaInfoJSON.get("tel")
+                                    .toString().replace('"',' ').trim();
+                String[] coordenadas = mascotaInfoJSON.get("geo")
+                                    .toString().split(",");
+                double latitud = Double.parseDouble(coordenadas[0]
+                                    .replace('"',' ').trim());
+                double longitud = Double.parseDouble(coordenadas[1]
+                                    .replace('"',' ').trim());
                 hogarMascotaLatLng = new LatLng(latitud,longitud);
 
                 irADetalleLecturaONotificacionMascotaEncontradaActivity();
             }
             else{
-                Toast.makeText(this, "Los datos en la etiqueta no se encuentra en formato Json", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,
+                            "Los datos en la etiqueta no se encuentra en formato Json",
+                                 Toast.LENGTH_LONG).show();
             }
         }
         catch(Exception e){

@@ -72,8 +72,8 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if(mNfcAdapter != null){
             mTextViewTelefonoHabilitadoNFCInfo
-                    .setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR DE SU DISPOSITIVO MOVIL " +
-                            "PARA ESCRIBIR EN ELLA");
+                .setText("MANTENGA LA ETIQUETA NFC CONTRA LA PARTE POSTERIOR " +
+                 "DE SU DISPOSITIVO MOVIL PARA ESCRIBIR EN ELLA");
             if(!mNfcAdapter.isEnabled()){
                 mostrarDialogoActivarNFC();
             }
@@ -82,17 +82,19 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
             }
         }
         else{
-
-            mTextViewTelefonoHabilitadoNFCInfo.setText("SU DISPOSITIVO MOVIL NO ES COMPATIBLE CON LA TECNOLOGIA NFC");
+            mTextViewTelefonoHabilitadoNFCInfo
+                    .setText("SU DISPOSITIVO MOVIL NO ES " +
+                    "COMPATIBLE CON LA TECNOLOGIA NFC");
         }
 
         //IMPLEMENTACION DEL SISTEMA DE ENVIO EN PRIMER PLANO
         //PARA OBTENER LOS DETALLES DE LA ETIQUETA SE USA PENDING INTENT
         mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                new Intent(this, getClass())
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-        //SE AÑADE LOS FILTROS DE INTENTS QUE MANEJARÁ LA ETIQUETA, SI ESTE FILTRO COINCIDE
-        // CON LA ETIQUETA ENTONCES LA APLICACION MANEJARÁ LA INTENCION
+        //SE AÑADE LOS FILTROS DE INTENTS QUE MANEJARÁ LA ETIQUETA, SI ESTE
+        //FILTRO COINCIDE CON LA ETIQUETA ENTONCES LA APLICACION MANEJARÁ LA INTENCION
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         mFilters = new IntentFilter[]{ndef};
         //SE AÑADE LA TECNOLOGIA DE ETIQUETA QUE LA APLICACION PUEDE MANEJAR
@@ -159,7 +161,8 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
         super.onResume();
 
         if (mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, mListaTech);
+            mNfcAdapter.enableForegroundDispatch(this,
+                    mPendingIntent, mFilters, mListaTech);
         }
     }
 
@@ -172,7 +175,9 @@ public class EscrituraEtiquetaActivity extends AppCompatActivity {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             NdefMessage newMessage = ClienteController
-                    .crearMensajeNdef(mExtraIdPet, mAppSharedPreferences.obtenerNumeroCelular(), mPetHomeLatLng);
+                    .crearMensajeNdef(mExtraIdPet,
+                                      mAppSharedPreferences.obtenerNumeroCelular(),
+                                      mPetHomeLatLng);
 
             mostrarResultadoEscritura(ClienteController.escribirMensajeNdef(newMessage, tag));
         }

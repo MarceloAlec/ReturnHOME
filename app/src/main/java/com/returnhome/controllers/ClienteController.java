@@ -19,7 +19,7 @@ import retrofit2.Call;
 
 public class ClienteController {
 
-    private static final String BASE_URL = "http://192.168.0.3:82/api.returnhome.com/v1/";
+    private static final String BASE_URL = "http://192.168.0.4:82/api.returnhome.com/v1/";
 
     //SE EJECUTAN LAS LLAMADAS AL SERVICIO WEB CON SUS RESPECTIVOS METODOS HTTP
 
@@ -52,9 +52,11 @@ public class ClienteController {
         JsonObject petInfo = new JsonObject();
         petInfo.addProperty("id",idPet);
         petInfo.addProperty("tel",phoneNumber);
-        petInfo.addProperty("geo",petHomeCoordinates.latitude + "," + petHomeCoordinates.longitude);
+        petInfo.addProperty("geo",petHomeCoordinates.latitude + "," +
+                                                petHomeCoordinates.longitude);
 
-        NdefRecord recordPetInfo = NdefRecord.createMime("application/json",petInfo.toString().getBytes());
+        NdefRecord recordPetInfo = NdefRecord.createMime("application/json",
+                                                            petInfo.toString().getBytes());
 
         return new NdefMessage(new NdefRecord[]{recordPetInfo});
 
@@ -78,8 +80,8 @@ public class ClienteController {
                 if (ndef.getMaxSize() < tamano) {
                     infoEscritura.put("estado","NOK");
                     infoEscritura
-                            .put("mensaje","Los datos a ser escritos ("+ tamano +" bytes) " +
-                                    "superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
+                        .put("mensaje","Los datos a ser escritos ("+ tamano +" bytes) " +
+                             "superan el tamaño de la etiqueta ("+ ndef.getMaxSize() +" bytes)");
                     return infoEscritura;
                 }
                 ndef.writeNdefMessage(mensaje);

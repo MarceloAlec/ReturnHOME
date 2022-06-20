@@ -3,6 +3,7 @@ package com.returnhome.ui.activities.cliente;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.returnhome.utils.AppSharedPreferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,11 +36,11 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private TextInputEditText mTextInputPassword;
 
     private AppSharedPreferences mAppSharedPreferences;
+    private AlertDialog mDialog;
 
     private String nombreCliente;
     private int idCliente;
     private String numeroCelular;
-
 
 
     @Override
@@ -47,6 +49,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_principal);
 
         inicializarComponentes();
+
+        //Crea un mensaje de espera para el proceso de registro
+        mDialog = new SpotsDialog.Builder().setContext(PrincipalActivity.this).setMessage("Espere un momento").build();
 
         mAppSharedPreferences = new AppSharedPreferences(this);
 
@@ -120,6 +125,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void autenticarCliente(Map<String,String> credenciales, String token){
+        mDialog.show();
         ClienteController.autenticar(credenciales).enqueue(new Callback<RHRespuesta>() {
             //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
             @Override
@@ -136,18 +142,19 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     registrarToken(tokenInfo);
                 }
                 else{
+                    mDialog.dismiss();
                     Toast.makeText(PrincipalActivity.this, "El email o la contraseña son incorrectos", Toast.LENGTH_LONG)
                             .show();
                 }
             }
-
             @Override
             //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
             public void onFailure(Call<RHRespuesta> call, Throwable t) {
+                mDialog.dismiss();
                 //SI ALGO FALLA EN LA PETICION SE MUESTRA UN MENSAJE AMIGABLE AL USUARIO
                 Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
             }
-        });
+            });
     }
 
     private void registrarToken(Map<String, String> tokenInfo){
@@ -155,7 +162,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         TokenController.registrarTokenDB(tokenInfo).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
+                mDialog.dismiss();
                 if(response.isSuccessful()){
 
                     /*
@@ -175,19 +182,24 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     mAppSharedPreferences.guardarIdCliente(idCliente);
                     mAppSharedPreferences.guardarNumeroCelular(numeroCelular);
 
-                    Intent intent = new Intent(PrincipalActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(PrincipalActivity.this,
+                                                            HomeActivity.class);
                     //SI EL USUARIO INGRESA AL HOME ACTIVITY NO PODRA REGRESAR AL PRINCIPAL ACTIVITY
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
+
+                    Toast.makeText(PrincipalActivity.this,
+                            "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(PrincipalActivity.this, "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
+                mDialog.dismiss();
+                Toast.makeText(PrincipalActivity.this,
+                        "No se pudo iniciar sesion", Toast.LENGTH_LONG).show();
             }
         });
     }

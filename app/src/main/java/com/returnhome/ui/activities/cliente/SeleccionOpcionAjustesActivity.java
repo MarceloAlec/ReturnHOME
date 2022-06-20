@@ -175,7 +175,6 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
         });
     }
 
-
     @Override
     public void onClick(View v) {
         Intent intent;

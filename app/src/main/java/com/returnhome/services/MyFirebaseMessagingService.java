@@ -45,7 +45,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 double mascotaLng  = Double.parseDouble(data.get("mascotaLng"));
 
                 LatLng petLatLng = new LatLng(mascotaLat, mascotaLng);
-                mostrarNotificacionMascotaEncontrada(title, body, idCliente, numeroCelular, nombreMascota, petLatLng);
+                mostrarNotificacionMascotaEncontrada(title, body, idCliente,
+                                                    numeroCelular, nombreMascota, petLatLng);
             }
             else {
 
@@ -55,7 +56,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 double mascotaLng = Double.parseDouble(data.get("mascotaLng"));
 
                 LatLng mascotaLatLng = new LatLng(mascotaLat, mascotaLng);
-                mostrarNotificacionMascotaDesaparecida(title, body, idMascota, nombreMascota, mascotaLatLng);
+                mostrarNotificacionMascotaDesaparecida(title, body, idMascota,
+                                                       nombreMascota, mascotaLatLng);
             }
         }
     }
