@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -21,13 +19,10 @@ if(isset($_GET["opcion"]) && isset($_GET["id"])){
     switch($opcion){
         case 1:
         
-            $consulta = "SELECT * FROM tblmascota WHERE idCliente = ?";
-            $stmt = $conexion->prepare($consulta);
+            $stmt = $conexion->prepare("SELECT * FROM tblmascota WHERE idCliente = ?");
             $stmt->bindValue(1,$id);
-            $stmt->execute();
-            $pets_num= $stmt->rowCount();
 
-            if($pets_num > 0){
+            if($stmt->execute()){
 
                 $array_mascotas = array();
             
@@ -42,8 +37,8 @@ if(isset($_GET["opcion"]) && isset($_GET["id"])){
             
                     array_push($array_mascotas, $e);
                 }
-                $stmt=null;
 
+                $stmt=null;
                 http_response_code(200);
                 echo json_encode(array("mascotas" => $array_mascotas)); 
             }
@@ -60,10 +55,8 @@ if(isset($_GET["opcion"]) && isset($_GET["id"])){
 
             $stmt = $conexion->prepare($consulta);
             $stmt->bindValue(1,$id);
-            $stmt->execute();
-            $num_mascotas= $stmt->rowCount();
 
-            if($num_mascotas == 1){
+            if($stmt->execute()){
 
                 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
                 $stmt=null;
@@ -92,12 +85,9 @@ if(isset($_GET["opcion"]) && isset($_GET["id"])){
             break;
         case 3:
             
-            $consulta = "SELECT * FROM tblmascota WHERE desaparecida = true";
-            $stmt = $conexion->prepare($consulta);
-            $stmt->execute();
-            $num_mascotaDesaparecida= $stmt->rowCount();
+            $stmt = $conexion->prepare("SELECT * FROM tblmascota WHERE desaparecida = true");
 
-            if($num_mascotaDesaparecida > 0){
+            if($stmt->execute()){
 
                 $array_mascotas = array();
             

@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -17,21 +15,16 @@ if(isset($contenido)){
                                     $username,
                                     $password,
                                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
-    $consulta = "UPDATE tblMascota SET nombre = ?,raza = ?,genero = ?,descripcion = ? WHERE idMascota = ?";
     
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare("UPDATE tblMascota SET nombre = ?,raza = ?,genero = ?,descripcion = ? WHERE idMascota = ?");
     $stmt->bindValue(1,$data["nombre"]);
     $stmt->bindValue(2,$data["raza"]);
     $stmt->bindValue(3,$data["genero"]);
     $stmt->bindValue(4,$data["descripcion"]);
-    $stmt->bindValue(5,$data["idMascota"]);
-    $stmt->execute();
-    $filas_modificadas = $stmt->rowCount();
+    $stmt->bindValue(5,$data["idMascota"]);  
 
-    $stmt=null;
-
-    if($filas_modificadas==1){
+    if($stmt->execute()){
+        $stmt=null;
         http_response_code(200);
     }
     else{

@@ -73,7 +73,7 @@ public class ActualizarInfoActivity extends AppCompatActivity {
             //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
 
-                if(response.isSuccessful()){
+                if(response.code() == 200){
                     mCliente = response.body().getCliente();
                     mTextInputNombre.setText(mCliente.getNombre());
                     mTextInputEmail.setText(mCliente.getEmail());

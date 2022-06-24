@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -18,9 +16,7 @@ if(isset($contenido)){
                                     $password,
                                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-    $consulta = "INSERT INTO tblMascota (nombre, raza, genero, descripcion, desaparecida, idCliente) values(?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare("INSERT INTO tblMascota (nombre, raza, genero, descripcion, desaparecida, idCliente) values(?, ?, ?, ?, ?, ?)");
     $stmt->bindValue(1,$data["nombre"]);
     $stmt->bindValue(2,$data["raza"]);
     $stmt->bindValue(3,$data["genero"]);

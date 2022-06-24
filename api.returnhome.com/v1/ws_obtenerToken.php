@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -14,15 +12,11 @@ if(isset($_GET['idCliente'])){
                                    $username,
                                    $password,
                                    array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
-    $consulta = "SELECT * FROM tblToken WHERE idCliente = ?";
            
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare("SELECT * FROM tblToken WHERE idCliente = ?");
     $stmt->bindValue(1,$idCliente);
-    $stmt->execute();
-    $num_token= $stmt->rowCount();
 
-    if($num_token > 0){
+    if($stmt->execute()){
 
         $array_tokens = array();
     
@@ -34,6 +28,7 @@ if(isset($_GET['idCliente'])){
         
             array_push($array_tokens, $e);
         }
+        
         $stmt=null;
         http_response_code(200);
         echo json_encode(array("tokens" => $array_tokens));

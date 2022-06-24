@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -17,19 +15,13 @@ if(isset($contenido)){
                                     $username,
                                     $password,
                                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
-    $consulta = "INSERT INTO tbltoken (token, idCliente) values(?, ?)";
-
-    $stmt = $conexion->prepare($consulta);
+                                    
+    $stmt = $conexion->prepare("INSERT INTO tbltoken (token, idCliente) values(?, ?)");
     $stmt->bindValue(1,$data["token"]);
     $stmt->bindValue(2,$data["idCliente"]);
-    $stmt->execute();
 
-    $fila_agregada=$stmt->rowCount();
-    $stmt=null;
-
-    if($fila_agregada==1){
-        
+    if($stmt->execute()){
+        $stmt=null;
         http_response_code(201);
     }
     else{

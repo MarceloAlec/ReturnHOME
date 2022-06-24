@@ -6,6 +6,10 @@ public class Token {
     private String token;
     private int idCliente;
 
+    public Token() {
+
+    }
+
     public Token(String token, int idCliente) {
         this.token = token;
         this.idCliente = idCliente;

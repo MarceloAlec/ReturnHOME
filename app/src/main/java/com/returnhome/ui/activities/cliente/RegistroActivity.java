@@ -85,15 +85,16 @@ public class RegistroActivity extends AppCompatActivity {
                 !email.isEmpty() &&
                 !password.isEmpty() &&
                 !numeroCelular.isEmpty()){
-
+            mDialog.show();
             ClienteController.registrar(new Cliente(nombre,email,password,
                             codigoPais+" "+numeroCelular))
                             .enqueue(new Callback<RHRespuesta>() {
-                        //AÑADO EL OBJETO CALLBACK PARA CONTROLAR LOS EVENTOS DE LA PETICIÓN
+
                 @Override
                 //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
                 public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
-                    if(response.code() == 200){
+                    mDialog.dismiss();
+                    if(response.code() == 201){
                         Toast.makeText(RegistroActivity.this,
                                 "La cuenta fue creada con exito",
                                 Toast.LENGTH_LONG).show();
@@ -108,6 +109,7 @@ public class RegistroActivity extends AppCompatActivity {
                 //METODO QUE SE EJECUTA CUANDO LA PETICIÓN FALLA
                 @Override
                 public void onFailure(Call<RHRespuesta> call, Throwable t) {
+                    mDialog.dismiss();
                     Toast.makeText(RegistroActivity.this,
                             "Registro fallido", Toast.LENGTH_LONG).show();
                 }

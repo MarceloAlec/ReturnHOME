@@ -8,6 +8,10 @@ public class Cliente {
     private String password;
     private String numeroCelular;
 
+    public Cliente() {
+
+    }
+
     public Cliente(String nombre, String email, String password, String phoneNumber) {
         this.nombre = nombre;
         this.email = email;
@@ -26,7 +30,11 @@ public class Cliente {
         return idCliente;
     }
 
-    public void setId(int id) {
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int id) {
         this.idCliente = id;
     }
 

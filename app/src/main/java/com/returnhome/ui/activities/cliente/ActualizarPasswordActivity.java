@@ -83,7 +83,7 @@ public class ActualizarPasswordActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
 
-                        if(response.isSuccessful()){
+                        if(response.code() == 200){
                             Toast.makeText(ActualizarPasswordActivity.this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                         }
                         else{

@@ -89,9 +89,6 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
             }
         });
 
-
-
-
     }
 
     private void showMenu(View v, MiMascotaViewHolder holder ) {
@@ -187,7 +184,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
-                if(response.isSuccessful()){
+                if(response.code() == 200){
                     Toast.makeText(context, "Mascota reportada como encontrada", Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -206,7 +203,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
         MascotaController.eliminar(mascotaArrayList.get(holder.getBindingAdapterPosition()).getIdMascota()).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
+                if (response.code() == 200) {
                     mascotaArrayList.remove(holder.getBindingAdapterPosition());
                     notifyItemRemoved(holder.getBindingAdapterPosition());
                 }
@@ -244,7 +241,7 @@ public class MiMascotaAdapter extends RecyclerView.Adapter<MiMascotaAdapter.MiMa
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
-                if(response.isSuccessful()){
+                if(response.code() == 200){
                     mascotaArrayList.get(posicion).setNombre(mascota.getNombre());
                     mascotaArrayList.get(posicion).setRaza(mascota.getRaza());
                     mascotaArrayList.get(posicion).setDescripcion(mascota.getDescripcion());

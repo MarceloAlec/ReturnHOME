@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-/*CREDENCIALES DE ACCESO A LA BASE DE DATOS */
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -19,27 +17,16 @@ if(isset($contenido)){
                                     $password,
                                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-    $consulta = "SELECT * FROM tblcliente WHERE email = ?";
-
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare("SELECT * FROM tblcliente WHERE email = ?");
     $stmt->bindValue(1,$data["email"]);
-    $stmt->execute();
 
-    $num = $stmt->rowCount();
-
-    if($num>0){
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    if($stmt->execute()){
+        $respuesta = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt=null;
 
-        if (password_verify($data["password"], $resultado["password"])) {
+        if (password_verify($data["password"], $respuesta["password"])) {
             http_response_code(200);
-            $cliente_auth = array("idCliente"=>$resultado["idCliente"],
-                                  "nombre"=>$resultado["nombre"],
-                                  "email"=>$resultado["email"],
-                                  "numeroCelular"=>$resultado["numeroCelular"]);
-
-            echo json_encode(array("cliente" => $cliente_auth));
+            echo json_encode(array("cliente" => $respuesta));
         }
         else{
             http_response_code(404);

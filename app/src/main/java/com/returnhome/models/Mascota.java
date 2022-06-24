@@ -19,6 +19,10 @@ public class Mascota implements Serializable {
     private boolean desaparecida;
     private int idCliente;
 
+    public Mascota() {
+       
+    }
+
     public Mascota(int idMascota, String nombre, String raza, char gender, String descripcion) {
         this.idMascota = idMascota;
         this.nombre = nombre;

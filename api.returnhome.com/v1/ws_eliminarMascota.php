@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -16,15 +14,11 @@ if(isset($_GET["idMascota"])){
                                      $password,
                                      array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-    $consulta = "DELETE FROM tblmascota WHERE idMascota = ?";
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare("DELETE FROM tblmascota WHERE idMascota = ?");
     $stmt->bindValue(1,$idMascota);
-    $stmt->execute();
 
-    $filas_modificadas = $stmt->rowCount();
-    $stmt=null;
-
-    if($filas_modificadas==1){
+    if($stmt->execute()){
+        $stmt=null;
         http_response_code(200);
     }
     else{

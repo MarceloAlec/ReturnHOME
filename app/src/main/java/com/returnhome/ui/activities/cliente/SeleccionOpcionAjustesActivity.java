@@ -150,7 +150,7 @@ public class SeleccionOpcionAjustesActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
-                if(response.isSuccessful()){
+                if(response.code() == 200){
                     Toast.makeText(SeleccionOpcionAjustesActivity.this, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
                     NotificacionController.desuscribirMascotaDesaparecida();
                     mAppSharedPreferences.actualizarEstadoAuth(false);

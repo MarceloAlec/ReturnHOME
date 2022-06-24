@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-//CREDENCIALES DE ACCESO A LA BASE DE DATOS
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -17,30 +15,21 @@ if(isset($contenido)){
                                    $username,
                                    $password,
                                    array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
         
-    $consulta = "SELECT password FROM tblcliente WHERE idCliente = ?";
-        
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare("SELECT password FROM tblcliente WHERE idCliente = ?");
     $stmt->bindValue(1,$data["idCliente"]);
-    $stmt->execute();
 
-    $num = $stmt->rowCount();
-
-    if($num==1){
+    if($stmt->execute()){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
         $stmt=null;
         
         if (password_verify($data["actualPassword"], $result["password"])) {
-            $consulta = "UPDATE tblCliente SET password = ? WHERE idCliente = ?";
-            $stmt = $conexion->prepare($consulta);
+            $stmt = $conexion->prepare("UPDATE tblCliente SET password = ? WHERE idCliente = ?");
             $stmt->bindValue(1,password_hash($data["nuevoPassword"],PASSWORD_DEFAULT));
             $stmt->bindValue(2,$data["idCliente"]);
-            $stmt->execute();
-            $fila_modificada = $stmt->rowCount();
 
-            if($fila_modificada==1){
+            if($stmt->execute()){
+                $stmt = null;
                 http_response_code(200);
             }
             else{

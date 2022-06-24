@@ -1,6 +1,4 @@
 <?php
-header("Content-Type: application/json");
-/*CREDENCIALES PARA ACCEDER A LA BASE DE DATOS */
 $hostname = "localhost";
 $username = "root";
 $password = "1998*";
@@ -19,9 +17,7 @@ if(isset($contenido)){
                                 $password,
                                 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-    $consulta = "SELECT * FROM tblcliente WHERE email = ?";
-
-    $stmt = $conexion->prepare($consulta);
+    $stmt = $conexion->prepare( "SELECT * FROM tblcliente WHERE email = ?");
     $stmt->bindValue(1,$data["email"]);
     $stmt->execute();
 
@@ -30,18 +26,14 @@ if(isset($contenido)){
     $stmt = null;
 
     if($num == 0){
-        $consulta = "INSERT INTO tblcliente (nombre, email, password, numeroCelular) values(?, ?, ?, ?)";
 
-        $stmt = $conexion->prepare($consulta);
+        $stmt = $conexion->prepare("INSERT INTO tblcliente (nombre, email, password, numeroCelular) values(?, ?, ?, ?)");
         $stmt->bindValue(1,$data["nombre"]);
         $stmt->bindValue(2,$data["email"]);
         $stmt->bindValue(3,password_hash($data["password"],PASSWORD_DEFAULT));
         $stmt->bindValue(4,$data["numeroCelular"]);
 
-        $stmt->execute();
-        $fila_agregada = $stmt->rowCount();
-
-        if($fila_agregada == 1){
+        if($stmt->execute()){
             $stmt = null;
             $idCliente=$conexion->lastInsertId();
             http_response_code(201);

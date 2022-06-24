@@ -115,7 +115,7 @@ public class MiMascotaFragment extends Fragment implements View.OnClickListener 
         MascotaController.registrar(mascota).enqueue(new Callback<RHRespuesta>() {
             @Override
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
-                if(response.isSuccessful()){
+                if(response.code() == 201){
                     mascota.setIdMascota(response.body().getMascota().getIdMascota());
                     mascotaArrayList.add(mascota);
                     showList(mascotaArrayList);

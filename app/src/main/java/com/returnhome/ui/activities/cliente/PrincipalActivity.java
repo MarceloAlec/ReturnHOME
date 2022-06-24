@@ -132,7 +132,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             //METODO QUE SE EJECUTA CUANDO LA PETICION TRAE DATOS
             public void onResponse(Call<RHRespuesta> call, Response<RHRespuesta> response) {
 
-                if(response.isSuccessful()){
+                if(response.code() == 200){
                     Map<String, String> tokenInfo = new HashMap<>();
                     tokenInfo.put("idCliente", String.valueOf(response.body().getCliente().getId()));
                     tokenInfo.put("token", token);
@@ -163,7 +163,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 mDialog.dismiss();
-                if(response.isSuccessful()){
+                if(response.code() == 201){
 
                     /*
                     EL USUARIO AUTENTICADO SE SUSBRIBE AL TEMA MASCOTAS DESAPARECIDAS PARA RECIBIR
