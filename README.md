@@ -1,5 +1,6 @@
 # ReturnHOME 
- Proyecto final de grado 
+ Proyecto final de grado en Electrónica y Redes de Información 
+ 
  Lado cliente
  * Aplicacion desarrollada con el IDE Android Studio empleando Java.
  * Utilizé las API de Google: Maps y Places.
